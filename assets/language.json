@@ -1,0 +1,35 @@
+[
+  {
+    "languageId": 1,
+    "name": "Deutsch",
+    "isocode": "de",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/api/v1/languages/1"
+      }
+    ]
+  },
+  {
+    "languageId": 2,
+    "name": "Français",
+    "isocode": "fr",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/api/v1/languages/2"
+      }
+    ]
+  },
+  {
+    "languageId": 3,
+    "name": "English",
+    "isocode": "en",
+    "links": [
+      {
+        "rel": "self",
+        "href": "/api/v1/languages/3"
+      }
+    ]
+  }
+]
