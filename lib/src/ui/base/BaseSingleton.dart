@@ -19,6 +19,7 @@ class BaseSingleton {
   var userEmailId = "";
   int userID=0;
   List<ProductDetails> billingProductList = [];
+  int pageLimits=100;
 
   void clearAllBaseSingleton() {
     jwtToken = "";

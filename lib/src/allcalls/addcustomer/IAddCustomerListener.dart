@@ -1,4 +1,3 @@
-
 abstract class IAddCustomerListener {
   String getCustomerName();
 
@@ -11,4 +10,14 @@ abstract class IAddCustomerListener {
   String getCustomerWhatsAppNumberNumber();
 
   void errorValidationMgs(String error);
+
+  void onSuccessResponseAddProduct(String msg);
+
+  void onFailureMessageAddProduct(String error);
+
+  Map parseAddCustomerData();
+
+  void hitPostAddCustomerData();
+
+  void clearAllEditTextDatas();
 }

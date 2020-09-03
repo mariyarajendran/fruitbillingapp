@@ -76,6 +76,11 @@ flutter:
         - asset: fonts/OpenSans-Regular.ttf
         - weight: 400
 
+#    - family: FontRegular
+#      fonts:
+#        - asset: fonts/Tamil-Regular.ttf
+#        - weight: 400
+
     - family: FontLight
       fonts:
         - asset: fonts/OpenSans-Light.ttf
