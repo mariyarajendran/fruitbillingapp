@@ -854,7 +854,7 @@ class ProductListsScreenState
                   ),
                 ),
                 onTap: () {
-                  navigateBaseRouting(0);
+                  navigateBaseRouting(5);
                 },
               ),
             ],
@@ -996,14 +996,9 @@ class ProductListsScreenState
     super.initState();
     if (mounted) {
       setState(() {
-        //_tabControllerDrawer = new TabController(length: 1, vsync: this);
         _RefreshController = ScrollController();
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
-        updateLoginSessionStatus();
-        if (!BaseSingleton.shared.firstTimeOfApp) {
-          twentySecondTimer();
-        }
         _animationController = AnimationController(
             vsync: this, duration: Duration(milliseconds: 500));
       });
@@ -1165,6 +1160,7 @@ class ProductListsScreenState
     return _modaProductLists.mapProductDetDetailsData = {
       "search_keyword": getSearchkeyword().trim(),
       "page_count": getPageCount().trim(),
+      "page_limits": BaseSingleton.shared.pageLimits
     };
   }
 

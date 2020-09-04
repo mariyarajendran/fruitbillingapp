@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:IGO/src/models/responsemodel/addcustomerresponsedata/AddCustomerResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/addproductresponsemodel/AddProductResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/calllogresponsemodel/CallLogResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
@@ -122,7 +123,7 @@ class ServiceRequest implements AllApiRepository {
       print("Response: $responseBody");
       productListResponseModel =
           new ProductListResponseModel.fromMap(responseBody);
-      if (statusCode != 200 || responseBody == null) {
+      if (statusCode != 201 && statusCode != 200 && responseBody == null) {
         throw new FetchDataException(
             "An error ocurred : [Status Code : $statusCode]  Message : $responseBody");
       }
@@ -158,6 +159,41 @@ class ServiceRequest implements AllApiRepository {
       }
     });
     return logoutResponseModel;
+  }
+
+  static const String ADD_CUSTOMER =
+      FRUIT_BILLING_BASE_URL + "api/json/addNewCustomer";
+
+  @override
+  Future<AddCustomerResponseModel> postAddCustomerDatas(Map customerDatas, int event) async{
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': BaseSingleton.shared.jwtToken,
+    };
+
+    AddCustomerResponseModel addCustomerResponseModel;
+    var body = json.encode(customerDatas);
+    await HttpClientHelper.post(ADD_CUSTOMER,
+        body: body,
+        headers: headers,
+        timeRetry: Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: 5))
+        .then((response) {
+      print("url:" + ADD_CUSTOMER);
+      print("requestData: " + body);
+      final statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      addCustomerResponseModel =
+      new AddCustomerResponseModel.fromMapStatus(responseBody);
+      if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
+        throw new FetchDataException("$statusCode");
+      }
+    });
+    return addCustomerResponseModel;
   }
 
 /////////////////////////////////////////

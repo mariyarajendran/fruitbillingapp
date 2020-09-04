@@ -1,7 +1,7 @@
+import 'package:IGO/src/allcalls/addcustomer/IAddCustomerListener.dart';
+import 'package:IGO/src/allcalls/addcustomer/PresenterAddCustomer.dart';
 import 'package:IGO/src/constants/ConstantCommon.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
-import 'package:IGO/src/models/responsemodel/signupresponsemodel/SignUpResponseModel.dart';
-import 'package:IGO/src/ui/addcustomerscreen/IAddCustomerListener.dart';
 import 'package:IGO/src/ui/addcustomerscreen/ModalAddCustomer.dart';
 import 'package:IGO/src/utils/Connectivity.dart';
 import 'package:IGO/src/utils/SessionManager.dart';
@@ -43,10 +43,12 @@ class AddCustomerScreenState
   Connectivitys _connectivity = Connectivitys.instance;
   ModalAddCustomer _modalAddCustomer;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
+  PresenterAddCustomer _presenterAddCustomer;
 
   AddCustomerScreenState() {
     this._modalAddCustomer = new ModalAddCustomer();
     this._sessionManager = new SessionManager();
+    this._presenterAddCustomer = new PresenterAddCustomer(this);
     this._connectivity = new Connectivitys(this);
   }
 
@@ -424,10 +426,29 @@ class AddCustomerScreenState
   void apiCallBacks(int event) {
     if (event == 1) {
       setState(() {
-        //_presenterAddProduct.validateAddProductData();
-        validateAddCustomerData();
+        _presenterAddCustomer.validateAddCustomerData();
+      });
+    } else if (event == 2) {
+      setState(() {
+        showDialog();
+        postCustomerDatas();
       });
     }
+  }
+
+  void postCustomerDatas() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterAddCustomer.hitPostCustomerDataCall();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
   }
 
   @override
@@ -461,22 +482,47 @@ class AddCustomerScreenState
         .toString();
   }
 
-  void validateAddCustomerData() {
-    if (getCustomerName().isEmpty) {
-      errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_customer_name'));
-    } else if (getCustomerBillingName().isEmpty) {
-      errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_customer_bill_name'));
-    } else if (getCustomerAddress().isEmpty) {
-      errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_customer_address'));
-    } else if (getCustomerPhoneNumber().isEmpty) {
-      errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_customer_phone_no'));
-    } else if (getCustomerWhatsAppNumberNumber().isEmpty) {
-      errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_customer_whatsapp_no'));
-    } else {}
+  @override
+  void hitPostAddCustomerData() {
+    setState(() {
+      apiCallBacks(2);
+    });
+  }
+
+  @override
+  void onFailureMessageAddProduct(String error) {
+    setState(() {
+      showErrorAlert(error);
+      dismissLoadingDialog();
+    });
+  }
+
+  @override
+  void onSuccessResponseAddProduct(String msg) {
+    setState(() {
+      showToast(msg);
+      clearAllEditTextDatas();
+      dismissLoadingDialog();
+    });
+  }
+
+  @override
+  Map parseAddCustomerData() {
+    return {
+      "customer_name": getCustomerName().trim(),
+      "customer_billing_name": getCustomerBillingName().trim(),
+      "customer_address": getCustomerAddress().trim(),
+      "customer_mobile_no": getCustomerPhoneNumber().trim(),
+      "customer_whatsapp_no": getCustomerWhatsAppNumberNumber().trim(),
+    };
+  }
+
+  @override
+  void clearAllEditTextDatas() {
+    _modalAddCustomer.controllerCustomerName.text = "";
+    _modalAddCustomer.controllerCustomerBillingName.text = "";
+    _modalAddCustomer.controllerCustomerAddress.text = "";
+    _modalAddCustomer.controllerCustomerPhoneNumber.text = "";
+    _modalAddCustomer.controllerCustomerWhatsAppNumber.text = "";
   }
 }
