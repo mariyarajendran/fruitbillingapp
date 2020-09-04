@@ -3,6 +3,7 @@ import 'package:IGO/src/models/responsemodel/addcustomerresponsedata/AddCustomer
 import 'package:IGO/src/models/responsemodel/addproductresponsemodel/AddProductResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/calllogresponsemodel/CallLogResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customerresponsemodel/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/logoutresponsemodel/LogoutResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/resetpasswordresponsemodel/ResetResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/signupresponsemodel/SignUpResponseModel.dart';
@@ -165,7 +166,8 @@ class ServiceRequest implements AllApiRepository {
       FRUIT_BILLING_BASE_URL + "api/json/addNewCustomer";
 
   @override
-  Future<AddCustomerResponseModel> postAddCustomerDatas(Map customerDatas, int event) async{
+  Future<AddCustomerResponseModel> postAddCustomerDatas(
+      Map customerDatas, int event) async {
     var headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
@@ -175,11 +177,11 @@ class ServiceRequest implements AllApiRepository {
     AddCustomerResponseModel addCustomerResponseModel;
     var body = json.encode(customerDatas);
     await HttpClientHelper.post(ADD_CUSTOMER,
-        body: body,
-        headers: headers,
-        timeRetry: Duration(milliseconds: 100),
-        retries: 3,
-        timeLimit: Duration(seconds: 5))
+            body: body,
+            headers: headers,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 5))
         .then((response) {
       print("url:" + ADD_CUSTOMER);
       print("requestData: " + body);
@@ -188,12 +190,49 @@ class ServiceRequest implements AllApiRepository {
       print("status code: $statusCode");
       print(response.body);
       addCustomerResponseModel =
-      new AddCustomerResponseModel.fromMapStatus(responseBody);
+          new AddCustomerResponseModel.fromMapStatus(responseBody);
       if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
         throw new FetchDataException("$statusCode");
       }
     });
     return addCustomerResponseModel;
+  }
+
+  @override
+  Future<CustomerListResponseModel> getCustomerListData(
+      Map requestData, int event) async {
+    String GET_CUSTOMER_LIST =
+        FRUIT_BILLING_BASE_URL + "api/json/getAllCustomer";
+
+    CustomerListResponseModel customerListResponseModel =
+        new CustomerListResponseModel();
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(GET_CUSTOMER_LIST,
+            headers: headers,
+            body: body,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 10))
+        .then((response) {
+      print("url: " + GET_CUSTOMER_LIST);
+      print("header: " + headers.toString());
+      int statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print("Response: $responseBody");
+      customerListResponseModel =
+          new CustomerListResponseModel.fromMap(responseBody);
+      if (statusCode != 201 && statusCode != 200 && responseBody == null) {
+        throw new FetchDataException(
+            "An error ocurred : [Status Code : $statusCode]  Message : $responseBody");
+      }
+    });
+    return customerListResponseModel;
   }
 
 /////////////////////////////////////////

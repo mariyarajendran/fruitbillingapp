@@ -1,4 +1,5 @@
 import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customerresponsemodel/CustomerListResponseModel.dart';
 
 class BaseSingleton {
   static final BaseSingleton _baseSingleton = new BaseSingleton._internal();
@@ -20,6 +21,7 @@ class BaseSingleton {
   int userID=0;
   List<ProductDetails> billingProductList = [];
   int pageLimits=100;
+  List<CustomerDetails> customerDetails=[];
 
   void clearAllBaseSingleton() {
     jwtToken = "";

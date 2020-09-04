@@ -76,10 +76,11 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
   }
 
   void checkInternetAlert() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => showMessageAlert(
-        AppLocalizations.instance.text('key_no_network'),
-        AppLocalizations.instance.text('key_retry'),
-        0));
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        showMessageAlert(
+            AppLocalizations.instance.text('key_no_network'),
+            AppLocalizations.instance.text('key_retry'),
+            0));
   }
 
   void updateInternetConnectivity(bool networkStatus) {
@@ -105,7 +106,8 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => new Container(
+                  (context, index) =>
+              new Container(
                 margin: EdgeInsets.only(
                     left: appConfig.rWP(1),
                     right: appConfig.rWP(1),
@@ -125,7 +127,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                       width: double.infinity,
                                       child: new Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           new Container(
                                             child: new Column(
@@ -140,7 +142,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                     margin: EdgeInsets.only(
                                                         top: appConfig.rHP(1)),
                                                     alignment:
-                                                        Alignment.topRight,
+                                                    Alignment.topRight,
                                                   ),
                                                   onTap: () {
                                                     setState(() {
@@ -153,8 +155,8 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                 ),
                                                 new Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     new Expanded(
                                                       child: new Align(
@@ -163,19 +165,19 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                             AppLocalizations
                                                                 .instance
                                                                 .text(
-                                                                    'key_product_name'),
+                                                                'key_product_name'),
                                                             textAlign:
-                                                                TextAlign.left,
+                                                            TextAlign.left,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT,
+                                                                ConstantCommon
+                                                                    .BASE_FONT,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
                                                         ),
                                                         alignment: Alignment
@@ -190,19 +192,19 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                             AppLocalizations
                                                                 .instance
                                                                 .text(
-                                                                    'key_product_cost'),
+                                                                'key_product_cost'),
                                                             textAlign:
-                                                                TextAlign.left,
+                                                            TextAlign.left,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT,
+                                                                ConstantCommon
+                                                                    .BASE_FONT,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
                                                         ),
                                                         alignment: Alignment
@@ -214,8 +216,8 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                 ),
                                                 new Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     new Expanded(
                                                       child: new Align(
@@ -224,26 +226,26 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                             BaseSingleton
                                                                 .shared
                                                                 .billingProductList[
-                                                                    index]
+                                                            index]
                                                                 .productName,
                                                             textAlign:
-                                                                TextAlign.left,
+                                                            TextAlign.left,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT_REGULAR,
+                                                                ConstantCommon
+                                                                    .BASE_FONT_REGULAR,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
                                                           margin:
-                                                              EdgeInsets.only(
-                                                                  top: appConfig
-                                                                      .rHP(
-                                                                          1.5)),
+                                                          EdgeInsets.only(
+                                                              top: appConfig
+                                                                  .rHP(
+                                                                  1.5)),
                                                         ),
                                                         alignment: Alignment
                                                             .bottomLeft,
@@ -254,21 +256,25 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                       child: Align(
                                                         child: new Container(
                                                           child: new Text(
-                                                            "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
+                                                            "₹ ${BaseSingleton
+                                                                .shared
+                                                                .billingProductList[index]
+                                                                .productCost}",
                                                             textAlign:
-                                                                TextAlign.right,
+                                                            TextAlign.right,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT_REGULAR,
+                                                                ConstantCommon
+                                                                    .BASE_FONT_REGULAR,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
-                                                          margin: EdgeInsets.only(
+                                                          margin: EdgeInsets
+                                                              .only(
                                                               top: appConfig
                                                                   .rHP(1.5),
                                                               bottom: appConfig
@@ -283,8 +289,8 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                 ),
                                                 new Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     new Expanded(
                                                       child: new Align(
@@ -293,24 +299,24 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                             AppLocalizations
                                                                 .instance
                                                                 .text(
-                                                                    'key_edit_kg'),
+                                                                'key_edit_kg'),
                                                             textAlign:
-                                                                TextAlign.left,
+                                                            TextAlign.left,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT,
+                                                                ConstantCommon
+                                                                    .BASE_FONT,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
                                                           margin:
-                                                              EdgeInsets.only(
-                                                                  top: appConfig
-                                                                      .rHP(3)),
+                                                          EdgeInsets.only(
+                                                              top: appConfig
+                                                                  .rHP(3)),
                                                         ),
                                                         alignment: Alignment
                                                             .bottomLeft,
@@ -324,24 +330,24 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                             AppLocalizations
                                                                 .instance
                                                                 .text(
-                                                                    'key_total_cost'),
+                                                                'key_total_cost'),
                                                             textAlign:
-                                                                TextAlign.left,
+                                                            TextAlign.left,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT,
+                                                                ConstantCommon
+                                                                    .BASE_FONT,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
                                                           margin:
-                                                              EdgeInsets.only(
-                                                                  top: appConfig
-                                                                      .rHP(3)),
+                                                          EdgeInsets.only(
+                                                              top: appConfig
+                                                                  .rHP(3)),
                                                         ),
                                                         alignment: Alignment
                                                             .bottomRight,
@@ -352,49 +358,52 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                 ),
                                                 new Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: [
                                                     new Expanded(
                                                       child: new Align(
                                                         child: new Container(
                                                           child: FlatButton(
                                                             child: Text(
-                                                                "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                                "${BaseSingleton
+                                                                    .shared
+                                                                    .billingProductList[index]
+                                                                    .totalKiloGrams} Kg",
                                                                 textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                                TextAlign
+                                                                    .center,
                                                                 style: TextStyle(
                                                                     color: ConstantColor
                                                                         .COLOR_WHITE,
                                                                     fontFamily:
-                                                                        ConstantCommon
-                                                                            .BASE_FONT,
+                                                                    ConstantCommon
+                                                                        .BASE_FONT,
                                                                     fontSize:
-                                                                        17,
+                                                                    17,
                                                                     fontWeight:
-                                                                        FontWeight
-                                                                            .w400)),
+                                                                    FontWeight
+                                                                        .w400)),
                                                             color: ConstantColor
                                                                 .COLOR_RED,
                                                             textColor:
-                                                                Colors.white,
+                                                            Colors.white,
                                                             onPressed: () {
                                                               setState(() {
                                                                 showProductCalculationAlertDialog(
                                                                     BaseSingleton
                                                                         .shared
                                                                         .billingProductList[
-                                                                            index]
+                                                                    index]
                                                                         .productName,
                                                                     AppLocalizations
                                                                         .instance
                                                                         .text(
-                                                                            'key_done'),
+                                                                        'key_done'),
                                                                     AppLocalizations
                                                                         .instance
                                                                         .text(
-                                                                            'key_clear'),
+                                                                        'key_clear'),
                                                                     1,
                                                                     BaseSingleton
                                                                         .shared
@@ -403,7 +412,8 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                               });
                                                             },
                                                           ),
-                                                          margin: EdgeInsets.only(
+                                                          margin: EdgeInsets
+                                                              .only(
                                                               top: appConfig
                                                                   .rHP(3),
                                                               bottom: appConfig
@@ -418,21 +428,25 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                       child: Align(
                                                         child: new Container(
                                                           child: new Text(
-                                                            "₹ ${BaseSingleton.shared.billingProductList[index].totalCost}",
+                                                            "₹ ${BaseSingleton
+                                                                .shared
+                                                                .billingProductList[index]
+                                                                .totalCost}",
                                                             textAlign:
-                                                                TextAlign.left,
+                                                            TextAlign.left,
                                                             style: TextStyle(
                                                                 color: ConstantColor
                                                                     .COLOR_BLACK,
                                                                 fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT_REGULAR,
+                                                                ConstantCommon
+                                                                    .BASE_FONT_REGULAR,
                                                                 fontSize: 14,
                                                                 fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                                FontWeight
+                                                                    .w400),
                                                           ),
-                                                          margin: EdgeInsets.only(
+                                                          margin: EdgeInsets
+                                                              .only(
                                                               top: appConfig
                                                                   .rHP(3),
                                                               bottom: appConfig
@@ -490,26 +504,27 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                     ),
                     new Positioned(
                         child: new Stack(
-                      alignment: Alignment.topLeft,
-                      children: <Widget>[
-                        new Icon(Icons.brightness_1,
-                            size: 30.0, color: ConstantColor.COLOR_RED),
-                        new Positioned(
-                            top: 6.0,
-                            right: 8.0,
-                            child: new Center(
-                              child: new Text(
-                                BaseSingleton.shared.billingProductList.length
-                                    .toString(),
-                                style: TextStyle(
-                                    color: ConstantColor.COLOR_WHITE,
-                                    fontFamily: ConstantCommon.BASE_FONT,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            )),
-                      ],
-                    )),
+                          alignment: Alignment.topLeft,
+                          children: <Widget>[
+                            new Icon(Icons.brightness_1,
+                                size: 30.0, color: ConstantColor.COLOR_RED),
+                            new Positioned(
+                                top: 6.0,
+                                right: 8.0,
+                                child: new Center(
+                                  child: new Text(
+                                    BaseSingleton.shared.billingProductList
+                                        .length
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_WHITE,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )),
+                          ],
+                        )),
                   ],
                 ),
                 new Container(
@@ -581,115 +596,116 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
     Container containerAppBar = Container(
       child: new Container(
           child: new Row(
-        children: [
-          new Expanded(
-            child: new Container(
-              width: appConfig.rW(20),
-              child: InkWell(
-                child: Container(
-                  child: Image.asset(
-                    "assets/images/back.png",
-                    width: 35,
-                    height: 35,
-                  ),
-                ),
-                onTap: () {
-                  setState(() {
-                    navigateBaseRouting(2);
-                  });
-                },
-              ),
-              alignment: Alignment.topLeft,
-            ),
-            flex: 0,
-          ),
-          new Expanded(
-            flex: 4,
-            child: Container(
-              child: Text(AppLocalizations.instance.text('key_product_cart'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: ConstantColor.COLOR_WHITE,
-                      fontFamily: ConstantCommon.BASE_FONT,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400)),
-              margin: EdgeInsets.only(right: appConfig.rWP(7)),
-            ),
-          ),
-          new Expanded(
-              flex: 0,
-              child: new InkWell(
+            children: [
+              new Expanded(
                 child: new Container(
-                  padding: EdgeInsets.only(
-                      right: appConfig.rWP(1),
-                      left: appConfig.rWP(3),
-                      top: appConfig.rWP(3),
-                      bottom: appConfig.rWP(2)),
-                  child: Image.asset(
-                    "assets/images/addproduct.png",
-                    width: 30,
-                    height: 30,
+                  width: appConfig.rW(20),
+                  child: InkWell(
+                    child: Container(
+                      child: Image.asset(
+                        "assets/images/back.png",
+                        width: 35,
+                        height: 35,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        navigateBaseRouting(2);
+                      });
+                    },
                   ),
+                  alignment: Alignment.topLeft,
                 ),
-                onTap: () {
-                  setState(() {
-                    dismissKeyboard();
-                    navigateBaseRouting(2);
-                  });
-                },
-              ))
-        ],
-      )),
+                flex: 0,
+              ),
+              new Expanded(
+                flex: 4,
+                child: Container(
+                  child: Text(
+                      AppLocalizations.instance.text('key_product_cart'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: ConstantColor.COLOR_WHITE,
+                          fontFamily: ConstantCommon.BASE_FONT,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400)),
+                  margin: EdgeInsets.only(right: appConfig.rWP(7)),
+                ),
+              ),
+              new Expanded(
+                  flex: 0,
+                  child: new InkWell(
+                    child: new Container(
+                      padding: EdgeInsets.only(
+                          right: appConfig.rWP(1),
+                          left: appConfig.rWP(3),
+                          top: appConfig.rWP(3),
+                          bottom: appConfig.rWP(2)),
+                      child: Image.asset(
+                        "assets/images/addproduct.png",
+                        width: 30,
+                        height: 30,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        dismissKeyboard();
+                        navigateBaseRouting(2);
+                      });
+                    },
+                  ))
+            ],
+          )),
     );
 
     Center containerNoData = new Center(
       child: new Container(
           child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          new Center(
-            child: new Container(
-              child: Image.asset(
-                "assets/images/empty.png",
-                width: 50,
-                height: 50,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              new Center(
+                child: new Container(
+                  child: Image.asset(
+                    "assets/images/empty.png",
+                    width: 50,
+                    height: 50,
+                  ),
+                ),
               ),
-            ),
-          ),
-          new Center(
-            child: new Container(
-              padding: EdgeInsets.all(10),
-              child: Text(AppLocalizations.instance.text('key_cart_empty'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: ConstantColor.COLOR_APP_BASE,
-                      fontFamily: ConstantCommon.BASE_FONT,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-          new Container(
-              height: 40,
-              child: FloatingActionButton.extended(
-                  backgroundColor: ConstantColor.COLOR_APP_BASE,
-                  elevation: 5.0,
-                  onPressed: () {
-                    dismissKeyboard();
-                    setState(() {
-                      navigateBaseRouting(2);
-                    });
-                  },
-                  label: Text(
-                    AppLocalizations.instance.text('key_add_product'),
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: ConstantColor.COLOR_WHITE,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: ConstantCommon.BASE_FONT),
-                  ))),
-        ],
-      )),
+              new Center(
+                child: new Container(
+                  padding: EdgeInsets.all(10),
+                  child: Text(AppLocalizations.instance.text('key_cart_empty'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: ConstantColor.COLOR_APP_BASE,
+                          fontFamily: ConstantCommon.BASE_FONT,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400)),
+                ),
+              ),
+              new Container(
+                  height: 40,
+                  child: FloatingActionButton.extended(
+                      backgroundColor: ConstantColor.COLOR_APP_BASE,
+                      elevation: 5.0,
+                      onPressed: () {
+                        dismissKeyboard();
+                        setState(() {
+                          navigateBaseRouting(2);
+                        });
+                      },
+                      label: Text(
+                        AppLocalizations.instance.text('key_add_product'),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: ConstantColor.COLOR_WHITE,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: ConstantCommon.BASE_FONT),
+                      ))),
+            ],
+          )),
     );
 
     return new WillPopScope(
@@ -707,15 +723,21 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
           ),
           body: !_modalCartLists.isNetworkStatus
               ? _modalCartLists.boolNodata
-                  ? containerNoData
-                  : new Stack(
-                      children: [containerClubListsAll, previewBillContainer],
-                    )
+              ? containerNoData
+              : new Stack(
+            children: [containerClubListsAll, previewBillContainer],
+          )
               : centerContainerNoNetwork,
         ),
         onWillPop: () {
           setState(() {
-            navigateBaseRouting(2);
+            showAlertDialog(
+                AppLocalizations.instance.text('key_exit'),
+                AppLocalizations.instance.text('key_quit'),
+                AppLocalizations.instance.text('key_cancel'),
+                1,
+                this);
+
           });
         });
   }
@@ -723,7 +745,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
   _refreshScrollListener() {
     String message = "";
     if (_RefreshController.offset <=
-            _RefreshController.position.minScrollExtent &&
+        _RefreshController.position.minScrollExtent &&
         !_RefreshController.position.outOfRange) {
       setState(() {
         message = "reach the top";
@@ -791,8 +813,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
 
   void apiCallBack(int event) {
     setState(() {
-      if (event == 6) {
-      } else if (event == 7) {}
+      if (event == 6) {} else if (event == 7) {}
     });
   }
 

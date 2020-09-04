@@ -11,6 +11,7 @@ import 'package:IGO/src/di/di.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/billpreviewscreen/BillPreviewScreen.dart';
 import 'package:IGO/src/ui/cartscreen/CartListScreen.dart';
+import 'package:IGO/src/ui/customerlist/CustomerListsScreen.dart';
 import 'package:IGO/src/ui/forgotscreen/ForgotScreen.dart';
 import 'package:IGO/src/ui/productlist/ProductLists.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
@@ -223,6 +224,12 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
         context,
         MaterialPageRoute(builder: (context) => AddCustomerScreen()),
         (Route<dynamic> route) => false,
+      );
+    }else if (event == 6) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => CustomerListsScreen()),
+            (Route<dynamic> route) => false,
       );
     }
   }
