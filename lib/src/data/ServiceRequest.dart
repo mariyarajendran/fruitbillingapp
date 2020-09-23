@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'package:IGO/src/models/responsemodel/customer/addcustomerresponsedata/AddCustomerResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/customer/customerresponsemodel/CustomerListResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/product/addproductresponsemodel/AddProductResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/product/calllogresponsemodel/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/addcustomer/AddCustomerResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/addproduct/AddProductResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:http_client_helper/http_client_helper.dart';
 import 'dart:async';

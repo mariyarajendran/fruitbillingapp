@@ -1,5 +1,5 @@
-import 'package:IGO/src/models/responsemodel/customer/customerresponsemodel/CustomerListResponseModel.dart';
 
+import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 
 abstract class ICustomerListener {
   void onSuccessResponseGetCustomerList(

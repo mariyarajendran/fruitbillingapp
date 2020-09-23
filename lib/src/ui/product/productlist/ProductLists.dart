@@ -1,6 +1,6 @@
 import 'package:IGO/src/data/apis/product/productlist/IProductListListener.dart';
 import 'package:IGO/src/data/apis/product/productlist/PresenterProductList.dart';
-import 'package:IGO/src/models/responsemodel/product/calllogresponsemodel/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';

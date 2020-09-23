@@ -1,6 +1,5 @@
 
-
-import 'package:IGO/src/models/responsemodel/product/calllogresponsemodel/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 
 abstract class IProductListListener {
   void onSuccessResponseGetProductList(

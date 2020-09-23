@@ -1,6 +1,6 @@
 import 'package:IGO/src/data/AllApiRepository.dart';
 import 'package:IGO/src/di/di.dart';
-import 'package:IGO/src/models/responsemodel/product/calllogresponsemodel/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'IProductListListener.dart';
 import 'IntractorProductList.dart';
 
