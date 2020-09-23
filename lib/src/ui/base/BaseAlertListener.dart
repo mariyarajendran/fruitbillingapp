@@ -1,4 +1,6 @@
-import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
+
+
+import 'package:IGO/src/models/responsemodel/product/calllogresponsemodel/ProductListResponseModel.dart';
 
 abstract class BaseAlertListener {
   void onTapAlertOkayListener();
