@@ -1,12 +1,9 @@
-import 'package:IGO/src/allcalls/logout/ILogoutListener.dart';
-import 'package:IGO/src/allcalls/logout/PresenterLogout.dart';
-import 'package:IGO/src/allcalls/productlist/IProductListListener.dart';
-import 'package:IGO/src/allcalls/productlist/PresenterProductList.dart';
+import 'package:IGO/src/allcalls/customerlist/ICustomerListener.dart';
+import 'package:IGO/src/allcalls/customerlist/PresenterCustomerList.dart';
 import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
-import 'ModaProductLists.dart';
+import 'package:IGO/src/models/responsemodel/customerresponsemodel/CustomerListResponseModel.dart';
+import 'ModalCustomerLists.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
-import 'package:IGO/src/models/responsemodel/calllogresponsemodel/CallLogResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/logoutresponsemodel/LogoutResponseModel.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -19,7 +16,7 @@ import './../../constants/ConstantColor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(ProductListsScreen());
+void main() => runApp(CustomerListsScreen());
 
 int organizationID;
 String organizationName;
@@ -28,7 +25,7 @@ String eventStartDate;
 double eventLatitude;
 double eventLongitude;
 
-class ProductListsScreen extends StatelessWidget {
+class CustomerListsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,39 +33,40 @@ class ProductListsScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProductListsScreenStateful(),
+      home: CustomerListsScreenStateful(),
     );
   }
 }
 
-class ProductListsScreenStateful extends StatefulWidget {
-  ProductListsScreenStateful({Key key, this.title}) : super(key: key);
+class CustomerListsScreenStateful extends StatefulWidget {
+  CustomerListsScreenStateful({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  ProductListsScreenState createState() => ProductListsScreenState();
+  CustomerListsScreenState createState() => CustomerListsScreenState();
 }
 
-class ProductListsScreenState
-    extends BaseStateStatefulState<ProductListsScreenStateful>
+class CustomerListsScreenState
+    extends BaseStateStatefulState<CustomerListsScreenStateful>
     with TickerProviderStateMixin
     implements
         ViewContractConnectivityListener,
-        IProductListListener,
         BaseAlertListener,
-        ILogoutListener {
+        ICustomerListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
-  ModaProductLists _modaProductLists;
-  PresenterProductList _presenterProductList;
-  PresenterLogout _presenterLogout;
+  ModalCustomerLists _modalCustomerLists;
+  PresenterCustomerList _presenterCustomerList;
 
   AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
   List<ProductDetails> callLogImportInfo = [];
   List<ProductDetails> duplicateCallLogImportInfo = [];
+
+  List<CustomerDetails> customerDetails = [];
+  List<CustomerDetails> duplicateCustomerDetails = [];
 
   //Keys//
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -77,53 +75,22 @@ class ProductListsScreenState
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  ProductListsScreenState() {
-    this._modaProductLists = new ModaProductLists();
+  CustomerListsScreenState() {
+    this._modalCustomerLists = new ModalCustomerLists();
     this._connectivity = new Connectivitys(this);
-    this._presenterProductList = new PresenterProductList(this);
-    this._presenterLogout = new PresenterLogout(this);
-  }
-
-  void checkInternetAlert() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => showMessageAlert(
-        AppLocalizations.instance.text('key_no_network'),
-        AppLocalizations.instance.text('key_retry'),
-        0));
+    this._presenterCustomerList = new PresenterCustomerList(this);
   }
 
   void updateInternetConnectivity(bool networkStatus) {
-    _modaProductLists.isNetworkStatus = networkStatus;
+    _modalCustomerLists.isNetworkStatus = networkStatus;
   }
 
   void updateNoData(bool status) {
-    _modaProductLists.boolNodata = status;
+    _modalCustomerLists.boolNodata = status;
   }
 
   void updateEventCircularLoader(bool status) {
-    _modaProductLists.eventCircularLoader = status;
-  }
-
-  bool checkDuplicateBillInCart(ProductDetails productDetails) {
-    int count = 0;
-    bool duplicateStatus = true;
-    setState(() {
-      if (BaseSingleton.shared.billingProductList.isNotEmpty) {
-        for (int i = 0;
-            i < BaseSingleton.shared.billingProductList.length;
-            i++) {
-          if (BaseSingleton.shared.billingProductList[i].productId
-              .contains(productDetails.productId)) {
-            count += 1;
-          }
-        }
-        if (count > 0) {
-          duplicateStatus = false;
-        } else {
-          duplicateStatus = true;
-        }
-      }
-    });
-    return duplicateStatus;
+    _modalCustomerLists.eventCircularLoader = status;
   }
 
   @override
@@ -133,32 +100,20 @@ class ProductListsScreenState
     ExpansionPanelList expansionPanelList = new ExpansionPanelList(
       expansionCallback: (int index, bool isExpanded) {
         setState(() {
-          callLogImportInfo[index].isExpanded = !isExpanded;
+          customerDetails[index].isExpanded = !isExpanded;
         });
       },
-      children: callLogImportInfo.map<ExpansionPanel>((ProductDetails item) {
+      children: customerDetails.map<ExpansionPanel>((CustomerDetails item) {
         return ExpansionPanel(
           headerBuilder: (BuildContext context, bool isExpanded) {
             return ListTile(
               title: new Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-//                  Checkbox(
-//                      value: item.isChecked,
-//                      activeColor: ConstantColor.COLOR_APP_BASE,
-//                      onChanged: (bool value) {
-//                        setState(() {
-//                          if (value) {
-//                            item.isChecked = value;
-//                          } else {
-//                            item.isChecked = value;
-//                          }
-//                        });
-//                      }),
                   Expanded(
                     flex: 3,
                     child: new Text(
-                      item.productName,
+                      item.customerName,
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: ConstantColor.COLOR_BLACK,
@@ -175,9 +130,7 @@ class ProductListsScreenState
                         alignment: new FractionalOffset(0.0, 0.0),
                         decoration: new BoxDecoration(
                           border: new Border.all(
-                            color: item.productStockKg <= 0
-                                ? ConstantColor.COLOR_BLOCKED
-                                : ConstantColor.COLOR_UNBLOCKED,
+                            color: ConstantColor.COLOR_UNBLOCKED,
                             width:
                                 10.0, // it's my slider variable, to change the size of the circle
                           ),
@@ -213,8 +166,8 @@ class ProductListsScreenState
                                         child: new Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_name'),
+                                              AppLocalizations.instance.text(
+                                                  'key_customer_bill_name'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -233,8 +186,8 @@ class ProductListsScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_code'),
+                                              AppLocalizations.instance.text(
+                                                  'key_customer_whatsapp_no'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -259,7 +212,7 @@ class ProductListsScreenState
                                         child: new Align(
                                           child: new Container(
                                             child: new Text(
-                                              item.productName,
+                                              item.customerBillingName,
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -280,7 +233,7 @@ class ProductListsScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              "${item.productCode}",
+                                              "${item.customerWhatsappNo}",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                   color:
@@ -307,8 +260,8 @@ class ProductListsScreenState
                                         child: new Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_stock'),
+                                              AppLocalizations.instance.text(
+                                                  'key_customer_phone_no'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -330,7 +283,7 @@ class ProductListsScreenState
                                           child: new Container(
                                             child: new Text(
                                               AppLocalizations.instance
-                                                  .text('key_product_cost'),
+                                                  .text('key_address'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -357,7 +310,7 @@ class ProductListsScreenState
                                         child: new Align(
                                           child: new Container(
                                             child: new Text(
-                                              "${item.productStockKg} kg",
+                                              "${item.customerMobileNo}",
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -379,7 +332,7 @@ class ProductListsScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              "₹ ${item.productCost}",
+                                              "${item.customerAddress}",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                   color:
@@ -392,123 +345,6 @@ class ProductListsScreenState
                                             margin: EdgeInsets.only(
                                                 top: appConfig.rHP(1.5),
                                                 bottom: appConfig.rHP(1.5)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_select_kg'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_total_cost'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      )
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: FlatButton(
-                                              child: Text(
-                                                  "${item.totalKiloGrams} Kg",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: ConstantColor
-                                                          .COLOR_WHITE,
-                                                      fontFamily: ConstantCommon
-                                                          .BASE_FONT,
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              color: ConstantColor.COLOR_RED,
-                                              textColor: Colors.white,
-                                              onPressed: () {
-                                                setState(() {
-                                                  showProductCalculationAlertDialog(
-                                                      item.productName,
-                                                      AppLocalizations.instance
-                                                          .text('key_done'),
-                                                      AppLocalizations.instance
-                                                          .text('key_clear'),
-                                                      1,
-                                                      item,
-                                                      this);
-                                                });
-                                              },
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3),
-                                                bottom: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              "₹ ${item.totalCost}",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3),
-                                                bottom: appConfig.rHP(3)),
                                           ),
                                           alignment: Alignment.bottomRight,
                                         ),
@@ -523,105 +359,31 @@ class ProductListsScreenState
                                         height: 40,
                                         alignment: Alignment.topRight,
                                         margin: EdgeInsets.only(
-                                            bottom: appConfig.rHP(3)),
+                                            bottom: appConfig.rHP(3),
+                                            top: appConfig.rHP(2.5)),
                                         child: FlatButton(
                                           child: Text(
                                               AppLocalizations.instance
-                                                  .text('key_add_to_bill'),
+                                                  .text('key_bill'),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color:
                                                       ConstantColor.COLOR_WHITE,
                                                   fontFamily:
                                                       ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
+                                                  fontSize: 17,
                                                   fontWeight: FontWeight.w400)),
-                                          color: ConstantColor.COLOR_APP_BASE,
+                                          color: ConstantColor.COLOR_GREEN,
                                           textColor: Colors.white,
                                           onPressed: () {
                                             setState(() {
-                                              dismissKeyboard();
-                                              setState(() {
-                                                if (item.totalCost == 0) {
-                                                  showToast(AppLocalizations
-                                                      .instance
-                                                      .text(
-                                                          'key_select_kilos'));
-                                                } else {
-                                                  ///add to bill array
-                                                  ///
-                                                  ///
-
-                                                  if (checkDuplicateBillInCart(
-                                                      item)) {
-                                                    runShakeAnimation();
-                                                    vibratePhone();
-                                                    BaseSingleton.shared
-                                                        .billingProductList
-                                                        .add(item);
-                                                    showToast(AppLocalizations
-                                                        .instance
-                                                        .text(
-                                                            'key_added_cart'));
-                                                  } else {
-                                                    showToast(AppLocalizations
-                                                        .instance
-                                                        .text(
-                                                            'key_already_in_cart'));
-                                                  }
-                                                }
-                                              });
+                                              BaseSingleton
+                                                  .shared.customerDetails
+                                                  .insert(0, item);
+                                              navigateBaseRouting(2);
                                             });
                                           },
-                                        ), /*FloatingActionButton.extended(
-                                              heroTag: item.productId,
-                                              backgroundColor:
-                                                  ConstantColor.COLOR_APP_BASE,
-                                              elevation: 5.0,
-                                              onPressed: () {
-                                                dismissKeyboard();
-                                                setState(() {
-                                                  if (item.totalCost == 0) {
-                                                    showToast(AppLocalizations
-                                                        .instance
-                                                        .text(
-                                                            'key_select_kilos'));
-                                                  } else {
-                                                    ///add to bill array
-                                                    ///
-                                                    ///
-
-                                                    if (checkDuplicateBillInCart(
-                                                        item)) {
-                                                      runShakeAnimation();
-                                                      vibratePhone();
-                                                      BaseSingleton.shared
-                                                          .billingProductList
-                                                          .add(item);
-                                                      showToast(AppLocalizations
-                                                          .instance
-                                                          .text(
-                                                              'key_added_cart'));
-                                                    } else {
-                                                      showToast(AppLocalizations
-                                                          .instance
-                                                          .text(
-                                                              'key_already_in_cart'));
-                                                    }
-                                                  }
-                                                });
-                                              },
-                                              label: Text(
-                                                AppLocalizations.instance
-                                                    .text('key_add_to_bill'),
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: ConstantColor
-                                                        .COLOR_CORE,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: ConstantCommon
-                                                        .BASE_FONT),
-                                              ))*/
+                                        ),
                                       ),
                                     ],
                                   )
@@ -662,7 +424,7 @@ class ProductListsScreenState
                 ),
                 new Container(
                   child: new Text(
-                    AppLocalizations.instance.text('key_user_product_list'),
+                    AppLocalizations.instance.text('key_customers'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: ConstantColor.COLOR_BLACK,
@@ -694,7 +456,7 @@ class ProductListsScreenState
                 top: appConfig.rHP(3),
                 bottom: appConfig.rHP(2)),
             child: new Text(
-              AppLocalizations.instance.text('key_user_product_list'),
+              AppLocalizations.instance.text('key_customers'),
               textAlign: TextAlign.left,
               style: TextStyle(
                   color: ConstantColor.COLOR_APP_BASE,
@@ -817,7 +579,7 @@ class ProductListsScreenState
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,
-        value: _modaProductLists.loadingCircularBar,
+        value: _modalCustomerLists.loadingCircularBar,
         valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
       )),
@@ -834,83 +596,10 @@ class ProductListsScreenState
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
-            actions: <Widget>[
-//              new InkWell(
-//                  child: new Container(
-//                    padding: EdgeInsets.only(right: appConfig.rWP(4)),
-//                    child: Image.asset(
-//                      "assets/images/profiles.png",
-//                      width: 35,
-//                      height: 40,
-//                    ),
-//                  ),
-//                  onTap: () {
-//                    setState(() {
-//                      getLocalSessionDatas();
-//                      showAlertDialog(
-//                          AppLocalizations.instance.text('key_are_you_logout'),
-//                          AppLocalizations.instance.text('key_okay'),
-//                          AppLocalizations.instance.text('key_cancel'),
-//                          0,
-//                          this);
-//                    });
-//                  }),
-
-              new InkWell(
-                child: RotationTransition(
-                  turns: Tween(begin: 0.0, end: -.1)
-                      .chain(CurveTween(curve: Curves.elasticIn))
-                      .animate(_animationController),
-                  child: new Container(
-                    padding: EdgeInsets.only(
-                        right: appConfig.rW(5), top: appConfig.rHP(1)),
-                    child: new Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        new Container(
-                          child: new IconButton(
-                            icon: new Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                            ),
-                            onPressed: null,
-                          ),
-                        ),
-                        new Positioned(
-                            child: new Stack(
-                          alignment: Alignment.topLeft,
-                          children: <Widget>[
-                            new Icon(Icons.brightness_1,
-                                size: 30.0, color: ConstantColor.COLOR_RED),
-                            new Positioned(
-                                top: 6.0,
-                                right: 8.0,
-                                child: new Center(
-                                  child: new Text(
-                                    BaseSingleton
-                                        .shared.billingProductList.length
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: ConstantColor.COLOR_WHITE,
-                                        fontFamily: ConstantCommon.BASE_FONT,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                )),
-                          ],
-                        )),
-                      ],
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  navigateBaseRouting(3);
-                },
-              ),
-            ],
+            actions: <Widget>[],
             bottomOpacity: 1,
           ),
-          body: !_modaProductLists.isNetworkStatus
+          body: !_modalCustomerLists.isNetworkStatus
               ? RefreshIndicator(
                   key: refreshKey,
                   child: new Stack(
@@ -929,7 +618,7 @@ class ProductListsScreenState
                                           new Container(
                                             child: new Column(
                                               children: <Widget>[
-                                                _modaProductLists.boolNodata
+                                                _modalCustomerLists.boolNodata
                                                     ? containerNoData
                                                     : containerClubListsAll
                                               ],
@@ -947,7 +636,7 @@ class ProductListsScreenState
                               ),
                             ),
                           ),
-                          absorbing: _modaProductLists.loadingEnableDisable,
+                          absorbing: _modalCustomerLists.loadingEnableDisable,
                         ),
                       ),
                     ],
@@ -957,7 +646,12 @@ class ProductListsScreenState
         ),
         onWillPop: () {
           setState(() {
-            navigateBaseRouting(6);
+            showAlertDialog(
+                AppLocalizations.instance.text('key_exit'),
+                AppLocalizations.instance.text('key_quit'),
+                AppLocalizations.instance.text('key_cancel'),
+                1,
+                this);
           });
         });
   }
@@ -975,28 +669,28 @@ class ProductListsScreenState
   }
 
   void filterSearchResults(String query) {
-    List<ProductDetails> dummyCallLogImportInfo = [];
-    dummyCallLogImportInfo.addAll(duplicateCallLogImportInfo);
+    List<CustomerDetails> dummyCustomerDetails = [];
+    dummyCustomerDetails.addAll(duplicateCustomerDetails);
     if (query.isNotEmpty) {
-      List<ProductDetails> dummyListData = [];
-      dummyCallLogImportInfo.forEach((item) {
-        if (item.productName.toLowerCase().contains(query) ||
-            item.productCode.toLowerCase().contains(query) ||
-            item.productId.toLowerCase().contains(query) ||
-            item.productId.toLowerCase().contains(query)) {
+      List<CustomerDetails> dummyListData = [];
+      dummyCustomerDetails.forEach((item) {
+        if (item.customerName.toLowerCase().contains(query) ||
+            item.customerBillingName.toLowerCase().contains(query) ||
+            item.customerMobileNo.toLowerCase().contains(query) ||
+            item.customerWhatsappNo.toLowerCase().contains(query)) {
           dummyListData.add(item);
         }
       });
       setState(() {
-        callLogImportInfo.clear();
-        callLogImportInfo.addAll(dummyListData);
+        customerDetails.clear();
+        customerDetails.addAll(dummyListData);
         updateNoDataController();
       });
       return;
     } else {
       setState(() {
-        callLogImportInfo.clear();
-        callLogImportInfo.addAll(duplicateCallLogImportInfo);
+        customerDetails.clear();
+        customerDetails.addAll(duplicateCustomerDetails);
       });
     }
   }
@@ -1017,15 +711,15 @@ class ProductListsScreenState
 
   void showDialog() {
     setState(() {
-      _modaProductLists.loadingEnableDisable = true;
-      _modaProductLists.loadingCircularBar = null;
+      _modalCustomerLists.loadingEnableDisable = true;
+      _modalCustomerLists.loadingCircularBar = null;
     });
   }
 
   void dismissLoadingDialog() {
     setState(() {
-      _modaProductLists.loadingEnableDisable = false;
-      _modaProductLists.loadingCircularBar = 0.0;
+      _modalCustomerLists.loadingEnableDisable = false;
+      _modalCustomerLists.loadingCircularBar = 0.0;
     });
   }
 
@@ -1055,7 +749,7 @@ class ProductListsScreenState
     if (status) {
       setState(() {
         updateInternetConnectivity(false);
-        apiCallBack(6);
+        apiCallBack(1);
       });
     } else {
       updateInternetConnectivity(true);
@@ -1066,27 +760,12 @@ class ProductListsScreenState
     }
   }
 
-  void getUserCallLogReport() {
+  void getCustomerList() {
     checkConnectivityResponse().then((data) {
       if (data) {
         setState(() {
           updateInternetConnectivity(false);
-          _presenterProductList.getProductList();
-        });
-      } else {
-        setState(() {
-          updateInternetConnectivity(true);
-        });
-      }
-    });
-  }
-
-  void logoutUser() {
-    checkConnectivityResponse().then((data) {
-      if (data) {
-        setState(() {
-          updateInternetConnectivity(false);
-          _presenterLogout.logoutUser();
+          _presenterCustomerList.getCustomerList();
         });
       } else {
         setState(() {
@@ -1098,12 +777,9 @@ class ProductListsScreenState
 
   void apiCallBack(int event) {
     setState(() {
-      if (event == 6) {
+      if (event == 1) {
         showDialog();
-        getUserCallLogReport();
-      } else if (event == 7) {
-        showDialog();
-        logoutUser();
+        getCustomerList();
       }
     });
   }
@@ -1112,37 +788,13 @@ class ProductListsScreenState
     refreshKey.currentState?.show(atTop: true);
     await Future.delayed(Duration(seconds: 2));
     setState(() {
-      apiCallBack(6);
+      apiCallBack(1);
     });
     return null;
   }
 
-  @override
-  void onFailureResponseGetProductList(String statusCode) {
-    setState(() {
-      showErrorAlert(statusCode);
-      dismissLoadingDialog();
-    });
-  }
-
-  @override
-  void onSuccessResponseGetProductList(
-      ProductListResponseModel productListResponseModel) {
-    setState(() {
-      dismissLoadingDialog();
-      callLogImportInfo = (productListResponseModel.productDetails as List)
-          .map((datas) => new ProductDetails.fromMap(datas))
-          .toList();
-      duplicateCallLogImportInfo =
-          (productListResponseModel.productDetails as List)
-              .map((datas) => new ProductDetails.fromMap(datas))
-              .toList();
-      updateNoDataController();
-    });
-  }
-
   void updateNoDataController() {
-    if (callLogImportInfo.length > 0) {
+    if (customerDetails.length > 0) {
       updateNoData(false);
     } else {
       updateNoData(true);
@@ -1151,29 +803,7 @@ class ProductListsScreenState
 
   @override
   void onTapAlertOkayListener() {
-    setState(() {
-      apiCallBack(7);
-    });
-  }
-
-  @override
-  void onFailureResponseGetUserLogout(String statusCode) {
-    setState(() {
-      dismissLoadingDialog();
-    });
-  }
-
-  @override
-  void onSuccessResponseUserLogout(LogoutResponseModel logoutResponseModel) {
-    setState(() {
-      dismissLoadingDialog();
-      resetAppClearLocalAndSessionData();
-    });
-  }
-
-  @override
-  int getUserId() {
-    return BaseSingleton.shared.userID;
+    setState(() {});
   }
 
   @override
@@ -1195,22 +825,45 @@ class ProductListsScreenState
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _animationController.dispose();
     super.dispose();
   }
 
   @override
-  Map parseGetProductDetailsRequestData() {
-    return _modaProductLists.mapProductDetDetailsData = {
+  void onTapAlertProductCalculationListener(ProductDetails productDetails) {
+    setState(() {});
+  }
+
+  @override
+  void onFailureResponseGetCustomerList(String statusCode) {
+    setState(() {
+      showErrorAlert(statusCode);
+      dismissLoadingDialog();
+    });
+  }
+
+  @override
+  void onSuccessResponseGetCustomerList(
+      CustomerListResponseModel customerListResponseModel) {
+    setState(() {
+      dismissLoadingDialog();
+      customerDetails = (customerListResponseModel.customerDetails as List)
+          .map((datas) => new CustomerDetails.fromMap(datas))
+          .toList();
+      duplicateCustomerDetails =
+          (customerListResponseModel.customerDetails as List)
+              .map((datas) => new CustomerDetails.fromMap(datas))
+              .toList();
+      updateNoDataController();
+    });
+  }
+
+  @override
+  Map parseGetCustomerDetailsRequestData() {
+    return {
       "search_keyword": getSearchkeyword().trim(),
       "page_count": getPageCount().trim(),
       "page_limits": BaseSingleton.shared.pageLimits
     };
-  }
-
-  @override
-  void onTapAlertProductCalculationListener(ProductDetails productDetails) {
-    setState(() {});
   }
 }

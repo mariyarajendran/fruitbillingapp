@@ -6,8 +6,6 @@ import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListRes
 import 'package:IGO/src/ui/cartscreen/ModalCartLists.dart';
 import 'ModalBillPreview.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
-import 'package:IGO/src/models/responsemodel/calllogresponsemodel/CallLogResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/logoutresponsemodel/LogoutResponseModel.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -100,11 +98,258 @@ class BillPreviewScreenState
   Widget build(BuildContext context) {
     appConfig = AppConfig(context);
 
+    Container containerBillPreviewCustomerDetails = new Container(
+        child: new Container(
+          child: new Column(
+            children: <Widget>[
+              new ListTile(
+                onTap: () {},
+                title: new Stack(
+                  children: <Widget>[
+                    new Container(
+                      width: double.infinity,
+                      child: new Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          new Container(
+                            child: new Column(
+                              children: <Widget>[
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            AppLocalizations.instance
+                                                .text('key_name'),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily:
+                                                    ConstantCommon.BASE_FONT,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    new Expanded(
+                                      child: Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            AppLocalizations.instance
+                                                .text('key_customer_bill_name'),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily:
+                                                    ConstantCommon.BASE_FONT,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ),
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                      flex: 1,
+                                    )
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            BaseSingleton
+                                                .shared
+                                                .customerDetails[0]
+                                                .customerName,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily: ConstantCommon
+                                                    .BASE_FONT_REGULAR,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(1.5)),
+                                        ),
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    new Expanded(
+                                      child: Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            BaseSingleton
+                                                .shared
+                                                .customerDetails[0]
+                                                .customerBillingName,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily: ConstantCommon
+                                                    .BASE_FONT_REGULAR,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(1.5)),
+                                        ),
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            AppLocalizations.instance
+                                                .text('key_customer_phone_no'),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily:
+                                                    ConstantCommon.BASE_FONT,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(3.5)),
+                                        ),
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    new Expanded(
+                                      child: Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            AppLocalizations.instance
+                                                .text('key_customer_whatsapp_no'),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily:
+                                                    ConstantCommon.BASE_FONT,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(3.5)),
+                                        ),
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                      flex: 1,
+                                    )
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            BaseSingleton
+                                                .shared
+                                                .customerDetails[0]
+                                                .customerMobileNo,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily: ConstantCommon
+                                                    .BASE_FONT_REGULAR,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(1.5),
+                                              bottom: appConfig.rHP(1.5)),
+                                        ),
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    new Expanded(
+                                      child: Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            BaseSingleton
+                                                .shared
+                                                .customerDetails[0]
+                                                .customerWhatsappNo,
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily: ConstantCommon
+                                                    .BASE_FONT_REGULAR,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(1.5),
+                                              bottom: appConfig.rHP(1.5)),
+                                        ),
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        margin: EdgeInsets.only(top: appConfig.rHP(2)));
+
     Container containerProductBilling = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
       margin: EdgeInsets.only(top: appConfig.rHP(1)),
       child: CustomScrollView(
         slivers: <Widget>[
+          SliverAppBar(
+              floating: false,
+              pinned: false,
+              snap: false,
+              backgroundColor: ConstantColor.COLOR_APP_BASE,
+              flexibleSpace: SingleChildScrollView(
+                child: containerBillPreviewCustomerDetails,
+              ),
+              bottom: new PreferredSize(
+                  child: new Container(),
+                  preferredSize: Size(appConfig.rW(50), appConfig.rH(13)))),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => new Container(
@@ -262,7 +507,7 @@ class BillPreviewScreenState
 
     Container containerBillHints = new Container(
       child: new Container(
-        margin: EdgeInsets.only(top: appConfig.rHP(8)),
+        //margin: EdgeInsets.only(top: appConfig.rHP(8)),
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -480,11 +725,11 @@ class BillPreviewScreenState
       color: ConstantColor.COLOR_LIGHT_GREY,
       child: new Stack(
         children: <Widget>[
-          containerAppTitleHintBar,
+          //containerAppTitleHintBar,
           containerBillHints,
           new Container(
             margin: EdgeInsets.only(
-                top: appConfig.rHP(13), bottom: appConfig.rHP(12)),
+                top: appConfig.rHP(5), bottom: appConfig.rHP(12)),
             child: containerProductBilling,
           ),
         ],
