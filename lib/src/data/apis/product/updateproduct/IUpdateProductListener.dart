@@ -1,3 +1,6 @@
+
+import 'package:IGO/src/models/responsemodel/product/updateproduct/UpdateProductResponseModel.dart';
+
 abstract class IUpdateProductListener {
   String getProductId();
 
@@ -11,9 +14,13 @@ abstract class IUpdateProductListener {
 
   String getProductStatus();
 
+  Map parseUpdateProductData();
+
+  void postUpdateProductData();
+
   void errorValidationMgs(String error);
 
-  void onSuccessResponseUpdateProduct(String msg);
+  void onSuccessResponseUpdateProduct(ProductDetailsUpdate productDetails);
 
   void onFailureMessageUpdateProduct(String error);
 }

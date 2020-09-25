@@ -1,8 +1,16 @@
 import 'dart:io';
+import 'package:IGO/src/models/responsemodel/bills/getallpendingbalance/GetPendingBalanceResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/bills/savebill/SaveBillResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/bills/updatependingbalance/UpdatePendBalanceResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/addcustomer/AddCustomerResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/dashboard/dashboarddetails/DashboardDetailsResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/addproduct/AddProductResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/updateproduct/UpdateProductResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/report/orderreport/OrderReportResponseModel.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:http_client_helper/http_client_helper.dart';
 import 'dart:async';
@@ -57,8 +65,6 @@ class ServiceRequest implements AllApiRepository {
     return addProductResponseModel;
   }
 
-
-
   @override
   Future<ProductListResponseModel> getProductListData(
       Map requestData, int event) async {
@@ -95,8 +101,6 @@ class ServiceRequest implements AllApiRepository {
     });
     return productListResponseModel;
   }
-
-
 
   static const String ADD_CUSTOMER =
       FRUIT_BILLING_BASE_URL + "api/json/addNewCustomer";
@@ -169,6 +173,300 @@ class ServiceRequest implements AllApiRepository {
       }
     });
     return customerListResponseModel;
+  }
+
+  static const String UPDATE_PRODUCT =
+      FRUIT_BILLING_BASE_URL + "api/json/updateProduct";
+
+  @override
+  Future<UpdateProductResponseModel> postUpdateProductDatas(
+      Map requestData, int event) async {
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': BaseSingleton.shared.jwtToken,
+    };
+
+    UpdateProductResponseModel updateProductResponseModel =
+        new UpdateProductResponseModel();
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(UPDATE_PRODUCT,
+            body: body,
+            headers: headers,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 5))
+        .then((response) {
+      print("url:" + UPDATE_PRODUCT);
+      print("requestData: " + body);
+      final statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      updateProductResponseModel =
+          new UpdateProductResponseModel.fromMap(responseBody);
+      if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
+        throw new FetchDataException("$statusCode");
+      }
+    });
+    return updateProductResponseModel;
+  }
+
+  static const String UPDATE_CUSTOMER =
+      FRUIT_BILLING_BASE_URL + "api/json/updateCustomer";
+
+  @override
+  Future<UpdateCustomerResponseModel> postUpdateCustomerDatas(
+      Map requestData, int event) async {
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': BaseSingleton.shared.jwtToken,
+    };
+
+    UpdateCustomerResponseModel updateCustomerResponseModel =
+        new UpdateCustomerResponseModel();
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(UPDATE_CUSTOMER,
+            body: body,
+            headers: headers,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 5))
+        .then((response) {
+      print("url:" + UPDATE_CUSTOMER);
+      print("requestData: " + body);
+      final statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      updateCustomerResponseModel =
+          new UpdateCustomerResponseModel.fromMap(responseBody);
+      if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
+        throw new FetchDataException("$statusCode");
+      }
+    });
+    return updateCustomerResponseModel;
+  }
+
+  static const String DASHBOARD_DETAILS =
+      FRUIT_BILLING_BASE_URL + "api/json/getDashboardDetails";
+
+  @override
+  Future<DashboardDetailsResponseModel> getDashboardDetailsDatas(
+      Map requestData, int event) async {
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': BaseSingleton.shared.jwtToken,
+    };
+
+    DashboardDetailsResponseModel dashboardDetailsResponseModel =
+        new DashboardDetailsResponseModel();
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(DASHBOARD_DETAILS,
+            body: body,
+            headers: headers,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 5))
+        .then((response) {
+      print("url:" + DASHBOARD_DETAILS);
+      print("requestData: " + body);
+      final statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      dashboardDetailsResponseModel =
+          new DashboardDetailsResponseModel.fromMap(responseBody);
+      if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
+        throw new FetchDataException("$statusCode");
+      }
+    });
+    return dashboardDetailsResponseModel;
+  }
+
+  @override
+  Future<OrderReportResponseModel> getOverAllOrderReports(
+      Map requestData, int event) async {
+    String OVER_ALL_REPORT =
+        FRUIT_BILLING_BASE_URL + "api/json/getOverAllOrderReports";
+
+    OrderReportResponseModel orderReportResponseModel =
+        new OrderReportResponseModel();
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(OVER_ALL_REPORT,
+            headers: headers,
+            body: body,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 10))
+        .then((response) {
+      print("url: " + OVER_ALL_REPORT);
+      print("header: " + headers.toString());
+      int statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print("Response: $responseBody");
+      orderReportResponseModel =
+          new OrderReportResponseModel.fromMap(responseBody);
+      if (statusCode != 200 && responseBody == null) {
+        throw new FetchDataException(
+            "An error ocurred : [Status Code : $statusCode]  Message : $responseBody");
+      }
+    });
+    return orderReportResponseModel;
+  }
+
+  @override
+  Future<OrderDetailsReportResponseModel> getOverAllOrderDetailedReports(
+      Map requestData, int event) async {
+    String OVER_ALL_DETAIL_REPORT =
+        FRUIT_BILLING_BASE_URL + "api/json/getOverAllOrderDetailedReports";
+
+    OrderDetailsReportResponseModel orderDetailsReportResponseModel =
+        new OrderDetailsReportResponseModel();
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(OVER_ALL_DETAIL_REPORT,
+            headers: headers,
+            body: body,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 10))
+        .then((response) {
+      print("url: " + OVER_ALL_DETAIL_REPORT);
+      print("header: " + headers.toString());
+      int statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print("Response: $responseBody");
+      orderDetailsReportResponseModel =
+          new OrderDetailsReportResponseModel.fromMap(responseBody);
+      if (statusCode != 200 && responseBody == null) {
+        throw new FetchDataException(
+            "An error ocurred : [Status Code : $statusCode]  Message : $responseBody");
+      }
+    });
+    return orderDetailsReportResponseModel;
+  }
+
+  @override
+  Future<GetPendingBalanceResponseModel> getPendingBalance(
+      Map requestData, int event) async {
+    String GET_PENDING_BALANCE =
+        FRUIT_BILLING_BASE_URL + "api/json/getPendingBalance";
+
+    GetPendingBalanceResponseModel getPendingBalanceResponseModel =
+        new GetPendingBalanceResponseModel();
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(GET_PENDING_BALANCE,
+            headers: headers,
+            body: body,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 10))
+        .then((response) {
+      print("url: " + GET_PENDING_BALANCE);
+      print("header: " + headers.toString());
+      int statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print("Response: $responseBody");
+      getPendingBalanceResponseModel =
+          new GetPendingBalanceResponseModel.fromMap(responseBody);
+      if (statusCode != 200 && responseBody == null) {
+        throw new FetchDataException(
+            "An error ocurred : [Status Code : $statusCode]  Message : $responseBody");
+      }
+    });
+    return getPendingBalanceResponseModel;
+  }
+
+  @override
+  Future<SaveBillResponseModel> postPlaceOrder(
+      Map requestData, int event) async {
+    String POST_PLACE_ORDER = FRUIT_BILLING_BASE_URL + "api/json/placeOrder";
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': BaseSingleton.shared.jwtToken,
+    };
+
+    SaveBillResponseModel saveBillResponseModel = new SaveBillResponseModel();
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(POST_PLACE_ORDER,
+            body: body,
+            headers: headers,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 5))
+        .then((response) {
+      print("url:" + POST_PLACE_ORDER);
+      print("requestData: " + body);
+      final statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      saveBillResponseModel =
+          new SaveBillResponseModel.fromMapStatus(responseBody);
+      if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
+        throw new FetchDataException("$statusCode");
+      }
+    });
+    return saveBillResponseModel;
+  }
+
+  @override
+  Future<UpdatePendBalanceResponseModel> updatePendingBalance(
+      Map requestData, int event) async {
+    String UPDATE_PENDING_BALANCE =
+        FRUIT_BILLING_BASE_URL + "api/json/updatePendingBalance";
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': BaseSingleton.shared.jwtToken,
+    };
+
+    UpdatePendBalanceResponseModel updatePendBalanceResponseModel =
+        new UpdatePendBalanceResponseModel();
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(UPDATE_PENDING_BALANCE,
+            body: body,
+            headers: headers,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 5))
+        .then((response) {
+      print("url:" + UPDATE_PENDING_BALANCE);
+      print("requestData: " + body);
+      final statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      updatePendBalanceResponseModel =
+          new UpdatePendBalanceResponseModel.fromMapStatus(responseBody);
+      if (statusCode != HttpStatus.STATUS_200 || response.body == null) {
+        throw new FetchDataException("$statusCode");
+      }
+    });
+    return updatePendBalanceResponseModel;
   }
 
 /////////////////////////////////////////

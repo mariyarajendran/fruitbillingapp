@@ -94,5 +94,6 @@
   "key_name": "பெயர்",
   "key_address": "முகவரி",
   "key_bill": "பில்",
-  "key_search": "தேடல்"
+  "key_search": "தேடல்",
+  "key_product_status": "Give product active or inactive status"
 }
