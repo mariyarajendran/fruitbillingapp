@@ -1,5 +1,5 @@
-import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/customerresponsemodel/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 
 class BaseSingleton {
   static final BaseSingleton _baseSingleton = new BaseSingleton._internal();

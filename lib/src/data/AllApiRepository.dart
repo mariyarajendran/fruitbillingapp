@@ -1,24 +1,28 @@
-import 'package:IGO/src/models/responsemodel/addcustomerresponsedata/AddCustomerResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/addproductresponsemodel/AddProductResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/customerresponsemodel/CustomerListResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/logoutresponsemodel/LogoutResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/resetpasswordresponsemodel/ResetResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/addcustomer/AddCustomerResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/addproduct/AddProductResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+
+
 
 abstract class AllApiRepository {
+
+
+  //////////////////////////////////////////////////////////////////////product
+
   Future<AddProductResponseModel> postAddProductDatas(
       Map loginDatas, int event);
 
   Future<AddCustomerResponseModel> postAddCustomerDatas(
       Map customerDatas, int event);
 
-  Future<ResetResponseModel> postResetPasswordDatas(Map resetDatas, int event);
-
   Future<ProductListResponseModel> getProductListData(
       Map requestData, int event);
+
+
+  /////////////////////////////////////////////////////////////////////product
 
   Future<CustomerListResponseModel> getCustomerListData(
       Map requestData, int event);
 
-  Future<LogoutResponseModel> logoutUser(int userID, int event);
 }

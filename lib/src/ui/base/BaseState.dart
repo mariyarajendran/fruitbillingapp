@@ -1,21 +1,20 @@
-import 'package:IGO/src/constants/ConstantColor.dart';
-import 'package:IGO/src/constants/ConstantSize.dart';
 import 'package:IGO/src/data/HttpStatusString.dart';
-import 'package:IGO/src/models/responsemodel/calllogresponsemodel/ProductListResponseModel.dart';
-import 'package:IGO/src/ui/addcustomerscreen/AddCustomerScreen.dart';
-import 'package:IGO/src/ui/addproductscreen/AddProductScreen.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
-import 'package:IGO/src/constants/ConstantCommon.dart';
 import 'package:IGO/src/di/di.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
-import 'package:IGO/src/ui/billpreviewscreen/BillPreviewScreen.dart';
-import 'package:IGO/src/ui/cartscreen/CartListScreen.dart';
-import 'package:IGO/src/ui/customerlist/CustomerListsScreen.dart';
-import 'package:IGO/src/ui/forgotscreen/ForgotScreen.dart';
-import 'package:IGO/src/ui/productlist/ProductLists.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/BillPreviewScreen.dart';
+import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
+import 'package:IGO/src/ui/customer/customerlist/CustomerListsScreen.dart';
+import 'package:IGO/src/ui/product/addproductscreen/AddProductScreen.dart';
+import 'package:IGO/src/ui/product/cartscreen/CartListScreen.dart';
+import 'package:IGO/src/ui/product/productlist/ProductLists.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/SessionManager.dart';
+import 'package:IGO/src/utils/constants/ConstantColor.dart';
+import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import 'package:IGO/src/utils/constants/ConstantSize.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -195,12 +194,6 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
         MaterialPageRoute(builder: (context) => AddProductScreen()),
         (Route<dynamic> route) => false,
       );
-    } else if (event == 1) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => ForgotScreen()),
-        (Route<dynamic> route) => false,
-      );
     } else if (event == 2) {
       Navigator.pushAndRemoveUntil(
         context,
@@ -225,11 +218,11 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
         MaterialPageRoute(builder: (context) => AddCustomerScreen()),
         (Route<dynamic> route) => false,
       );
-    }else if (event == 6) {
+    } else if (event == 6) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => CustomerListsScreen()),
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
       );
     }
   }

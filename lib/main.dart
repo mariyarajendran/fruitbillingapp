@@ -1,10 +1,10 @@
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
+import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import './src/utils/SessionManager.dart';
-import './src/constants/ConstantColor.dart';
 import './src/ui/base/BaseState.dart';
 import './src/ui/base/BaseSingleton.dart';
 
