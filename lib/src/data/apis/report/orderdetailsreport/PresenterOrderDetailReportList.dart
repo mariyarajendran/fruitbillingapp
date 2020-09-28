@@ -18,13 +18,13 @@ class PresenterOrderDetailReportList {
   void onSuccessResponseGetOrderDetailsReportList(
       OrderDetailsReportResponseModel orderDetailsReportResponseModel) {
     if (orderDetailsReportResponseModel.isSuccess) {
-      List<OverAllDetailReports> overAllDetailReports = [];
-      overAllDetailReports =
-          (orderDetailsReportResponseModel.overAllDetailReports)
-              .map((datas) => new OverAllDetailReports.fromMap(datas))
-              .toList();
-      _orderDetailReportListener
-          .onSuccessResponseGetOverAllDetailsOrderList(overAllDetailReports);
+//      List<OverAllDetailReports> overAllDetailReports = [];
+//      overAllDetailReports =
+//          (orderDetailsReportResponseModel.overAllDetailReports)
+//              .map((datas) => new OverAllDetailReports.fromMap(datas))
+//              .toList();
+      _orderDetailReportListener.onSuccessResponseGetOverAllDetailsOrderList(
+          orderDetailsReportResponseModel);
     } else {
       _orderDetailReportListener.onFailureResponseGetOverAllDetailsOrderList(
           orderDetailsReportResponseModel.message);

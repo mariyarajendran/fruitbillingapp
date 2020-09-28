@@ -160,11 +160,11 @@ class ServiceRequest implements AllApiRepository {
             timeLimit: Duration(seconds: 10))
         .then((response) {
       print("url: " + GET_CUSTOMER_LIST);
-      print("header: " + headers.toString());
+      print("request: " + body.toString());
       int statusCode = response.statusCode;
       final Map responseBody = json.decode(response.body);
       print("status code: $statusCode");
-      print("Response: $responseBody");
+      print("Response: ${response.body}");
       customerListResponseModel =
           new CustomerListResponseModel.fromMap(responseBody);
       if (statusCode != 201 && statusCode != 200 && responseBody == null) {
@@ -309,10 +309,11 @@ class ServiceRequest implements AllApiRepository {
         .then((response) {
       print("url: " + OVER_ALL_REPORT);
       print("header: " + headers.toString());
+      print("request: " + body);
       int statusCode = response.statusCode;
       final Map responseBody = json.decode(response.body);
       print("status code: $statusCode");
-      print("Response: $responseBody");
+      print("Response: ${response.body}");
       orderReportResponseModel =
           new OrderReportResponseModel.fromMap(responseBody);
       if (statusCode != 200 && responseBody == null) {
@@ -345,7 +346,7 @@ class ServiceRequest implements AllApiRepository {
             timeLimit: Duration(seconds: 10))
         .then((response) {
       print("url: " + OVER_ALL_DETAIL_REPORT);
-      print("header: " + headers.toString());
+      print("Request: " + body.toString());
       int statusCode = response.statusCode;
       final Map responseBody = json.decode(response.body);
       print("status code: $statusCode");

@@ -268,7 +268,7 @@ class AddProductScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    navigateBaseRouting(2);
+                    navigateBaseRouting(7);
                   });
                 },
               ),
@@ -323,7 +323,11 @@ class AddProductScreenState
             : centerContainerNoNetwork,
         backgroundColor: ConstantColor.COLOR_BACKGROUND,
       ),
-      onWillPop: () {},
+      onWillPop: () {
+        setState(() {
+          navigateBaseRouting(7);
+        });
+      },
     );
   }
 

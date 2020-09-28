@@ -15,8 +15,6 @@ import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
 
-
-
 import 'package:flutter/services.dart' show rootBundle;
 
 void main() => runApp(AddCustomerScreen());
@@ -316,7 +314,7 @@ class AddCustomerScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    navigateBaseRouting(2);
+                    navigateBaseRouting(10);
                   });
                 },
               ),
@@ -371,7 +369,11 @@ class AddCustomerScreenState
             : centerContainerNoNetwork,
         backgroundColor: ConstantColor.COLOR_BACKGROUND,
       ),
-      onWillPop: () {},
+      onWillPop: () {
+        setState(() {
+          navigateBaseRouting(10);
+        });
+      },
     );
   }
 
@@ -509,6 +511,7 @@ class AddCustomerScreenState
       showToast(msg);
       clearAllEditTextDatas();
       dismissLoadingDialog();
+      navigateBaseRouting(10);
     });
   }
 

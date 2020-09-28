@@ -22,7 +22,7 @@ class PresenterUpdateCustomer {
     _updateCustomerListener.onFailureMessageUpdateCustomer(error);
   }
 
-  void hitPostCustomerDataCall() {
+  void hitUpdateCustomerDataCall() {
     _intractorUpdateCustomer.hitCustomerUpdateCall(
         _updateCustomerListener.parseUpdateCustomerData());
   }

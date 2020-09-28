@@ -2,7 +2,7 @@ class DashboardDetailsResponseModel {
   int code;
   bool isSuccess;
   String message;
-  DashboardDetails dashboardDetails;
+  dynamic dashboardDetails;
 
   DashboardDetailsResponseModel(
       {this.code, this.isSuccess, this.message, this.dashboardDetails});
@@ -11,7 +11,7 @@ class DashboardDetailsResponseModel {
       : code = map['code'] ?? '',
         isSuccess = map['isSuccess'] ?? false,
         message = map['message'] ?? '',
-        dashboardDetails = map['dashboard_details'];
+        dashboardDetails = DashboardDetails.fromMap(map['dashboard_details']);
 }
 
 class DashboardDetails {

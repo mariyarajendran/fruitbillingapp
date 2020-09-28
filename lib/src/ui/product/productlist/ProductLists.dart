@@ -13,7 +13,6 @@ import 'package:IGO/src/utils/Connectivity.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -54,7 +53,7 @@ class ProductListsScreenState
     implements
         ViewContractConnectivityListener,
         IProductListListener,
-        BaseAlertListener{
+        BaseAlertListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
@@ -1035,6 +1034,7 @@ class ProductListsScreenState
     super.initState();
     if (mounted) {
       setState(() {
+        apiCallBack(6);
         _RefreshController = ScrollController();
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
@@ -1049,7 +1049,6 @@ class ProductListsScreenState
     if (status) {
       setState(() {
         updateInternetConnectivity(false);
-        apiCallBack(6);
       });
     } else {
       updateInternetConnectivity(true);
@@ -1074,8 +1073,6 @@ class ProductListsScreenState
       }
     });
   }
-
-
 
   void apiCallBack(int event) {
     setState(() {
@@ -1129,14 +1126,8 @@ class ProductListsScreenState
 
   @override
   void onTapAlertOkayListener() {
-    setState(() {
-
-    });
+    setState(() {});
   }
-
-
-
-
 
   @override
   void onTapAlertQuitAppListener() {
