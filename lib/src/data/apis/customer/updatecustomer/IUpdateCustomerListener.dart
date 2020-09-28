@@ -3,11 +3,11 @@ import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCusto
 abstract class IUpdateCustomerListener {
   String getCustonerId();
 
-  String getCustomerName();
+  String getCustomerNameUpdate();
 
-  String getCustomerBillingName();
+  String getCustomerBillingNameUpdate();
 
-  String getCustomerAddress();
+  String getCustomerAddressUpdate();
 
   String getCustomerMobileNo();
 
@@ -22,7 +22,7 @@ abstract class IUpdateCustomerListener {
   void errorValidationMgs(String error);
 
   void onSuccessResponseUpdateCustomer(
-      CustomerDetailsUpdate customerDetailsUpdate);
+      UpdateCustomerResponseModel updateCustomerResponseModel);
 
   void onFailureMessageUpdateCustomer(String error);
 }

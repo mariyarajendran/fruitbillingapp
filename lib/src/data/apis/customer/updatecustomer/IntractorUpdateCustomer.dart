@@ -16,8 +16,7 @@ class IntractorUpdateCustomer {
   void hitCustomerUpdateCall(Map mapProductData) {
     _allApiRepository.postUpdateCustomerDatas(mapProductData, 0).then((data) {
       if (data.isSuccess) {
-        _presenterUpdateCustomer
-            .onSuccessResponseUpdateCustomer(data.customerDetailsUpdate);
+        _presenterUpdateCustomer.onSuccessResponseUpdateCustomer(data);
       } else {
         _presenterUpdateCustomer.onFailureMessageUpdateCustomer(data.message);
       }

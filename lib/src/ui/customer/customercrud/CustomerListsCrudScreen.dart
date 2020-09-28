@@ -5,6 +5,7 @@ import 'package:IGO/src/data/apis/customer/updatecustomer/PresenterUpdateCustome
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
@@ -20,6 +21,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(CustomerListsCrudScreen());
+CustomerDetails customerDetailsNavigate = new CustomerDetails();
 
 class CustomerListsCrudScreen extends StatelessWidget {
   @override
@@ -373,7 +375,14 @@ class CustomerListsCrudScreenState
                                             color: ConstantColor.COLOR_GREEN,
                                             textColor: Colors.white,
                                             onPressed: () {
-                                              setState(() {});
+                                              setState(() {
+                                                customerDetailsNavigate = item;
+                                                navigationPushReplacementPassParams(
+                                                    AddCustomerScreenStateful(
+                                                  customerDetails:
+                                                      customerDetailsNavigate,
+                                                ));
+                                              });
                                             },
                                           ),
                                         ),
@@ -705,7 +714,11 @@ class CustomerListsCrudScreenState
             child: const Icon(Icons.add),
             onPressed: () {
               setState(() {
-                navigateBaseRouting(5);
+                customerDetailsNavigate = new CustomerDetails();
+                navigationPushReplacementPassParams(AddCustomerScreenStateful(
+                  customerDetails: customerDetailsNavigate,
+                ));
+                //navigateBaseRouting(5);
               });
             },
           ),
@@ -958,22 +971,7 @@ class CustomerListsCrudScreenState
   }
 
   @override
-  String getCustomerAddress() {
-    return "";
-  }
-
-  @override
-  String getCustomerBillingName() {
-    return "";
-  }
-
-  @override
   String getCustomerMobileNo() {
-    return "";
-  }
-
-  @override
-  String getCustomerName() {
     return "";
   }
 
@@ -1002,8 +1000,9 @@ class CustomerListsCrudScreenState
 
   @override
   void onSuccessResponseUpdateCustomer(
-      CustomerDetailsUpdate customerDetailsUpdate) {
+      UpdateCustomerResponseModel updateCustomerResponseModel) {
     setState(() {
+      showToast(updateCustomerResponseModel.message);
       dismissLoadingDialog();
       apiCallBack(1);
     });
@@ -1025,5 +1024,20 @@ class CustomerListsCrudScreenState
   @override
   void postUpdateCustomerData() {
     setState(() {});
+  }
+
+  @override
+  String getCustomerAddressUpdate() {
+    return "";
+  }
+
+  @override
+  String getCustomerBillingNameUpdate() {
+    return "";
+  }
+
+  @override
+  String getCustomerNameUpdate() {
+    return "";
   }
 }

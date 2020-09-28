@@ -3,7 +3,6 @@ import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCusto
 import 'IntractorUpdateCustomer.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 
-
 class PresenterUpdateCustomer {
   IUpdateCustomerListener _updateCustomerListener;
   IntractorUpdateCustomer _intractorUpdateCustomer;
@@ -13,9 +12,9 @@ class PresenterUpdateCustomer {
   }
 
   void onSuccessResponseUpdateCustomer(
-      CustomerDetailsUpdate customerDetailsUpdate) {
+      UpdateCustomerResponseModel updateCustomerResponseModel) {
     _updateCustomerListener
-        .onSuccessResponseUpdateCustomer(customerDetailsUpdate);
+        .onSuccessResponseUpdateCustomer(updateCustomerResponseModel);
   }
 
   void onFailureMessageUpdateCustomer(String error) {
@@ -28,13 +27,13 @@ class PresenterUpdateCustomer {
   }
 
   void validateUpdateCustomerData() {
-    if (_updateCustomerListener.getCustomerName().isEmpty) {
+    if (_updateCustomerListener.getCustomerNameUpdate().isEmpty) {
       _updateCustomerListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_name'));
-    } else if (_updateCustomerListener.getCustomerBillingName().isEmpty) {
+    } else if (_updateCustomerListener.getCustomerBillingNameUpdate().isEmpty) {
       _updateCustomerListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_cost'));
-    } else if (_updateCustomerListener.getCustomerAddress().isEmpty) {
+    } else if (_updateCustomerListener.getCustomerAddressUpdate().isEmpty) {
       _updateCustomerListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_code'));
     } else if (_updateCustomerListener.getCustomerMobileNo().isEmpty) {
