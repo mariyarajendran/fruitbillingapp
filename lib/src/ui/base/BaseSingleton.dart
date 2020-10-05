@@ -18,10 +18,15 @@ class BaseSingleton {
   bool firstTimeOfApp = false;
   var appLocalLang = "ta";
   var userEmailId = "";
-  int userID=0;
+  int userID = 0;
   List<ProductDetails> billingProductList = [];
-  int pageLimits=100;
-  List<CustomerDetails> customerDetails=[];
+  int pageLimits = 100;
+  List<CustomerDetails> customerDetails = [];
+
+  void clearBillSessionAndCustomerSession() {
+    billingProductList = [];
+    customerDetails = [];
+  }
 
   void clearAllBaseSingleton() {
     jwtToken = "";
@@ -29,6 +34,6 @@ class BaseSingleton {
     loginSession = "";
     appLocalLang = "ta";
     userEmailId = "";
-    userID=0;
+    userID = 0;
   }
 }

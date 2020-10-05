@@ -1,10 +1,15 @@
 import 'package:IGO/src/data/apis/bills/savebill/ISaveBillListener.dart';
 import 'package:IGO/src/data/apis/bills/savebill/PresenterSaveBillData.dart';
+import 'package:IGO/src/data/apis/report/orderdetailsreport/IOrderDetailReportListener.dart';
+import 'package:IGO/src/data/apis/report/orderdetailsreport/PresenterOrderDetailReportList.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
+import 'package:IGO/src/ui/report/overallreport/OverAllParamModel.dart';
+import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
-import 'ModalBillPreview.dart';
+import 'ModalOverAllDetailedReport.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
@@ -15,16 +20,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(BillPreviewScreen());
+void main() => runApp(OverAllDetailedReportScreen());
 
-int organizationID;
-String organizationName;
-String organizationName2;
-String eventStartDate;
-double eventLatitude;
-double eventLongitude;
-
-class BillPreviewScreen extends StatelessWidget {
+class OverAllDetailedReportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,35 +30,41 @@ class BillPreviewScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BillPreviewScreenStateful(),
+      home: OverAllDetailedReportStateful(),
     );
   }
 }
 
-class BillPreviewScreenStateful extends StatefulWidget {
-  BillPreviewScreenStateful({Key key, this.title}) : super(key: key);
-
+class OverAllDetailedReportStateful extends StatefulWidget {
+  OverAllDetailedReportStateful(
+      {Key key, this.title, @required this.overAllParamModel})
+      : super(key: key);
+  final OverAllParamModel overAllParamModel;
   final String title;
+  OverallReportListScreen overallReportListScreen;
 
   @override
-  BillPreviewScreenState createState() => BillPreviewScreenState();
+  OverAllDetailedReportState createState() => OverAllDetailedReportState();
 }
 
-class BillPreviewScreenState
-    extends BaseStateStatefulState<BillPreviewScreenStateful>
+class OverAllDetailedReportState
+    extends BaseStateStatefulState<OverAllDetailedReportStateful>
     with TickerProviderStateMixin
     implements
         ViewContractConnectivityListener,
         BaseAlertListener,
-        ISaveBillListener {
+        IOrderDetailReportListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
-  ModalBillPreview _modalBillPreview;
-  PresenterSaveBillData _presenterSaveBillData;
-
+  ModalOverAllDetailedReport _modalOverAllDetailedReport;
+  PresenterOrderDetailReportList _presenterOrderDetailReportList;
   AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
+  List<OverAllDetailReports> overAllDetailReports = [];
+  OrderDetailsReportResponseModel orderDetailsReportResponseModel =
+      new OrderDetailsReportResponseModel();
+  CustomerDetails customerDetails = new CustomerDetails();
 
   //Keys//
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -69,10 +73,10 @@ class BillPreviewScreenState
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  BillPreviewScreenState() {
-    this._modalBillPreview = new ModalBillPreview();
-    this._presenterSaveBillData = new PresenterSaveBillData(this);
+  OverAllDetailedReportState() {
+    this._modalOverAllDetailedReport = new ModalOverAllDetailedReport();
     this._connectivity = new Connectivitys(this);
+    _presenterOrderDetailReportList = new PresenterOrderDetailReportList(this);
   }
 
   void checkInternetAlert() {
@@ -83,15 +87,15 @@ class BillPreviewScreenState
   }
 
   void updateInternetConnectivity(bool networkStatus) {
-    _modalBillPreview.isNetworkStatus = networkStatus;
+    _modalOverAllDetailedReport.isNetworkStatus = networkStatus;
   }
 
   void updateNoData(bool status) {
-    _modalBillPreview.boolNodata = status;
+    _modalOverAllDetailedReport.boolNodata = status;
   }
 
   void updateEventCircularLoader(bool status) {
-    _modalBillPreview.eventCircularLoader = status;
+    _modalOverAllDetailedReport.eventCircularLoader = status;
   }
 
   @override
@@ -168,11 +172,7 @@ class BillPreviewScreenState
                                       child: new Align(
                                         child: new Container(
                                           child: new Text(
-                                            BaseSingleton
-                                                    .shared
-                                                    .customerDetails[0]
-                                                    .customerName ??
-                                                '',
+                                            customerDetails.customerName ?? '',
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 color:
@@ -193,9 +193,7 @@ class BillPreviewScreenState
                                       child: Align(
                                         child: new Container(
                                           child: new Text(
-                                            BaseSingleton
-                                                    .shared
-                                                    .customerDetails[0]
+                                            customerDetails
                                                     .customerBillingName ??
                                                 '',
                                             textAlign: TextAlign.right,
@@ -274,10 +272,7 @@ class BillPreviewScreenState
                                       child: new Align(
                                         child: new Container(
                                           child: new Text(
-                                            BaseSingleton
-                                                    .shared
-                                                    .customerDetails[0]
-                                                    .customerMobileNo ??
+                                            customerDetails.customerMobileNo ??
                                                 '',
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
@@ -300,9 +295,7 @@ class BillPreviewScreenState
                                       child: Align(
                                         child: new Container(
                                           child: new Text(
-                                            BaseSingleton
-                                                    .shared
-                                                    .customerDetails[0]
+                                            customerDetails
                                                     .customerWhatsappNo ??
                                                 '',
                                             textAlign: TextAlign.right,
@@ -390,9 +383,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          BaseSingleton
-                                                              .shared
-                                                              .billingProductList[
+                                                          overAllDetailReports[
                                                                   index]
                                                               .productName,
                                                           textAlign:
@@ -417,7 +408,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
+                                                          "₹ ${overAllDetailReports[index].productCost}",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -441,7 +432,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                          "${overAllDetailReports[index].productStockKg} Kg",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -465,7 +456,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].totalCost}",
+                                                          "₹ ${overAllDetailReports[index].productTotalCost}",
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -501,7 +492,7 @@ class BillPreviewScreenState
                   ],
                 ),
               ),
-              childCount: BaseSingleton.shared.billingProductList.length,
+              childCount: overAllDetailReports.length,
             ),
           ),
         ],
@@ -610,7 +601,7 @@ class BillPreviewScreenState
     );
 
     Container previewBillTotalContainer = new Container(
-      margin: EdgeInsets.only(bottom: appConfig.rHP(6)),
+      //margin: EdgeInsets.only(bottom: appConfig.rHP(6)),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: new Column(
@@ -650,7 +641,7 @@ class BillPreviewScreenState
                                   new Expanded(
                                     child: new Container(
                                       child: new Text(
-                                        "₹ ${calculateTotalCost()}",
+                                        "₹ ${overAllParamModel.totalBalanceAmount}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
@@ -676,54 +667,6 @@ class BillPreviewScreenState
         ),
       ),
     );
-
-    Container containerAppTitleHintBar = new Container(
-        color: ConstantColor.COLOR_WHITE,
-        child: new Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                new Stack(
-                  children: [
-                    new Container(
-                      padding: EdgeInsets.only(
-                          right: appConfig.rWP(1),
-                          left: appConfig.rWP(5),
-                          top: appConfig.rWP(3),
-                          bottom: appConfig.rWP(2)),
-                      child: Image.asset(
-                        "assets/images/billing.png",
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                  ],
-                ),
-                new Container(
-                  child: new Text(
-                    AppLocalizations.instance.text('key_bill_preview_hint'),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
-                        fontFamily: ConstantCommon.BASE_FONT,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Spacer(),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Container(
-                    height: 3.0,
-                    margin: EdgeInsets.only(left: appConfig.rWP(5)),
-                    width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
-              ],
-            ),
-          ],
-        ));
 
     Container containerBillPreview = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
@@ -757,9 +700,7 @@ class BillPreviewScreenState
               color: ConstantColor.COLOR_GREEN,
               textColor: Colors.white,
               onPressed: () {
-                setState(() {
-                  apiCallBack(0);
-                });
+                setState(() {});
               },
             ),
           )),
@@ -782,7 +723,7 @@ class BillPreviewScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    navigateBaseRouting(3);
+                    navigateBaseRouting(8);
                   });
                 },
               ),
@@ -863,7 +804,7 @@ class BillPreviewScreenState
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,
-        value: _modalBillPreview.loadingCircularBar,
+        value: _modalOverAllDetailedReport.loadingCircularBar,
         valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
       )),
@@ -882,27 +823,28 @@ class BillPreviewScreenState
             centerTitle: false,
             bottomOpacity: 1,
           ),
-          body: !_modalBillPreview.isNetworkStatus
-              ? _modalBillPreview.boolNodata
+          body: !_modalOverAllDetailedReport.isNetworkStatus
+              ? _modalOverAllDetailedReport.boolNodata
                   ? containerNoData
                   : AbsorbPointer(
                       child: new Stack(
                         children: [
                           containerBillPreview,
                           previewBillTotalContainer,
-                          previewBillContainer,
+                          //previewBillContainer,
                           new Align(
                               alignment: Alignment.center,
                               child: containerCircularLoader),
                         ],
                       ),
-                      absorbing: _modalBillPreview.loadingEnableDisable,
+                      absorbing:
+                          _modalOverAllDetailedReport.loadingEnableDisable,
                     )
               : centerContainerNoNetwork,
         ),
         onWillPop: () {
           setState(() {
-            navigateBaseRouting(3);
+            navigateBaseRouting(8);
           });
         });
   }
@@ -927,16 +869,6 @@ class BillPreviewScreenState
     });
   }
 
-  int calculateTotalCost() {
-    int totalCount = 0;
-    setState(() {
-      for (int i = 0; i < BaseSingleton.shared.billingProductList.length; i++) {
-        totalCount += BaseSingleton.shared.billingProductList[i].totalCost;
-      }
-    });
-    return totalCount;
-  }
-
   void forSomeDelay() {
     Future.delayed(const Duration(milliseconds: 3000), () {
       // onlineDisappear();
@@ -945,15 +877,15 @@ class BillPreviewScreenState
 
   void showDialog() {
     setState(() {
-      _modalBillPreview.loadingEnableDisable = true;
-      _modalBillPreview.loadingCircularBar = null;
+      _modalOverAllDetailedReport.loadingEnableDisable = true;
+      _modalOverAllDetailedReport.loadingCircularBar = null;
     });
   }
 
   void dismissLoadingDialog() {
     setState(() {
-      _modalBillPreview.loadingEnableDisable = false;
-      _modalBillPreview.loadingCircularBar = 0.0;
+      _modalOverAllDetailedReport.loadingEnableDisable = false;
+      _modalOverAllDetailedReport.loadingCircularBar = 0.0;
     });
   }
 
@@ -965,8 +897,7 @@ class BillPreviewScreenState
         _RefreshController = ScrollController();
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
-        updateNoDataController();
-        parseProductListData();
+        apiCallBack(0);
       });
     }
   }
@@ -990,8 +921,23 @@ class BillPreviewScreenState
     setState(() {
       if (event == 0) {
         showDialog();
-        saveBill();
+        getOverAllDetailsReportList();
       } else if (event == 7) {}
+    });
+  }
+
+  void getOverAllDetailsReportList() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterOrderDetailReportList.getOrderDetailsReportList();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
     });
   }
 
@@ -1003,7 +949,7 @@ class BillPreviewScreenState
   }
 
   void updateNoDataController() {
-    if (BaseSingleton.shared.billingProductList.length > 0) {
+    if (overAllDetailReports.length > 0) {
       updateNoData(false);
     } else {
       updateNoData(true);
@@ -1012,32 +958,6 @@ class BillPreviewScreenState
 
   void clearBillingSessionData() {
     BaseSingleton.shared.billingProductList = [];
-  }
-
-  List<Map<String, dynamic>> parseProductListData() {
-    List<Map<String, dynamic>> productListData = [];
-    setState(() {
-      for (int i = 0; i < BaseSingleton.shared.billingProductList.length; i++) {
-        Map<String, dynamic> productMapData = {
-          'product_id': BaseSingleton.shared.billingProductList[i].productId,
-          'product_name':
-              BaseSingleton.shared.billingProductList[i].productName,
-          'product_cost':
-              BaseSingleton.shared.billingProductList[i].productCost,
-          'product_date':
-              BaseSingleton.shared.billingProductList[i].productDate,
-          'product_stock_kg':
-              BaseSingleton.shared.billingProductList[i].totalKiloGrams,
-          'product_total_cost':
-              BaseSingleton.shared.billingProductList[i].totalCost,
-          'product_code':
-              BaseSingleton.shared.billingProductList[i].productCode,
-        };
-        productListData.add(productMapData);
-      }
-      print(productListData);
-    });
-    return productListData;
   }
 
   @override
@@ -1058,72 +978,43 @@ class BillPreviewScreenState
   }
 
   @override
-  void errorValidationMgs(String error) {}
-
-  @override
   String getCustomerId() {
-    return BaseSingleton.shared.customerDetails[0].customerId;
+    return overAllParamModel.customerId;
   }
 
   @override
-  String getPendingAmount() {
-    return "0";
+  String getOrderId() {
+    return overAllParamModel.orderId;
   }
 
   @override
-  String getReceivedAmount() {
-    return calculateTotalCost().toString();
-  }
-
-  @override
-  String getTotalAmount() {
-    return calculateTotalCost().toString();
-  }
-
-  @override
-  void onFailureMessageSaveBill(String error) {
+  void onFailureResponseGetOverAllDetailsOrderList(String statusCode) {
     setState(() {
       dismissLoadingDialog();
-      showErrorAlert(error);
+      showErrorAlert(statusCode);
+      updateNoDataController();
     });
   }
 
   @override
-  void onSuccessResponseSaveBill(String msg) {
+  void onSuccessResponseGetOverAllDetailsOrderList(
+      OrderDetailsReportResponseModel orderDetailsReportResponseModel) {
     setState(() {
       dismissLoadingDialog();
-      showToast(msg);
-      navigateBaseRouting(6);
-      clearBillingSessionData();
-    });
-  }
-
-  @override
-  Map parseSaveBillData() {
-    return {
-      'customer_id': getCustomerId(),
-      'total_amount': getTotalAmount(),
-      'received_amount': getReceivedAmount(),
-      'pending_amount': getPendingAmount(),
-      'product_list_data': parseProductListData(),
-    };
-  }
-
-  void saveBill() {
-    checkConnectivityResponse().then((data) {
-      if (data) {
-        setState(() {
-          updateInternetConnectivity(false);
-          _presenterSaveBillData.hitPostSaveBillCall();
-        });
-      } else {
-        setState(() {
-          updateInternetConnectivity(true);
-        });
+      if (orderDetailsReportResponseModel != null) {
+        this.orderDetailsReportResponseModel = orderDetailsReportResponseModel;
+        this.overAllDetailReports =
+            (orderDetailsReportResponseModel.overAllDetailReports)
+                .map((datas) => new OverAllDetailReports.fromMap(datas))
+                .toList();
+        this.customerDetails = orderDetailsReportResponseModel.customerDetails;
+        updateNoDataController();
       }
     });
   }
 
   @override
-  void postSaveBillData() {}
+  Map parseGetProductDetailsRequestData() {
+    return {'order_id': getOrderId(), 'customer_id': getCustomerId()};
+  }
 }

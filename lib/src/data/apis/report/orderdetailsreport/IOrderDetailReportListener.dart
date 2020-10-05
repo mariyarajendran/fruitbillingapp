@@ -2,11 +2,13 @@ import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDeta
 
 abstract class IOrderDetailReportListener {
   void onSuccessResponseGetOverAllDetailsOrderList(
-      List<OverAllDetailReports> listOverAllDetailReports);
+      OrderDetailsReportResponseModel orderDetailsReportResponseModel);
 
   void onFailureResponseGetOverAllDetailsOrderList(String statusCode);
 
   String getOrderId();
+
+  String getCustomerId();
 
   Map parseGetProductDetailsRequestData();
 }

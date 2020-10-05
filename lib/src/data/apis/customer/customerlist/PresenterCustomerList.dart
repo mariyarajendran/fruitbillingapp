@@ -4,7 +4,6 @@ import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListR
 import 'ICustomerListener.dart';
 import 'IntractorCustomerList.dart';
 
-
 class PresenterCustomerList {
   AllApiRepository _allApiRepository;
   ICustomerListener _customerListener;
@@ -22,13 +21,8 @@ class PresenterCustomerList {
 
   void onSuccessResponseGetCustomerList(
       CustomerListResponseModel customerListResponseModel) {
-    if (customerListResponseModel.isSuccess) {
-      _customerListener
-          .onSuccessResponseGetCustomerList(customerListResponseModel);
-    } else {
-      _customerListener
-          .onFailureResponseGetCustomerList(customerListResponseModel.message);
-    }
+    _customerListener
+        .onSuccessResponseGetCustomerList(customerListResponseModel);
   }
 
   void onFailureResponseGetCustomerList(String statusCode) {

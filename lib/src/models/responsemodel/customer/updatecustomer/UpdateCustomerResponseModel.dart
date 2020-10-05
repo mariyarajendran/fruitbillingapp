@@ -11,7 +11,8 @@ class UpdateCustomerResponseModel {
       : code = map['code'] ?? '',
         isSuccess = map['isSuccess'] ?? false,
         message = map['message'] ?? '',
-        customerDetailsUpdate = map['customer_details'];
+        customerDetailsUpdate =
+            CustomerDetailsUpdate.fromMap(map['customer_details']);
 }
 
 class CustomerDetailsUpdate {

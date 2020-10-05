@@ -1,5 +1,10 @@
 import 'package:IGO/src/data/apis/customer/addcustomer/IAddCustomerListener.dart';
 import 'package:IGO/src/data/apis/customer/addcustomer/PresenterAddCustomer.dart';
+import 'package:IGO/src/data/apis/customer/updatecustomer/IUpdateCustomerListener.dart';
+import 'package:IGO/src/data/apis/customer/updatecustomer/PresenterUpdateCustomer.dart';
+import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
+import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 
 import 'ModalAddCustomer.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
@@ -14,8 +19,6 @@ import 'package:flutter/material.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
-
-
 
 import 'package:flutter/services.dart' show rootBundle;
 
@@ -33,8 +36,11 @@ class AddCustomerScreen extends StatelessWidget {
 }
 
 class AddCustomerScreenStateful extends StatefulWidget {
-  AddCustomerScreenStateful({Key key, this.title}) : super(key: key);
+  AddCustomerScreenStateful(
+      {Key key, this.title, @required this.customerDetails})
+      : super(key: key);
   final String title;
+  final CustomerDetails customerDetails;
 
   @override
   AddCustomerScreenState createState() => AddCustomerScreenState();
@@ -43,19 +49,24 @@ class AddCustomerScreenStateful extends StatefulWidget {
 class AddCustomerScreenState
     extends BaseStateStatefulState<AddCustomerScreenStateful>
     with WidgetsBindingObserver
-    implements IAddCustomerListener, ViewContractConnectivityListener {
+    implements
+        IAddCustomerListener,
+        ViewContractConnectivityListener,
+        IUpdateCustomerListener {
   AppConfig _appConfig;
   SessionManager _sessionManager;
   Connectivitys _connectivity = Connectivitys.instance;
   ModalAddCustomer _modalAddCustomer;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
   PresenterAddCustomer _presenterAddCustomer;
+  PresenterUpdateCustomer _presenterUpdateCustomer;
 
   AddCustomerScreenState() {
     this._modalAddCustomer = new ModalAddCustomer();
     this._sessionManager = new SessionManager();
     this._presenterAddCustomer = new PresenterAddCustomer(this);
     this._connectivity = new Connectivitys(this);
+    this._presenterUpdateCustomer = new PresenterUpdateCustomer(this);
   }
 
   void checkInternetAlert() {
@@ -75,6 +86,21 @@ class AddCustomerScreenState
     _connectivity.myStream.listen((source) {
       setState(() => _sourceConnectionStatus = source);
       print("initnetw" + _sourceConnectionStatus.toString());
+    });
+  }
+
+  void setEditDetails() {
+    setState(() {
+      _modalAddCustomer.controllerCustomerName.text =
+          customerDetailsNavigate.customerName;
+      _modalAddCustomer.controllerCustomerBillingName.text =
+          customerDetailsNavigate.customerBillingName;
+      _modalAddCustomer.controllerCustomerAddress.text =
+          customerDetailsNavigate.customerAddress;
+      _modalAddCustomer.controllerCustomerPhoneNumber.text =
+          customerDetailsNavigate.customerMobileNo;
+      _modalAddCustomer.controllerCustomerWhatsAppNumber.text =
+          customerDetailsNavigate.customerWhatsappNo;
     });
   }
 
@@ -274,7 +300,11 @@ class AddCustomerScreenState
           textColor: Colors.white,
           color: ConstantColor.COLOR_APP_BASE,
           onPressed: () {
-            apiCallBacks(1);
+            if (customerDetailsNavigate.customerId == null) {
+              apiCallBacks(1);
+            } else {
+              apiCallBacks(3);
+            }
           },
           child: new Text(AppLocalizations.instance.text('key_add_customer'),
               textAlign: TextAlign.center,
@@ -316,7 +346,7 @@ class AddCustomerScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    navigateBaseRouting(2);
+                    navigateBaseRouting(10);
                   });
                 },
               ),
@@ -371,7 +401,11 @@ class AddCustomerScreenState
             : centerContainerNoNetwork,
         backgroundColor: ConstantColor.COLOR_BACKGROUND,
       ),
-      onWillPop: () {},
+      onWillPop: () {
+        setState(() {
+          navigateBaseRouting(10);
+        });
+      },
     );
   }
 
@@ -381,6 +415,7 @@ class AddCustomerScreenState
     if (mounted) {
       setState(() {
         initNetworkConnectivity();
+        setEditDetails();
       });
     }
   }
@@ -439,6 +474,15 @@ class AddCustomerScreenState
         showDialog();
         postCustomerDatas();
       });
+    } else if (event == 3) {
+      setState(() {
+        _presenterUpdateCustomer.validateUpdateCustomerData();
+      });
+    } else if (event == 4) {
+      setState(() {
+        showDialog();
+        updateCustomerDatas();
+      });
     }
   }
 
@@ -448,6 +492,21 @@ class AddCustomerScreenState
         setState(() {
           updateInternetConnectivity(false);
           _presenterAddCustomer.hitPostCustomerDataCall();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
+  }
+
+  void updateCustomerDatas() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterUpdateCustomer.hitUpdateCustomerDataCall();
         });
       } else {
         setState(() {
@@ -509,6 +568,7 @@ class AddCustomerScreenState
       showToast(msg);
       clearAllEditTextDatas();
       dismissLoadingDialog();
+      navigateBaseRouting(10);
     });
   }
 
@@ -530,5 +590,79 @@ class AddCustomerScreenState
     _modalAddCustomer.controllerCustomerAddress.text = "";
     _modalAddCustomer.controllerCustomerPhoneNumber.text = "";
     _modalAddCustomer.controllerCustomerWhatsAppNumber.text = "";
+  }
+
+  @override
+  String getCustomerMobileNo() {
+    return _modalAddCustomer.controllerCustomerPhoneNumber.text;
+  }
+
+  @override
+  String getCustomerStatus() {
+    return "true";
+  }
+
+  @override
+  String getCustomerWhatsAppNo() {
+    return _modalAddCustomer.controllerCustomerWhatsAppNumber.text;
+  }
+
+  @override
+  String getCustonerId() {
+    return customerDetailsNavigate.customerId;
+  }
+
+  @override
+  void onFailureMessageUpdateCustomer(String error) {
+    setState(() {
+      dismissLoadingDialog();
+      showErrorAlert(error);
+    });
+  }
+
+  @override
+  void onSuccessResponseUpdateCustomer(
+      UpdateCustomerResponseModel updateCustomerResponseModel) {
+    setState(() {
+      showToast(updateCustomerResponseModel.message);
+      clearAllEditTextDatas();
+      dismissLoadingDialog();
+      navigateBaseRouting(10);
+    });
+  }
+
+  @override
+  Map parseUpdateCustomerData() {
+    return {
+      "customer_name": getCustomerNameUpdate(),
+      "customer_id": getCustonerId(),
+      "customer_billing_name": getCustomerBillingNameUpdate(),
+      "customer_address": getCustomerAddressUpdate(),
+      "customer_mobile_no": getCustomerMobileNo(),
+      "customer_whatsapp_no": getCustomerWhatsAppNo(),
+      "customer_status": getCustomerStatus()
+    };
+  }
+
+  @override
+  void postUpdateCustomerData() {
+    setState(() {
+      apiCallBacks(4);
+    });
+  }
+
+  @override
+  String getCustomerAddressUpdate() {
+    return _modalAddCustomer.controllerCustomerAddress.text;
+  }
+
+  @override
+  String getCustomerBillingNameUpdate() {
+    return _modalAddCustomer.controllerCustomerBillingName.text;
+  }
+
+  @override
+  String getCustomerNameUpdate() {
+    return _modalAddCustomer.controllerCustomerName.text;
   }
 }

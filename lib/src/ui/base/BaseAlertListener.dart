@@ -1,5 +1,3 @@
-
-
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 
 abstract class BaseAlertListener {

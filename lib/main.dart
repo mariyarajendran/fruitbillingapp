@@ -60,9 +60,9 @@ class SplashScreenState extends BaseStateStatefulState<SplashScreenStateful> {
       setState(() {
         if (BaseSingleton.shared.loginSession == "" ||
             BaseSingleton.shared.loginSession == null) {
-          navigateBaseRouting(6);
+          navigateBaseRouting(7);
         } else {
-          navigateBaseRouting(6);
+          navigateBaseRouting(7);
         }
       });
     });

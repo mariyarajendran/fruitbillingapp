@@ -1,11 +1,15 @@
 import 'package:IGO/src/data/apis/customer/customerlist/ICustomerListener.dart';
 import 'package:IGO/src/data/apis/customer/customerlist/PresenterCustomerList.dart';
+import 'package:IGO/src/data/apis/customer/updatecustomer/IUpdateCustomerListener.dart';
+import 'package:IGO/src/data/apis/customer/updatecustomer/PresenterUpdateCustomer.dart';
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
-import 'ModalCustomerLists.dart';
+import 'ModalCustomerListsCrud.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
@@ -16,16 +20,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(CustomerListsScreen());
+void main() => runApp(CustomerListsCrudScreen());
+CustomerDetails customerDetailsNavigate = new CustomerDetails();
 
-int organizationID;
-String organizationName;
-String organizationName2;
-String eventStartDate;
-double eventLatitude;
-double eventLongitude;
-
-class CustomerListsScreen extends StatelessWidget {
+class CustomerListsCrudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,32 +31,34 @@ class CustomerListsScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CustomerListsScreenStateful(),
+      home: CustomerListsCrudScreenStateful(),
     );
   }
 }
 
-class CustomerListsScreenStateful extends StatefulWidget {
-  CustomerListsScreenStateful({Key key, this.title}) : super(key: key);
+class CustomerListsCrudScreenStateful extends StatefulWidget {
+  CustomerListsCrudScreenStateful({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  CustomerListsScreenState createState() => CustomerListsScreenState();
+  CustomerListsCrudScreenState createState() => CustomerListsCrudScreenState();
 }
 
-class CustomerListsScreenState
-    extends BaseStateStatefulState<CustomerListsScreenStateful>
+class CustomerListsCrudScreenState
+    extends BaseStateStatefulState<CustomerListsCrudScreenStateful>
     with TickerProviderStateMixin
     implements
         ViewContractConnectivityListener,
         BaseAlertListener,
-        ICustomerListener {
+        ICustomerListener,
+        IUpdateCustomerListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
-  ModalCustomerLists _modalCustomerLists;
+  ModalCustomerListsCrud _modalCustomerListsCrud;
   PresenterCustomerList _presenterCustomerList;
+  PresenterUpdateCustomer _presenterUpdateCustomer;
 
   AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
@@ -73,22 +73,23 @@ class CustomerListsScreenState
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  CustomerListsScreenState() {
-    this._modalCustomerLists = new ModalCustomerLists();
+  CustomerListsCrudScreenState() {
+    this._modalCustomerListsCrud = new ModalCustomerListsCrud();
     this._connectivity = new Connectivitys(this);
     this._presenterCustomerList = new PresenterCustomerList(this);
+    this._presenterUpdateCustomer = new PresenterUpdateCustomer(this);
   }
 
   void updateInternetConnectivity(bool networkStatus) {
-    _modalCustomerLists.isNetworkStatus = networkStatus;
+    _modalCustomerListsCrud.isNetworkStatus = networkStatus;
   }
 
   void updateNoData(bool status) {
-    _modalCustomerLists.boolNodata = status;
+    _modalCustomerListsCrud.boolNodata = status;
   }
 
   void updateEventCircularLoader(bool status) {
-    _modalCustomerLists.eventCircularLoader = status;
+    _modalCustomerListsCrud.eventCircularLoader = status;
   }
 
   @override
@@ -351,38 +352,104 @@ class CustomerListsScreenState
                                     ],
                                   ),
                                   new Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      new Container(
-                                        height: 40,
-                                        alignment: Alignment.topRight,
-                                        margin: EdgeInsets.only(
-                                            bottom: appConfig.rHP(3),
-                                            top: appConfig.rHP(2.5)),
-                                        child: FlatButton(
-                                          child: Text(
-                                              AppLocalizations.instance
-                                                  .text('key_bill'),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_WHITE,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w400)),
-                                          color: ConstantColor.COLOR_GREEN,
-                                          textColor: Colors.white,
-                                          onPressed: () {
-                                            setState(() {
-                                              BaseSingleton
-                                                  .shared.customerDetails
-                                                  .insert(0, item);
-                                              navigateBaseRouting(2);
-                                            });
-                                          },
+                                      new Expanded(
+                                        child: new Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                              bottom: appConfig.rHP(3),
+                                              top: appConfig.rHP(2.5)),
+                                          child: FlatButton(
+                                            child: Text("Edit",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: ConstantColor
+                                                        .COLOR_WHITE,
+                                                    fontFamily: ConstantCommon
+                                                        .BASE_FONT,
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            color: ConstantColor.COLOR_GREEN,
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              setState(() {
+                                                customerDetailsNavigate = item;
+                                                navigationPushReplacementPassParams(
+                                                    AddCustomerScreenStateful(
+                                                  customerDetails:
+                                                      customerDetailsNavigate,
+                                                ));
+                                              });
+                                            },
+                                          ),
                                         ),
+                                        flex: 1,
                                       ),
+                                      new Expanded(
+                                        child: new Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                              bottom: appConfig.rHP(3),
+                                              top: appConfig.rHP(2.5)),
+                                          child: FlatButton(
+                                            child: Text("Delete",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: ConstantColor
+                                                        .COLOR_WHITE,
+                                                    fontFamily: ConstantCommon
+                                                        .BASE_FONT,
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            color: ConstantColor.COLOR_RED,
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              setState(() {
+                                                _modalCustomerListsCrud
+                                                        .customerId =
+                                                    item.customerId;
+                                                showAlertDialog(
+                                                    "Are you sure delete",
+                                                    "yes",
+                                                    "No",
+                                                    0,
+                                                    this);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        flex: 1,
+                                      ),
+                                      new Expanded(
+                                        child: new Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                              bottom: appConfig.rHP(3),
+                                              top: appConfig.rHP(2.5)),
+                                          child: FlatButton(
+                                            child: Text("History",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: ConstantColor
+                                                        .COLOR_WHITE,
+                                                    fontFamily: ConstantCommon
+                                                        .BASE_FONT,
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            color: ConstantColor.COLOR_GREEN,
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              setState(() {});
+                                            },
+                                          ),
+                                        ),
+                                        flex: 1,
+                                      )
                                     ],
                                   )
                                 ],
@@ -577,7 +644,7 @@ class CustomerListsScreenState
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,
-        value: _modalCustomerLists.loadingCircularBar,
+        value: _modalCustomerListsCrud.loadingCircularBar,
         valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
       )),
@@ -597,7 +664,7 @@ class CustomerListsScreenState
             actions: <Widget>[],
             bottomOpacity: 1,
           ),
-          body: !_modalCustomerLists.isNetworkStatus
+          body: !_modalCustomerListsCrud.isNetworkStatus
               ? RefreshIndicator(
                   key: refreshKey,
                   child: new Stack(
@@ -616,7 +683,8 @@ class CustomerListsScreenState
                                           new Container(
                                             child: new Column(
                                               children: <Widget>[
-                                                _modalCustomerLists.boolNodata
+                                                _modalCustomerListsCrud
+                                                        .boolNodata
                                                     ? containerNoData
                                                     : containerClubListsAll
                                               ],
@@ -634,13 +702,26 @@ class CustomerListsScreenState
                               ),
                             ),
                           ),
-                          absorbing: _modalCustomerLists.loadingEnableDisable,
+                          absorbing:
+                              _modalCustomerListsCrud.loadingEnableDisable,
                         ),
                       ),
                     ],
                   ),
                   onRefresh: refreshList)
               : centerContainerNoNetwork,
+          floatingActionButton: new FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              setState(() {
+                customerDetailsNavigate = new CustomerDetails();
+                navigationPushReplacementPassParams(AddCustomerScreenStateful(
+                  customerDetails: customerDetailsNavigate,
+                ));
+                //navigateBaseRouting(5);
+              });
+            },
+          ),
         ),
         onWillPop: () {
           setState(() {
@@ -704,15 +785,15 @@ class CustomerListsScreenState
 
   void showDialog() {
     setState(() {
-      _modalCustomerLists.loadingEnableDisable = true;
-      _modalCustomerLists.loadingCircularBar = null;
+      _modalCustomerListsCrud.loadingEnableDisable = true;
+      _modalCustomerListsCrud.loadingCircularBar = null;
     });
   }
 
   void dismissLoadingDialog() {
     setState(() {
-      _modalCustomerLists.loadingEnableDisable = false;
-      _modalCustomerLists.loadingCircularBar = 0.0;
+      _modalCustomerListsCrud.loadingEnableDisable = false;
+      _modalCustomerListsCrud.loadingCircularBar = 0.0;
     });
   }
 
@@ -768,11 +849,29 @@ class CustomerListsScreenState
     });
   }
 
+  void getDeleteCustomer() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterUpdateCustomer.hitUpdateCustomerDataCall();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
+  }
+
   void apiCallBack(int event) {
     setState(() {
       if (event == 1) {
         showDialog();
         getCustomerList();
+      } else if (event == 2) {
+        showDialog();
+        getDeleteCustomer();
       }
     });
   }
@@ -796,14 +895,14 @@ class CustomerListsScreenState
 
   @override
   void onTapAlertOkayListener() {
-    setState(() {});
+    setState(() {
+      apiCallBack(2);
+    });
   }
 
   @override
   void onTapAlertQuitAppListener() {
-    setState(() {
-      SystemNavigator.pop();
-    });
+    setState(() {});
   }
 
   @override
@@ -832,6 +931,7 @@ class CustomerListsScreenState
     setState(() {
       showErrorAlert(statusCode);
       dismissLoadingDialog();
+      updateNoDataController();
     });
   }
 
@@ -840,13 +940,18 @@ class CustomerListsScreenState
       CustomerListResponseModel customerListResponseModel) {
     setState(() {
       dismissLoadingDialog();
-      customerDetails = (customerListResponseModel.customerDetails as List)
-          .map((datas) => new CustomerDetails.fromMap(datas))
-          .toList();
-      duplicateCustomerDetails =
-          (customerListResponseModel.customerDetails as List)
-              .map((datas) => new CustomerDetails.fromMap(datas))
-              .toList();
+      if (customerListResponseModel.isSuccess) {
+        customerDetails = (customerListResponseModel.customerDetails as List)
+            .map((datas) => new CustomerDetails.fromMap(datas))
+            .toList();
+        duplicateCustomerDetails =
+            (customerListResponseModel.customerDetails as List)
+                .map((datas) => new CustomerDetails.fromMap(datas))
+                .toList();
+      } else {
+        customerDetails = [];
+        duplicateCustomerDetails = [];
+      }
       updateNoDataController();
     });
   }
@@ -858,5 +963,81 @@ class CustomerListsScreenState
       "page_count": getPageCount().trim(),
       "page_limits": BaseSingleton.shared.pageLimits
     };
+  }
+
+  @override
+  void errorValidationMgs(String error) {
+    setState(() {});
+  }
+
+  @override
+  String getCustomerMobileNo() {
+    return "";
+  }
+
+  @override
+  String getCustomerStatus() {
+    return "false";
+  }
+
+  @override
+  String getCustomerWhatsAppNo() {
+    return "";
+  }
+
+  @override
+  String getCustonerId() {
+    return _modalCustomerListsCrud.customerId;
+  }
+
+  @override
+  void onFailureMessageUpdateCustomer(String error) {
+    setState(() {
+      showErrorAlert(error);
+      dismissLoadingDialog();
+    });
+  }
+
+  @override
+  void onSuccessResponseUpdateCustomer(
+      UpdateCustomerResponseModel updateCustomerResponseModel) {
+    setState(() {
+      showToast(updateCustomerResponseModel.message);
+      dismissLoadingDialog();
+      apiCallBack(1);
+    });
+  }
+
+  @override
+  Map parseUpdateCustomerData() {
+    return {
+      "customer_name": "",
+      "customer_id": getCustonerId(),
+      "customer_billing_name": "",
+      "customer_address": "",
+      "customer_mobile_no": "",
+      "customer_whatsapp_no": "",
+      "customer_status": getCustomerStatus()
+    };
+  }
+
+  @override
+  void postUpdateCustomerData() {
+    setState(() {});
+  }
+
+  @override
+  String getCustomerAddressUpdate() {
+    return "";
+  }
+
+  @override
+  String getCustomerBillingNameUpdate() {
+    return "";
+  }
+
+  @override
+  String getCustomerNameUpdate() {
+    return "";
   }
 }

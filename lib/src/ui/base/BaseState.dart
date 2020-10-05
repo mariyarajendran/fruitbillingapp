@@ -1,15 +1,20 @@
 import 'package:IGO/src/data/HttpStatusString.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/di/di.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/BillPreviewScreen.dart';
 import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
+import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 import 'package:IGO/src/ui/customer/customerlist/CustomerListsScreen.dart';
+import 'package:IGO/src/ui/dashboard/DashboardScreen.dart';
 import 'package:IGO/src/ui/product/addproductscreen/AddProductScreen.dart';
 import 'package:IGO/src/ui/product/cartscreen/CartListScreen.dart';
 import 'package:IGO/src/ui/product/productlist/ProductLists.dart';
+import 'package:IGO/src/ui/report/overalldetailreport/OverAllDetailedReportScreen.dart';
+import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/SessionManager.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
@@ -222,6 +227,30 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => CustomerListsScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 7) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 8) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => OverallReportListScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 9) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => OverAllDetailedReportScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 10) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => CustomerListsCrudScreen()),
         (Route<dynamic> route) => false,
       );
     }

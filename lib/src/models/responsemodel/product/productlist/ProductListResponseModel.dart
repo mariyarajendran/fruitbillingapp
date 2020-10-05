@@ -22,7 +22,7 @@ class ProductDetails {
   String productId;
   String productName;
   int productCost;
-  String productImage;
+  String productDate;
   int productStockKg;
   String productCode;
   bool isExpanded = false;
@@ -34,7 +34,7 @@ class ProductDetails {
       {this.productId,
       this.productName,
       this.productCode,
-      this.productImage,
+      this.productDate,
       this.productStockKg,
       this.productCost,
       this.isExpanded,
@@ -45,7 +45,7 @@ class ProductDetails {
       : productId = map['product_id'] ?? '',
         productName = map['product_name'] ?? '',
         productCost = map['product_cost'] ?? 0,
-        productImage = map['product_image'] ?? '',
+        productDate = map['product_date'] ?? '',
         productStockKg = map['product_stock_kg'] ?? 0,
         productCode = map['product_code'] ?? '';
 }
