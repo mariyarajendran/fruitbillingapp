@@ -1,4 +1,5 @@
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'ModalCartLists.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
@@ -823,5 +824,10 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
   @override
   void onTapAlertProductCalculationListener(ProductDetails productDetails) {
     setState(() {});
+  }
+
+  @override
+  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

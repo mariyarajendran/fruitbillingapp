@@ -2,6 +2,7 @@ import 'package:IGO/src/data/apis/dashboard/dashboarddetails/IDashboardDetailsLi
 import 'package:IGO/src/data/apis/dashboard/dashboarddetails/PresenterDashboardDetails.dart';
 import 'package:IGO/src/models/responsemodel/dashboard/dashboarddetails/DashboardDetailsResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/ui/dashboard/DateModel.dart';
 import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
@@ -387,7 +388,7 @@ class DashboardScreenState
       child: columnTotalProduct,
       onTap: () {
         setState(() {
-          navigateBaseRouting(5);
+          navigateBaseRouting(11);
         });
       },
     );
@@ -395,151 +396,163 @@ class DashboardScreenState
     Column columnOverAllAmount = new Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        new Container(
-            child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            new Container(
-              child: new Text(
-                "Overall Selled Price",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: ConstantColor.COLOR_BLACK,
-                    fontFamily: ConstantCommon.BASE_FONT,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400),
-              ),
-              margin: EdgeInsets.only(top: appConfig.rHP(2)),
-            ),
-            new Container(
-              child: new Text(
-                "₹ ${_dashboardDetails.overallAmount ?? 0}",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: ConstantColor.COLOR_BLACK,
-                    fontFamily: ConstantCommon.BASE_FONT,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w400),
-              ),
-              margin: EdgeInsets.only(top: appConfig.rHP(1)),
-            )
-          ],
-        )),
-        new Container(
-          margin: EdgeInsets.only(
-              top: appConfig.rHP(0),
-              left: appConfig.rWP(1),
-              right: appConfig.rW(1)),
-          child: Card(
-            child: new Row(
-              children: [
-                new Expanded(
-                  flex: 1,
-                  child: new Center(
-                    child: new Container(
-                      child: Image.asset(
-                        "assets/images/profit.png",
-                        width: 50,
-                        height: 50,
-                      ),
-                    ),
-                  ),
+        new InkWell(
+          child: new Container(
+              child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              new Container(
+                child: new Text(
+                  "Overall Selled Price",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: ConstantColor.COLOR_BLACK,
+                      fontFamily: ConstantCommon.BASE_FONT,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400),
                 ),
-                new Expanded(
-                  flex: 2,
-                  child: new Text(
-                    "Received",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
-                        fontFamily: ConstantCommon.BASE_FONT,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400),
-                  ),
+                margin: EdgeInsets.only(top: appConfig.rHP(2)),
+              ),
+              new Container(
+                child: new Text(
+                  "₹ ${_dashboardDetails.overallAmount ?? 0}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: ConstantColor.COLOR_BLACK,
+                      fontFamily: ConstantCommon.BASE_FONT,
+                      fontSize: 25,
+                      fontWeight: FontWeight.w400),
                 ),
-                new Expanded(
-                    flex: 2,
-                    child: new Container(
-                      child: new Text(
-                        "₹ ${_dashboardDetails.totalIncome ?? 0}",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            color: ConstantColor.COLOR_GREEN,
-                            fontFamily: ConstantCommon.BASE_FONT,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      margin: EdgeInsets.only(right: appConfig.rWP(5)),
-                    ))
-              ],
-            ),
-          ),
-          height: 80,
+                margin: EdgeInsets.only(top: appConfig.rHP(1)),
+              )
+            ],
+          )),
+          onTap: () {
+            setState(() {
+              BaseSingleton.shared.dateModel = new DateModel(
+                  _modelDashboard.fromDate, _modelDashboard.toDate, "", 0);
+              navigationPushReplacementPassParams(OverallReportListStateful());
+            });
+          },
         ),
-        new Container(
-          margin:
-              EdgeInsets.only(left: appConfig.rWP(1), right: appConfig.rW(1)),
-          child: Card(
-            child: new Row(
-              children: [
-                new Expanded(
-                  flex: 1,
-                  child: new Center(
-                    child: new Container(
-                      child: Image.asset(
-                        "assets/images/lose.png",
-                        width: 50,
-                        height: 50,
+        new InkWell(
+          child: new Container(
+            margin: EdgeInsets.only(
+                top: appConfig.rHP(0),
+                left: appConfig.rWP(1),
+                right: appConfig.rW(1)),
+            child: Card(
+              child: new Row(
+                children: [
+                  new Expanded(
+                    flex: 1,
+                    child: new Center(
+                      child: new Container(
+                        child: Image.asset(
+                          "assets/images/profit.png",
+                          width: 50,
+                          height: 50,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                new Expanded(
-                  flex: 2,
-                  child: new Text(
-                    "Pending",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
-                        fontFamily: ConstantCommon.BASE_FONT,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-                new Expanded(
+                  new Expanded(
                     flex: 2,
-                    child: new Container(
-                      child: new Text(
-                        "₹ ${_dashboardDetails.pendingIncome ?? 0}",
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            color: ConstantColor.COLOR_RED,
-                            fontFamily: ConstantCommon.BASE_FONT,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400),
-                      ),
-                      margin: EdgeInsets.only(right: appConfig.rWP(5)),
-                    ))
-              ],
+                    child: new Text(
+                      "Received",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: ConstantColor.COLOR_BLACK,
+                          fontFamily: ConstantCommon.BASE_FONT,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  new Expanded(
+                      flex: 2,
+                      child: new Container(
+                        child: new Text(
+                          "₹ ${_dashboardDetails.totalIncome ?? 0}",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              color: ConstantColor.COLOR_GREEN,
+                              fontFamily: ConstantCommon.BASE_FONT,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        margin: EdgeInsets.only(right: appConfig.rWP(5)),
+                      ))
+                ],
+              ),
             ),
+            height: 80,
           ),
-          height: 80,
+          onTap: () {
+            setState(() {
+              BaseSingleton.shared.dateModel = new DateModel(
+                  _modelDashboard.fromDate, _modelDashboard.toDate, "", 0);
+              navigationPushReplacementPassParams(OverallReportListStateful());
+            });
+          },
+        ),
+        new InkWell(
+          child: new Container(
+            margin:
+                EdgeInsets.only(left: appConfig.rWP(1), right: appConfig.rW(1)),
+            child: Card(
+              child: new Row(
+                children: [
+                  new Expanded(
+                    flex: 1,
+                    child: new Center(
+                      child: new Container(
+                        child: Image.asset(
+                          "assets/images/lose.png",
+                          width: 50,
+                          height: 50,
+                        ),
+                      ),
+                    ),
+                  ),
+                  new Expanded(
+                    flex: 2,
+                    child: new Text(
+                      "Pending",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: ConstantColor.COLOR_BLACK,
+                          fontFamily: ConstantCommon.BASE_FONT,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                  new Expanded(
+                      flex: 2,
+                      child: new Container(
+                        child: new Text(
+                          "₹ ${_dashboardDetails.pendingIncome ?? 0}",
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              color: ConstantColor.COLOR_RED,
+                              fontFamily: ConstantCommon.BASE_FONT,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        margin: EdgeInsets.only(right: appConfig.rWP(5)),
+                      ))
+                ],
+              ),
+            ),
+            height: 80,
+          ),
+          onTap: () {
+            setState(() {
+              navigateBaseRouting(12);
+            });
+          },
         ),
         previewBillContainer,
       ],
-    );
-
-    InkWell inkWellOverAllAmount = new InkWell(
-      child: columnOverAllAmount,
-      onTap: () {
-        setState(() {
-          dateModel =
-              new DateModel(_modelDashboard.fromDate, _modelDashboard.toDate);
-          navigationPushReplacementPassParams(OverallReportListStateful(
-            dateModel: dateModel,
-          ));
-        });
-      },
     );
 
     Column columnDashboardTitle = new Column(
@@ -550,7 +563,7 @@ class DashboardScreenState
         columnDateFilter,
         inkWellTotalCustomer,
         inkWellTotalProduct,
-        inkWellOverAllAmount,
+        columnOverAllAmount,
       ],
     );
 
@@ -782,5 +795,11 @@ class DashboardScreenState
   @override
   Map parseDashboardDetailsData() {
     return {'from_date': getFromDate(), 'to_date': getToDate()};
+  }
+
+  @override
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

@@ -2,6 +2,7 @@ import 'package:IGO/src/data/apis/customer/customerlist/ICustomerListener.dart';
 import 'package:IGO/src/data/apis/customer/customerlist/PresenterCustomerList.dart';
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
@@ -858,5 +859,10 @@ class CustomerListsScreenState
       "page_count": getPageCount().trim(),
       "page_limits": BaseSingleton.shared.pageLimits
     };
+  }
+
+  @override
+  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

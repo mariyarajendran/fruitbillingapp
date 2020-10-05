@@ -1,6 +1,11 @@
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/data/apis/product/addproduct/IAddProductListener.dart';
 import 'package:IGO/src/data/apis/product/addproduct/PresenterAddProduct.dart';
+import 'package:IGO/src/data/apis/product/updateproduct/IUpdateProductListener.dart';
+import 'package:IGO/src/data/apis/product/updateproduct/PresenterUpdateProduct.dart';
+import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/updateproduct/UpdateProductResponseModel.dart';
+import 'package:IGO/src/ui/product/productcrud/ProductCrudScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/Connectivity.dart';
 import 'package:IGO/src/utils/SessionManager.dart';
@@ -28,8 +33,10 @@ class AddProductScreen extends StatelessWidget {
 }
 
 class AddProductScreenStateful extends StatefulWidget {
-  AddProductScreenStateful({Key key, this.title}) : super(key: key);
+  AddProductScreenStateful({Key key, this.title, @required this.productDetails})
+      : super(key: key);
   final String title;
+  final ProductDetails productDetails;
 
   @override
   AddProductScreenState createState() => AddProductScreenState();
@@ -38,11 +45,15 @@ class AddProductScreenStateful extends StatefulWidget {
 class AddProductScreenState
     extends BaseStateStatefulState<AddProductScreenStateful>
     with WidgetsBindingObserver
-    implements IAddProductListener, ViewContractConnectivityListener {
+    implements
+        IAddProductListener,
+        ViewContractConnectivityListener,
+        IUpdateProductListener {
   AppConfig _appConfig;
   SessionManager _sessionManager;
   Connectivitys _connectivity = Connectivitys.instance;
   ModalAddProduct _modalAddProduct;
+  PresenterUpdateProduct _presenterUpdateProduct;
   PresenterAddProduct _presenterAddProduct;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
 
@@ -50,6 +61,7 @@ class AddProductScreenState
     this._modalAddProduct = new ModalAddProduct();
     this._sessionManager = new SessionManager();
     this._presenterAddProduct = new PresenterAddProduct(this);
+    this._presenterUpdateProduct = PresenterUpdateProduct(this);
     this._connectivity = new Connectivitys(this);
   }
 
@@ -70,6 +82,23 @@ class AddProductScreenState
     _connectivity.myStream.listen((source) {
       setState(() => _sourceConnectionStatus = source);
       print("initnetw" + _sourceConnectionStatus.toString());
+    });
+  }
+
+  void setEditDetails() {
+    setState(() {
+      _modalAddProduct.controllerProductName.text =
+          productDetailsNavigate.productName;
+      if (productDetailsNavigate.productCost != null) {
+        _modalAddProduct.controllerProductCost.text =
+            cutNull(productDetailsNavigate.productCost.toString());
+      }
+      _modalAddProduct.controllerProductCode.text =
+          productDetailsNavigate.productCode;
+      if (productDetailsNavigate.productStockKg != null) {
+        _modalAddProduct.controllerProductKg.text =
+            cutNull(productDetailsNavigate.productStockKg.toString());
+      }
     });
   }
 
@@ -226,7 +255,13 @@ class AddProductScreenState
           textColor: Colors.white,
           color: ConstantColor.COLOR_APP_BASE,
           onPressed: () {
-            apiCallBacks(1);
+            setState(() {
+              if (productDetailsNavigate.productId == null) {
+                apiCallBacks(1);
+              } else {
+                apiCallBacks(3);
+              }
+            });
           },
           child: new Text(AppLocalizations.instance.text('key_save_product'),
               textAlign: TextAlign.center,
@@ -268,7 +303,7 @@ class AddProductScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    navigateBaseRouting(7);
+                    navigateBaseRouting(11);
                   });
                 },
               ),
@@ -325,7 +360,7 @@ class AddProductScreenState
       ),
       onWillPop: () {
         setState(() {
-          navigateBaseRouting(7);
+          navigateBaseRouting(11);
         });
       },
     );
@@ -337,6 +372,7 @@ class AddProductScreenState
     if (mounted) {
       setState(() {
         initNetworkConnectivity();
+        setEditDetails();
       });
     }
   }
@@ -395,7 +431,31 @@ class AddProductScreenState
         showDialog();
         postProductDatas();
       });
+    } else if (event == 3) {
+      setState(() {
+        _presenterUpdateProduct.validateUpdateProductData();
+      });
+    } else if (event == 4) {
+      setState(() {
+        showDialog();
+        updateProductDatas();
+      });
     }
+  }
+
+  void updateProductDatas() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterUpdateProduct.hitUpdateProductDataCall();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
   }
 
   @override
@@ -454,6 +514,7 @@ class AddProductScreenState
       showToast(msg);
       clearAllEditTextDatas();
       dismissLoadingDialog();
+      navigateBaseRouting(11);
     });
   }
 
@@ -474,6 +535,73 @@ class AddProductScreenState
       _modalAddProduct.controllerProductCode.text = "";
       _modalAddProduct.controllerProductCost.text = "";
       _modalAddProduct.controllerProductKg.text = "";
+    });
+  }
+
+  @override
+  String getProductCodeUpdate() {
+    return _modalAddProduct.controllerProductCode.text;
+  }
+
+  @override
+  String getProductCostUpdate() {
+    return _modalAddProduct.controllerProductCost.text;
+  }
+
+  @override
+  String getProductIdUpdate() {
+    return productDetailsNavigate.productId;
+  }
+
+  @override
+  String getProductNameUpdate() {
+    return _modalAddProduct.controllerProductName.text;
+  }
+
+  @override
+  String getProductStatusUpdate() {
+    return "true";
+  }
+
+  @override
+  String getProductStockKgUpdate() {
+    return _modalAddProduct.controllerProductKg.text;
+  }
+
+  @override
+  void onFailureMessageUpdateProduct(String error) {
+    setState(() {
+      dismissLoadingDialog();
+      showErrorAlert(error);
+    });
+  }
+
+  @override
+  void onSuccessResponseUpdateProduct(
+      UpdateProductResponseModel updateProductResponseModel) {
+    setState(() {
+      dismissLoadingDialog();
+      showToast(updateProductResponseModel.message);
+      navigateBaseRouting(11);
+    });
+  }
+
+  @override
+  Map parseUpdateProductData() {
+    return {
+      "product_id": getProductIdUpdate(),
+      "product_name": getProductNameUpdate(),
+      "product_cost": getProductCostUpdate(),
+      "product_stock_kg": getProductStockKgUpdate(),
+      "product_code": getProductCodeUpdate(),
+      "product_status": getProductStatusUpdate()
+    };
+  }
+
+  @override
+  void postUpdateProductData() {
+    setState(() {
+      apiCallBacks(4);
     });
   }
 }

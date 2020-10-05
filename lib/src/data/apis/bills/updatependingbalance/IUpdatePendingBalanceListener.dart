@@ -5,6 +5,12 @@ abstract class IUpdatePendingBalanceListener {
 
   String getReceivedAmount();
 
+  String getOrderSummaryPendingAmount();
+
+  String getOrderPendingHistoryReceivedAmount();
+
+  String getOrderPendingHistoryPendingAmount();
+
   void postUpdatePendingBalanceData();
 
   Map parseUpdatePendingBalanceData();

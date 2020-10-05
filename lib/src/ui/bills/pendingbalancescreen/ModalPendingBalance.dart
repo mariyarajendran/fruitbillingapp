@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class ModalOverallReport {
+class ModalPendingBalance {
   bool isNetworkStatus = false;
   bool boolNodata = false;
   bool eventCircularLoader = true;

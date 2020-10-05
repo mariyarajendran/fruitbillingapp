@@ -1,5 +1,6 @@
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/dashboard/DateModel.dart';
 
 class BaseSingleton {
   static final BaseSingleton _baseSingleton = new BaseSingleton._internal();
@@ -22,6 +23,7 @@ class BaseSingleton {
   List<ProductDetails> billingProductList = [];
   int pageLimits = 100;
   List<CustomerDetails> customerDetails = [];
+  DateModel dateModel;
 
   void clearBillSessionAndCustomerSession() {
     billingProductList = [];

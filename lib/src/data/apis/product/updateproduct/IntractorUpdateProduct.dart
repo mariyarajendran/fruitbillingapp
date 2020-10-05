@@ -16,7 +16,7 @@ class IntractorUpdateProduct {
     _allApiRepository.postUpdateProductDatas(mapProductData, 0).then((data) {
       if (data.isSuccess) {
         _presenterUpdateProduct
-            .onSuccessResponseUpdateProduct(data.productDetails);
+            .onSuccessResponseUpdateProduct(data);
       } else {
         _presenterUpdateProduct.onFailureMessageUpdateProduct(data.message);
       }

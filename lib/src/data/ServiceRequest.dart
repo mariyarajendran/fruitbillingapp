@@ -350,7 +350,7 @@ class ServiceRequest implements AllApiRepository {
       int statusCode = response.statusCode;
       final Map responseBody = json.decode(response.body);
       print("status code: $statusCode");
-      print("Response: $responseBody");
+      print(response.body);
       orderDetailsReportResponseModel =
           new OrderDetailsReportResponseModel.fromMap(responseBody);
       if (statusCode != 200 && responseBody == null) {
@@ -383,11 +383,11 @@ class ServiceRequest implements AllApiRepository {
             timeLimit: Duration(seconds: 10))
         .then((response) {
       print("url: " + GET_PENDING_BALANCE);
-      print("header: " + headers.toString());
+      print("header: " + body);
       int statusCode = response.statusCode;
       final Map responseBody = json.decode(response.body);
       print("status code: $statusCode");
-      print("Response: $responseBody");
+      print(response.body);
       getPendingBalanceResponseModel =
           new GetPendingBalanceResponseModel.fromMap(responseBody);
       if (statusCode != 200 && responseBody == null) {

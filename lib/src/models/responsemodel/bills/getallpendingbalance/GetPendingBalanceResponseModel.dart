@@ -18,6 +18,8 @@ class PendingBalanceDetails {
   String orderSummaryId;
   String orderId;
   String customerId;
+  String customerName;
+  String customerMobileNo;
   int totalAmount;
   String receivedAmount;
   int pendingAmount;
@@ -27,6 +29,8 @@ class PendingBalanceDetails {
     this.orderSummaryId,
     this.orderId,
     this.customerId,
+    this.customerName,
+    this.customerMobileNo,
     this.totalAmount,
     this.receivedAmount,
     this.pendingAmount,
@@ -37,6 +41,8 @@ class PendingBalanceDetails {
       : orderSummaryId = map['order_summary_id'] ?? '',
         orderId = map['order_id'] ?? '',
         customerId = map['customer_id'] ?? '',
+        customerName = map['customer_name'] ?? '',
+        customerMobileNo = map['customer_mobile_no'] ?? '',
         totalAmount = map['total_amount'] ?? 0,
         receivedAmount = map['received_amount'] ?? '',
         pendingAmount = map['pending_amount'] ?? 0,

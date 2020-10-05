@@ -15,33 +15,35 @@ class PresenterUpdateProduct {
     _intractorUpdateProduct = new IntractorUpdateProduct(this);
   }
 
-  void onSuccessResponseUpdateProduct(ProductDetailsUpdate productDetails) {
-    _updateProductListener.onSuccessResponseUpdateProduct(productDetails);
+  void onSuccessResponseUpdateProduct(
+      UpdateProductResponseModel updateProductResponseModel) {
+    _updateProductListener
+        .onSuccessResponseUpdateProduct(updateProductResponseModel);
   }
 
   void onFailureMessageUpdateProduct(String error) {
     _updateProductListener.onFailureMessageUpdateProduct(error);
   }
 
-  void hitPostProductDataCall() {
+  void hitUpdateProductDataCall() {
     _intractorUpdateProduct
         .hitProductUpdateCall(_updateProductListener.parseUpdateProductData());
   }
 
   void validateUpdateProductData() {
-    if (_updateProductListener.getProductName().isEmpty) {
+    if (_updateProductListener.getProductNameUpdate().isEmpty) {
       _updateProductListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_name'));
-    } else if (_updateProductListener.getProductCost().isEmpty) {
+    } else if (_updateProductListener.getProductCostUpdate().isEmpty) {
       _updateProductListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_cost'));
-    } else if (_updateProductListener.getProductCode().isEmpty) {
+    } else if (_updateProductListener.getProductCodeUpdate().isEmpty) {
       _updateProductListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_code'));
-    } else if (_updateProductListener.getProductStockKg().isEmpty) {
+    } else if (_updateProductListener.getProductStockKgUpdate().isEmpty) {
       _updateProductListener.errorValidationMgs(
           AppLocalizations.instance.text('key_enter_product_kg'));
-    } else if (_updateProductListener.getProductStatus().isEmpty) {
+    } else if (_updateProductListener.getProductStatusUpdate().isEmpty) {
       _updateProductListener.errorValidationMgs(
           AppLocalizations.instance.text('key_product_status'));
     } else {

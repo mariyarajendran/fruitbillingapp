@@ -27,6 +27,7 @@ class CustomerDetails {
   String customerAddress;
   String customerDate;
   bool isExpanded = false;
+  int customerTotalPendingBalance;
   int totalCost = 0;
   int totalKiloGrams = 0;
   TextEditingController textEditingController;
@@ -40,6 +41,7 @@ class CustomerDetails {
       this.customerWhatsappNo,
       this.customerDate,
       this.isExpanded,
+      this.customerTotalPendingBalance,
       this.totalCost,
       this.textEditingController});
 
@@ -50,5 +52,7 @@ class CustomerDetails {
         customerAddress = map['customer_address'] ?? '',
         customerMobileNo = map['customer_mobile_no'] ?? '',
         customerWhatsappNo = map['customer_whatsapp_no'] ?? '',
+        customerTotalPendingBalance =
+            map['customer_total_pending_balance'] ?? '',
         customerDate = map['customer_date'] ?? '';
 }

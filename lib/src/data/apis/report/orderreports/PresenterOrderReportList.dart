@@ -17,17 +17,12 @@ class PresenterOrderReportList {
 
   void onSuccessResponseGetOrderReportList(
       OrderReportResponseModel orderReportResponseModel) {
-    if (orderReportResponseModel.isSuccess) {
-      List<OverAllReports> overAllReportsList = [];
-      overAllReportsList = (orderReportResponseModel.overAllReports)
-          .map((datas) => new OverAllReports.fromMap(datas))
-          .toList();
-      _iOrderReportListener
-          .onSuccessResponseGetOverAllOrderList(overAllReportsList);
-    } else {
-      _iOrderReportListener.onFailureResponseGetOverAllOrderList(
-          orderReportResponseModel.message);
-    }
+    List<OverAllReports> overAllReportsList = [];
+    overAllReportsList = (orderReportResponseModel.overAllReports)
+        .map((datas) => new OverAllReports.fromMap(datas))
+        .toList();
+    _iOrderReportListener
+        .onSuccessResponseGetOverAllOrderList(overAllReportsList);
   }
 
   void onFailureResponseGetOrderReportList(String statusCode) {
