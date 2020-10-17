@@ -366,7 +366,9 @@ class CustomerListsCrudScreenState
                                               bottom: appConfig.rHP(3),
                                               top: appConfig.rHP(2.5)),
                                           child: FlatButton(
-                                            child: Text("Edit",
+                                            child: Text(
+                                                AppLocalizations.instance
+                                                    .text('key_editing'),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: ConstantColor
@@ -399,7 +401,9 @@ class CustomerListsCrudScreenState
                                               bottom: appConfig.rHP(3),
                                               top: appConfig.rHP(2.5)),
                                           child: FlatButton(
-                                            child: Text("Delete",
+                                            child: Text(
+                                                AppLocalizations.instance
+                                                    .text('key_delete'),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: ConstantColor
@@ -417,9 +421,13 @@ class CustomerListsCrudScreenState
                                                         .customerId =
                                                     item.customerId;
                                                 showAlertDialog(
-                                                    "Are you sure delete",
-                                                    "yes",
-                                                    "No",
+                                                    AppLocalizations.instance
+                                                        .text(
+                                                            'key_are_you_delete'),
+                                                    AppLocalizations.instance
+                                                        .text('key_yes'),
+                                                    AppLocalizations.instance
+                                                        .text('key_no'),
                                                     0,
                                                     this);
                                               });
@@ -435,7 +443,9 @@ class CustomerListsCrudScreenState
                                               bottom: appConfig.rHP(3),
                                               top: appConfig.rHP(2.5)),
                                           child: FlatButton(
-                                            child: Text("History",
+                                            child: Text(
+                                                AppLocalizations.instance
+                                                    .text('key_bills'),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: ConstantColor
@@ -445,7 +455,7 @@ class CustomerListsCrudScreenState
                                                     fontSize: 17,
                                                     fontWeight:
                                                         FontWeight.w400)),
-                                            color: ConstantColor.COLOR_GREEN,
+                                            color: ConstantColor.COLOR_APP_BASE,
                                             textColor: Colors.white,
                                             onPressed: () {
                                               setState(() {
@@ -480,7 +490,7 @@ class CustomerListsCrudScreenState
     );
 
     Container containerAppTitleHintBar = new Container(
-        color: ConstantColor.COLOR_WHITE,
+        color: ConstantColor.COLOR_CUSTOMER,
         child: new Column(
           children: <Widget>[
             Row(
@@ -502,7 +512,7 @@ class CustomerListsCrudScreenState
                     AppLocalizations.instance.text('key_customers'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
+                        color: ConstantColor.COLOR_WHITE,
                         fontFamily: ConstantCommon.BASE_FONT,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
@@ -516,7 +526,7 @@ class CustomerListsCrudScreenState
                     height: 3.0,
                     margin: EdgeInsets.only(left: appConfig.rWP(5)),
                     width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
+                    color: ConstantColor.COLOR_CUSTOMER_BACKGROUND),
               ],
             ),
           ],
@@ -534,7 +544,7 @@ class CustomerListsCrudScreenState
               AppLocalizations.instance.text('key_customers'),
               textAlign: TextAlign.left,
               style: TextStyle(
-                  color: ConstantColor.COLOR_APP_BASE,
+                  color: ConstantColor.COLOR_BLACK,
                   fontFamily: ConstantCommon.BASE_FONT,
                   fontSize: 18,
                   fontWeight: FontWeight.w400),
@@ -656,7 +666,7 @@ class CustomerListsCrudScreenState
         strokeWidth: 6,
         value: _modalCustomerListsCrud.loadingCircularBar,
         valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_WHITE),
       )),
     );
 
@@ -664,10 +674,10 @@ class CustomerListsCrudScreenState
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
           key: _scaffoldKey,
-          backgroundColor: ConstantColor.COLOR_BACKGROUND,
+          backgroundColor: ConstantColor.COLOR_CUSTOMER_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_CUSTOMER,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
@@ -721,6 +731,7 @@ class CustomerListsCrudScreenState
                   onRefresh: refreshList)
               : centerContainerNoNetwork,
           floatingActionButton: new FloatingActionButton(
+            backgroundColor: ConstantColor.COLOR_CUSTOMER,
             child: const Icon(Icons.add),
             onPressed: () {
               setState(() {
@@ -1052,7 +1063,8 @@ class CustomerListsCrudScreenState
   }
 
   @override
-  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

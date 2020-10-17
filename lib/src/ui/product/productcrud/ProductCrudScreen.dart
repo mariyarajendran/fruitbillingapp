@@ -396,113 +396,6 @@ class ProductCrudScreenState
                                   new Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_select_kg'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_total_cost'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      )
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: FlatButton(
-                                              child: Text(
-                                                  "${item.totalKiloGrams} Kg",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: ConstantColor
-                                                          .COLOR_WHITE,
-                                                      fontFamily: ConstantCommon
-                                                          .BASE_FONT,
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              color: ConstantColor.COLOR_RED,
-                                              textColor: Colors.white,
-                                              onPressed: () {
-                                                setState(() {});
-                                              },
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3),
-                                                bottom: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              "₹ ${item.totalCost}",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3),
-                                                bottom: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       new Expanded(
                                         child: new Container(
@@ -511,7 +404,9 @@ class ProductCrudScreenState
                                               bottom: appConfig.rHP(3),
                                               top: appConfig.rHP(2.5)),
                                           child: FlatButton(
-                                            child: Text("Edit",
+                                            child: Text(
+                                                AppLocalizations.instance
+                                                    .text('key_editing'),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: ConstantColor
@@ -544,7 +439,9 @@ class ProductCrudScreenState
                                               bottom: appConfig.rHP(3),
                                               top: appConfig.rHP(2.5)),
                                           child: FlatButton(
-                                            child: Text("Delete",
+                                            child: Text(
+                                                AppLocalizations.instance
+                                                    .text('key_delete'),
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: ConstantColor
@@ -561,9 +458,13 @@ class ProductCrudScreenState
                                                 _modaProductCrud.productId =
                                                     item.productId;
                                                 showAlertDialog(
-                                                    "Are you sure delete",
-                                                    "Yes",
-                                                    "No",
+                                                    AppLocalizations.instance
+                                                        .text(
+                                                            'key_are_you_delete'),
+                                                    AppLocalizations.instance
+                                                        .text('key_yes'),
+                                                    AppLocalizations.instance
+                                                        .text('key_no'),
                                                     0,
                                                     this);
                                               });
@@ -592,7 +493,7 @@ class ProductCrudScreenState
     );
 
     Container containerAppTitleHintBar = new Container(
-        color: ConstantColor.COLOR_WHITE,
+        color: ConstantColor.COLOR_PRODUCTS,
         child: new Column(
           children: <Widget>[
             Row(
@@ -614,7 +515,7 @@ class ProductCrudScreenState
                     AppLocalizations.instance.text('key_user_product_list'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
+                        color: ConstantColor.COLOR_WHITE,
                         fontFamily: ConstantCommon.BASE_FONT,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
@@ -628,7 +529,7 @@ class ProductCrudScreenState
                     height: 3.0,
                     margin: EdgeInsets.only(left: appConfig.rWP(5)),
                     width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
+                    color: ConstantColor.COLOR_PRODUCTS_BACKGROUND),
               ],
             ),
           ],
@@ -646,7 +547,7 @@ class ProductCrudScreenState
               AppLocalizations.instance.text('key_user_product_list'),
               textAlign: TextAlign.left,
               style: TextStyle(
-                  color: ConstantColor.COLOR_APP_BASE,
+                  color: ConstantColor.COLOR_PRODUCTS,
                   fontFamily: ConstantCommon.BASE_FONT,
                   fontSize: 18,
                   fontWeight: FontWeight.w400),
@@ -768,7 +669,7 @@ class ProductCrudScreenState
         strokeWidth: 6,
         value: _modaProductCrud.loadingCircularBar,
         valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_WHITE),
       )),
     );
 
@@ -776,10 +677,10 @@ class ProductCrudScreenState
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
           key: _scaffoldKey,
-          backgroundColor: ConstantColor.COLOR_BACKGROUND,
+          backgroundColor: ConstantColor.COLOR_PRODUCTS_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_PRODUCTS,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
@@ -832,6 +733,7 @@ class ProductCrudScreenState
               : centerContainerNoNetwork,
           floatingActionButton: new FloatingActionButton(
             child: const Icon(Icons.add),
+            backgroundColor: ConstantColor.COLOR_PRODUCTS,
             onPressed: () {
               setState(() {
                 productDetailsNavigate = new ProductDetails();
@@ -1148,7 +1050,8 @@ class ProductCrudScreenState
   }
 
   @override
-  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

@@ -121,8 +121,8 @@ class AddProductScreenState
           focusNode: _modalAddProduct.focusProductName,
           decoration: InputDecoration(
               labelText: AppLocalizations.instance.text('key_product_name'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -131,7 +131,7 @@ class AddProductScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -156,8 +156,8 @@ class AddProductScreenState
           focusNode: _modalAddProduct.focusProductCost,
           decoration: InputDecoration(
               labelText: AppLocalizations.instance.text('key_product_cost'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -166,7 +166,7 @@ class AddProductScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -192,8 +192,8 @@ class AddProductScreenState
           focusNode: _modalAddProduct.focusProductCode,
           decoration: InputDecoration(
               labelText: AppLocalizations.instance.text('key_product_code'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -202,7 +202,7 @@ class AddProductScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -226,8 +226,8 @@ class AddProductScreenState
           focusNode: _modalAddProduct.focusProductKg,
           decoration: InputDecoration(
               labelText: AppLocalizations.instance.text('key_product_kg'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -236,7 +236,7 @@ class AddProductScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -253,7 +253,7 @@ class AddProductScreenState
         child: new RaisedButton(
           padding: const EdgeInsets.all(8.0),
           textColor: Colors.white,
-          color: ConstantColor.COLOR_APP_BASE,
+          color: ConstantColor.COLOR_PRODUCTS,
           onPressed: () {
             setState(() {
               if (productDetailsNavigate.productId == null) {
@@ -281,7 +281,7 @@ class AddProductScreenState
           child: CircularProgressIndicator(
         value: _modalAddProduct.loadingCircularBar,
         valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_PRODUCTS),
         strokeWidth: 6,
       )),
     );
@@ -331,12 +331,13 @@ class AddProductScreenState
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ConstantColor.COLOR_APP_BASE,
+          backgroundColor: ConstantColor.COLOR_PRODUCTS,
           automaticallyImplyLeading: false,
           title: containerAppBar,
           centerTitle: false,
           bottomOpacity: 1,
         ),
+        backgroundColor: ConstantColor.COLOR_WHITE,
         body: !_modalAddProduct.isNetworkStatus
             ? SingleChildScrollView(
                 child: AbsorbPointer(
@@ -356,7 +357,6 @@ class AddProductScreenState
                 ),
               )
             : centerContainerNoNetwork,
-        backgroundColor: ConstantColor.COLOR_BACKGROUND,
       ),
       onWillPop: () {
         setState(() {

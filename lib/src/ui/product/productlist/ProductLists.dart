@@ -228,7 +228,7 @@ class ProductListsScreenState
                                           child: new Container(
                                             child: new Text(
                                               AppLocalizations.instance
-                                                  .text('key_product_code'),
+                                                  .text('key_product_cost'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -274,105 +274,6 @@ class ProductListsScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              "${item.productCode}",
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(1.5)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_stock'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3.5)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_cost'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3.5)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      )
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              "${item.productStockKg} kg",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(1.5),
-                                                bottom: appConfig.rHP(1.5)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
                                               "₹ ${item.productCost}",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
@@ -384,8 +285,7 @@ class ProductListsScreenState
                                                   fontWeight: FontWeight.w400),
                                             ),
                                             margin: EdgeInsets.only(
-                                                top: appConfig.rHP(1.5),
-                                                bottom: appConfig.rHP(1.5)),
+                                                top: appConfig.rHP(1.5)),
                                           ),
                                           alignment: Alignment.bottomRight,
                                         ),
@@ -523,14 +423,14 @@ class ProductListsScreenState
                                               AppLocalizations.instance
                                                   .text('key_add_to_bill'),
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
+                                               style: TextStyle(
                                                   color:
                                                       ConstantColor.COLOR_WHITE,
                                                   fontFamily:
                                                       ConstantCommon.BASE_FONT,
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400)),
-                                          color: ConstantColor.COLOR_APP_BASE,
+                                          color: ConstantColor.COLOR_BILLINGS,
                                           textColor: Colors.white,
                                           onPressed: () {
                                             setState(() {
@@ -637,7 +537,7 @@ class ProductListsScreenState
     );
 
     Container containerAppTitleHintBar = new Container(
-        color: ConstantColor.COLOR_WHITE,
+        color: ConstantColor.COLOR_BILLINGS,
         child: new Column(
           children: <Widget>[
             Row(
@@ -659,7 +559,7 @@ class ProductListsScreenState
                     AppLocalizations.instance.text('key_user_product_list'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
+                        color: ConstantColor.COLOR_WHITE,
                         fontFamily: ConstantCommon.BASE_FONT,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
@@ -673,7 +573,7 @@ class ProductListsScreenState
                     height: 3.0,
                     margin: EdgeInsets.only(left: appConfig.rWP(5)),
                     width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
+                    color: ConstantColor.COLOR_BILLINGS_LIGHT),
               ],
             ),
           ],
@@ -691,7 +591,7 @@ class ProductListsScreenState
               AppLocalizations.instance.text('key_user_product_list'),
               textAlign: TextAlign.left,
               style: TextStyle(
-                  color: ConstantColor.COLOR_APP_BASE,
+                  color: ConstantColor.COLOR_BILLINGS,
                   fontFamily: ConstantCommon.BASE_FONT,
                   fontSize: 18,
                   fontWeight: FontWeight.w400),
@@ -813,7 +713,7 @@ class ProductListsScreenState
         strokeWidth: 6,
         value: _modaProductLists.loadingCircularBar,
         valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_WHITE),
       )),
     );
 
@@ -821,10 +721,10 @@ class ProductListsScreenState
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
           key: _scaffoldKey,
-          backgroundColor: ConstantColor.COLOR_BACKGROUND,
+          backgroundColor: ConstantColor.COLOR_BILLINGS_LIGHT,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_BILLINGS,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
@@ -1169,7 +1069,8 @@ class ProductListsScreenState
   }
 
   @override
-  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

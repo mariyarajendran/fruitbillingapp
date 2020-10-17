@@ -34,4 +34,10 @@ class ConstantColor {
   static const Color COLOR_UNBLOCKED = Color(0xFF17C2C1);
   static const Color COLOR_LIGHT_GREYS = Color(0xFFEEEEEE);
   static const Color COLOR_LIGHT_GREY_ONE = Color(0xFFACACAC);
+  static const Color COLOR_CUSTOMER = Color(0xFFB54115);
+  static const Color COLOR_CUSTOMER_BACKGROUND = Color(0xFFF8D6CB);
+  static const Color COLOR_PRODUCTS = Color(0xFF4B4856);
+  static const Color COLOR_PRODUCTS_BACKGROUND = Color(0xFFE0E3DE);
+  static const Color COLOR_BILLINGS = Color(0xFF3D550C);
+  static const Color COLOR_BILLINGS_LIGHT = Color(0xFFB2D2A4);
 }
