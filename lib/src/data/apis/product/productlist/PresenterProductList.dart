@@ -21,13 +21,8 @@ class PresenterProductList {
 
   void onSuccessResponseGetProductList(
       ProductListResponseModel productListResponseModel) {
-    if (productListResponseModel.isSuccess) {
-      _iProductListListener
-          .onSuccessResponseGetProductList(productListResponseModel);
-    } else {
-      _iProductListListener
-          .onFailureResponseGetProductList(productListResponseModel.message);
-    }
+    _iProductListListener
+        .onSuccessResponseGetProductList(productListResponseModel);
   }
 
   void onFailureResponseGetProductList(String statusCode) {

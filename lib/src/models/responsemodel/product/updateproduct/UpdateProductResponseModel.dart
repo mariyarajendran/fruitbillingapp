@@ -11,14 +11,14 @@ class UpdateProductResponseModel {
       : code = map['code'] ?? '',
         isSuccess = map['isSuccess'] ?? false,
         message = map['message'] ?? '',
-        productDetails = map['product_details'];
+        productDetails = ProductDetailsUpdate.fromMap(map['product_details']);
 }
 
 class ProductDetailsUpdate {
   String productId;
   String productName;
-  int productCost;
-  int productStockKg;
+  String productCost;
+  String productStockKg;
   String productCode;
   String productDate;
   bool productStatus;
@@ -35,8 +35,8 @@ class ProductDetailsUpdate {
   ProductDetailsUpdate.fromMap(Map<String, dynamic> map)
       : productId = map['product_id'] ?? '',
         productName = map['product_name'] ?? '',
-        productCost = map['product_cost'] ?? 0,
-        productStockKg = map['product_stock_kg'] ?? 0,
+        productCost = map['product_cost'] ?? '',
+        productStockKg = map['product_stock_kg'] ?? '',
         productCode = map['product_code'] ?? '',
         productStatus = map['product_status'] ?? false,
         productDate = map['product_date'] ?? '';

@@ -17,17 +17,12 @@ class PresenterPendingBalanceList {
 
   void onSuccessResponseGetOrderReportList(
       GetPendingBalanceResponseModel getPendingBalanceResponseModel) {
-    if (getPendingBalanceResponseModel.isSuccess) {
-      List<PendingBalanceDetails> pendingBalanceDetails = [];
-      pendingBalanceDetails = (getPendingBalanceResponseModel.balanceDetails)
-          .map((datas) => new PendingBalanceDetails.fromMap(datas))
-          .toList();
-      _getPendingBalanceListener
-          .onSuccessResponseGetAllPendingBalanceList(pendingBalanceDetails);
-    } else {
-      _getPendingBalanceListener.onFailureResponseGetAllPendingBalance(
-          getPendingBalanceResponseModel.message);
-    }
+    List<PendingBalanceDetails> pendingBalanceDetails = [];
+    pendingBalanceDetails = (getPendingBalanceResponseModel.balanceDetails)
+        .map((datas) => new PendingBalanceDetails.fromMap(datas))
+        .toList();
+    _getPendingBalanceListener
+        .onSuccessResponseGetAllPendingBalanceList(pendingBalanceDetails);
   }
 
   void onFailureResponseGetOrderReportList(String statusCode) {

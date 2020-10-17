@@ -6,13 +6,7 @@ abstract class IGetPendingBalanceListener {
 
   void onFailureResponseGetAllPendingBalance(String statusCode);
 
-  String getPageCount();
-
   String getSearchkeyword();
-
-  String getCustomerId();
-
-  String getPageLimits();
 
   String getFromDate();
 

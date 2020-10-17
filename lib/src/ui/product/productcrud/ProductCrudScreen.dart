@@ -1,11 +1,15 @@
 import 'package:IGO/src/data/apis/product/productlist/IProductListListener.dart';
 import 'package:IGO/src/data/apis/product/productlist/PresenterProductList.dart';
+import 'package:IGO/src/data/apis/product/updateproduct/IUpdateProductListener.dart';
+import 'package:IGO/src/data/apis/product/updateproduct/PresenterUpdateProduct.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/product/updateproduct/UpdateProductResponseModel.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
+import 'package:IGO/src/ui/product/addproductscreen/AddProductScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
-import 'ModaProductLists.dart';
+import 'ModaProductCrud.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
@@ -17,16 +21,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(ProductListsScreen());
+void main() => runApp(ProductCrudScreen());
+ProductDetails productDetailsNavigate = new ProductDetails();
 
-int organizationID;
-String organizationName;
-String organizationName2;
-String eventStartDate;
-double eventLatitude;
-double eventLongitude;
-
-class ProductListsScreen extends StatelessWidget {
+class ProductCrudScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,36 +32,37 @@ class ProductListsScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProductListsScreenStateful(),
+      home: ProductCrudScreenStateful(),
     );
   }
 }
 
-class ProductListsScreenStateful extends StatefulWidget {
-  ProductListsScreenStateful({Key key, this.title}) : super(key: key);
+class ProductCrudScreenStateful extends StatefulWidget {
+  ProductCrudScreenStateful({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  ProductListsScreenState createState() => ProductListsScreenState();
+  ProductCrudScreenState createState() => ProductCrudScreenState();
 }
 
-class ProductListsScreenState
-    extends BaseStateStatefulState<ProductListsScreenStateful>
+class ProductCrudScreenState
+    extends BaseStateStatefulState<ProductCrudScreenStateful>
     with TickerProviderStateMixin
     implements
         ViewContractConnectivityListener,
         IProductListListener,
-        BaseAlertListener {
+        BaseAlertListener,
+        IUpdateProductListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
-  ModaProductLists _modaProductLists;
+  ModaProductCrud _modaProductCrud;
   PresenterProductList _presenterProductList;
-  AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
   List<ProductDetails> callLogImportInfo = [];
   List<ProductDetails> duplicateCallLogImportInfo = [];
+  PresenterUpdateProduct _presenterUpdateProduct;
 
   //Keys//
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -72,10 +71,11 @@ class ProductListsScreenState
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  ProductListsScreenState() {
-    this._modaProductLists = new ModaProductLists();
+  ProductCrudScreenState() {
+    this._modaProductCrud = new ModaProductCrud();
     this._connectivity = new Connectivitys(this);
     this._presenterProductList = new PresenterProductList(this);
+    this._presenterUpdateProduct = new PresenterUpdateProduct(this);
   }
 
   void checkInternetAlert() {
@@ -86,15 +86,15 @@ class ProductListsScreenState
   }
 
   void updateInternetConnectivity(bool networkStatus) {
-    _modaProductLists.isNetworkStatus = networkStatus;
+    _modaProductCrud.isNetworkStatus = networkStatus;
   }
 
   void updateNoData(bool status) {
-    _modaProductLists.boolNodata = status;
+    _modaProductCrud.boolNodata = status;
   }
 
   void updateEventCircularLoader(bool status) {
-    _modaProductLists.eventCircularLoader = status;
+    _modaProductCrud.eventCircularLoader = status;
   }
 
   bool checkDuplicateBillInCart(ProductDetails productDetails) {
@@ -465,17 +465,7 @@ class ProductListsScreenState
                                               color: ConstantColor.COLOR_RED,
                                               textColor: Colors.white,
                                               onPressed: () {
-                                                setState(() {
-                                                  showProductCalculationAlertDialog(
-                                                      item.productName,
-                                                      AppLocalizations.instance
-                                                          .text('key_done'),
-                                                      AppLocalizations.instance
-                                                          .text('key_clear'),
-                                                      1,
-                                                      item,
-                                                      this);
-                                                });
+                                                setState(() {});
                                               },
                                             ),
                                             margin: EdgeInsets.only(
@@ -511,111 +501,76 @@ class ProductListsScreenState
                                     ],
                                   ),
                                   new Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      new Container(
-                                        height: 40,
-                                        alignment: Alignment.topRight,
-                                        margin: EdgeInsets.only(
-                                            bottom: appConfig.rHP(3)),
-                                        child: FlatButton(
-                                          child: Text(
-                                              AppLocalizations.instance
-                                                  .text('key_add_to_bill'),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_WHITE,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400)),
-                                          color: ConstantColor.COLOR_APP_BASE,
-                                          textColor: Colors.white,
-                                          onPressed: () {
-                                            setState(() {
-                                              dismissKeyboard();
-                                              setState(() {
-                                                if (item.totalCost == 0) {
-                                                  showToast(AppLocalizations
-                                                      .instance
-                                                      .text(
-                                                          'key_select_kilos'));
-                                                } else {
-                                                  ///add to bill array
-                                                  ///
-                                                  ///
-
-                                                  if (checkDuplicateBillInCart(
-                                                      item)) {
-                                                    runShakeAnimation();
-                                                    vibratePhone();
-                                                    BaseSingleton.shared
-                                                        .billingProductList
-                                                        .add(item);
-                                                    showToast(AppLocalizations
-                                                        .instance
-                                                        .text(
-                                                            'key_added_cart'));
-                                                  } else {
-                                                    showToast(AppLocalizations
-                                                        .instance
-                                                        .text(
-                                                            'key_already_in_cart'));
-                                                  }
-                                                }
-                                              });
-                                            });
-                                          },
-                                        ), /*FloatingActionButton.extended(
-                                              heroTag: item.productId,
-                                              backgroundColor:
-                                                  ConstantColor.COLOR_APP_BASE,
-                                              elevation: 5.0,
-                                              onPressed: () {
-                                                dismissKeyboard();
-                                                setState(() {
-                                                  if (item.totalCost == 0) {
-                                                    showToast(AppLocalizations
-                                                        .instance
-                                                        .text(
-                                                            'key_select_kilos'));
-                                                  } else {
-                                                    ///add to bill array
-                                                    ///
-                                                    ///
-
-                                                    if (checkDuplicateBillInCart(
-                                                        item)) {
-                                                      runShakeAnimation();
-                                                      vibratePhone();
-                                                      BaseSingleton.shared
-                                                          .billingProductList
-                                                          .add(item);
-                                                      showToast(AppLocalizations
-                                                          .instance
-                                                          .text(
-                                                              'key_added_cart'));
-                                                    } else {
-                                                      showToast(AppLocalizations
-                                                          .instance
-                                                          .text(
-                                                              'key_already_in_cart'));
-                                                    }
-                                                  }
-                                                });
-                                              },
-                                              label: Text(
-                                                AppLocalizations.instance
-                                                    .text('key_add_to_bill'),
+                                      new Expanded(
+                                        child: new Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                              bottom: appConfig.rHP(3),
+                                              top: appConfig.rHP(2.5)),
+                                          child: FlatButton(
+                                            child: Text("Edit",
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                    fontSize: 14,
                                                     color: ConstantColor
-                                                        .COLOR_CORE,
-                                                    fontWeight: FontWeight.bold,
+                                                        .COLOR_WHITE,
                                                     fontFamily: ConstantCommon
-                                                        .BASE_FONT),
-                                              ))*/
+                                                        .BASE_FONT,
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            color: ConstantColor.COLOR_GREEN,
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              setState(() {
+                                                productDetailsNavigate = item;
+                                                navigationPushReplacementPassParams(
+                                                    AddProductScreenStateful(
+                                                  productDetails:
+                                                      productDetailsNavigate,
+                                                ));
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        flex: 1,
+                                      ),
+                                      new Expanded(
+                                        child: new Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(
+                                              bottom: appConfig.rHP(3),
+                                              top: appConfig.rHP(2.5)),
+                                          child: FlatButton(
+                                            child: Text("Delete",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: ConstantColor
+                                                        .COLOR_WHITE,
+                                                    fontFamily: ConstantCommon
+                                                        .BASE_FONT,
+                                                    fontSize: 17,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            color: ConstantColor.COLOR_RED,
+                                            textColor: Colors.white,
+                                            onPressed: () {
+                                              setState(() {
+                                                _modaProductCrud.productId =
+                                                    item.productId;
+                                                showAlertDialog(
+                                                    "Are you sure delete",
+                                                    "Yes",
+                                                    "No",
+                                                    0,
+                                                    this);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        flex: 1,
                                       ),
                                     ],
                                   )
@@ -811,7 +766,7 @@ class ProductListsScreenState
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,
-        value: _modaProductLists.loadingCircularBar,
+        value: _modaProductCrud.loadingCircularBar,
         valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
       )),
@@ -828,83 +783,10 @@ class ProductListsScreenState
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
-            actions: <Widget>[
-//              new InkWell(
-//                  child: new Container(
-//                    padding: EdgeInsets.only(right: appConfig.rWP(4)),
-//                    child: Image.asset(
-//                      "assets/images/profiles.png",
-//                      width: 35,
-//                      height: 40,
-//                    ),
-//                  ),
-//                  onTap: () {
-//                    setState(() {
-//                      getLocalSessionDatas();
-//                      showAlertDialog(
-//                          AppLocalizations.instance.text('key_are_you_logout'),
-//                          AppLocalizations.instance.text('key_okay'),
-//                          AppLocalizations.instance.text('key_cancel'),
-//                          0,
-//                          this);
-//                    });
-//                  }),
-
-              new InkWell(
-                child: RotationTransition(
-                  turns: Tween(begin: 0.0, end: -.1)
-                      .chain(CurveTween(curve: Curves.elasticIn))
-                      .animate(_animationController),
-                  child: new Container(
-                    padding: EdgeInsets.only(
-                        right: appConfig.rW(5), top: appConfig.rHP(1)),
-                    child: new Stack(
-                      alignment: Alignment.topRight,
-                      children: <Widget>[
-                        new Container(
-                          child: new IconButton(
-                            icon: new Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                            ),
-                            onPressed: null,
-                          ),
-                        ),
-                        new Positioned(
-                            child: new Stack(
-                          alignment: Alignment.topLeft,
-                          children: <Widget>[
-                            new Icon(Icons.brightness_1,
-                                size: 30.0, color: ConstantColor.COLOR_RED),
-                            new Positioned(
-                                top: 6.0,
-                                right: 8.0,
-                                child: new Center(
-                                  child: new Text(
-                                    BaseSingleton
-                                        .shared.billingProductList.length
-                                        .toString(),
-                                    style: TextStyle(
-                                        color: ConstantColor.COLOR_WHITE,
-                                        fontFamily: ConstantCommon.BASE_FONT,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                )),
-                          ],
-                        )),
-                      ],
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  navigateBaseRouting(3);
-                },
-              ),
-            ],
+            actions: <Widget>[],
             bottomOpacity: 1,
           ),
-          body: !_modaProductLists.isNetworkStatus
+          body: !_modaProductCrud.isNetworkStatus
               ? RefreshIndicator(
                   key: refreshKey,
                   child: new Stack(
@@ -923,7 +805,7 @@ class ProductListsScreenState
                                           new Container(
                                             child: new Column(
                                               children: <Widget>[
-                                                _modaProductLists.boolNodata
+                                                _modaProductCrud.boolNodata
                                                     ? containerNoData
                                                     : containerClubListsAll
                                               ],
@@ -941,17 +823,28 @@ class ProductListsScreenState
                               ),
                             ),
                           ),
-                          absorbing: _modaProductLists.loadingEnableDisable,
+                          absorbing: _modaProductCrud.loadingEnableDisable,
                         ),
                       ),
                     ],
                   ),
                   onRefresh: refreshList)
               : centerContainerNoNetwork,
+          floatingActionButton: new FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              setState(() {
+                productDetailsNavigate = new ProductDetails();
+                navigationPushReplacementPassParams(AddProductScreenStateful(
+                  productDetails: productDetailsNavigate,
+                ));
+              });
+            },
+          ),
         ),
         onWillPop: () {
           setState(() {
-            navigateBaseRouting(6);
+            navigateBaseRouting(7);
           });
         });
   }
@@ -1011,23 +904,16 @@ class ProductListsScreenState
 
   void showDialog() {
     setState(() {
-      _modaProductLists.loadingEnableDisable = true;
-      _modaProductLists.loadingCircularBar = null;
+      _modaProductCrud.loadingEnableDisable = true;
+      _modaProductCrud.loadingCircularBar = null;
     });
   }
 
   void dismissLoadingDialog() {
     setState(() {
-      _modaProductLists.loadingEnableDisable = false;
-      _modaProductLists.loadingCircularBar = 0.0;
+      _modaProductCrud.loadingEnableDisable = false;
+      _modaProductCrud.loadingCircularBar = 0.0;
     });
-  }
-
-  void runShakeAnimation() async {
-    for (int i = 0; i < 2; i++) {
-      await _animationController.forward(from: 0);
-      await _animationController.reverse(from: 100);
-    }
   }
 
   @override
@@ -1039,8 +925,6 @@ class ProductListsScreenState
         _RefreshController = ScrollController();
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
-        _animationController = AnimationController(
-            vsync: this, duration: Duration(milliseconds: 500));
       });
     }
   }
@@ -1075,11 +959,29 @@ class ProductListsScreenState
     });
   }
 
+  void getUpdateProductApi() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterUpdateProduct.hitUpdateProductDataCall();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
+  }
+
   void apiCallBack(int event) {
     setState(() {
       if (event == 6) {
         showDialog();
         getUserCallLogReport();
+      } else if (event == 1) {
+        showDialog();
+        getUpdateProductApi();
       }
     });
   }
@@ -1106,13 +1008,18 @@ class ProductListsScreenState
       ProductListResponseModel productListResponseModel) {
     setState(() {
       dismissLoadingDialog();
-      callLogImportInfo = (productListResponseModel.productDetails as List)
-          .map((datas) => new ProductDetails.fromMap(datas))
-          .toList();
-      duplicateCallLogImportInfo =
-          (productListResponseModel.productDetails as List)
-              .map((datas) => new ProductDetails.fromMap(datas))
-              .toList();
+      if (productListResponseModel.isSuccess) {
+        callLogImportInfo = (productListResponseModel.productDetails as List)
+            .map((datas) => new ProductDetails.fromMap(datas))
+            .toList();
+        duplicateCallLogImportInfo =
+            (productListResponseModel.productDetails as List)
+                .map((datas) => new ProductDetails.fromMap(datas))
+                .toList();
+      } else {
+        callLogImportInfo = [];
+        duplicateCallLogImportInfo = [];
+      }
       updateNoDataController();
     });
   }
@@ -1127,7 +1034,9 @@ class ProductListsScreenState
 
   @override
   void onTapAlertOkayListener() {
-    setState(() {});
+    setState(() {
+      apiCallBack(1);
+    });
   }
 
   @override
@@ -1149,14 +1058,12 @@ class ProductListsScreenState
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Map parseGetProductDetailsRequestData() {
-    return _modaProductLists.mapProductDetDetailsData = {
+    return _modaProductCrud.mapProductDetDetailsData = {
       "search_keyword": getSearchkeyword().trim(),
       "page_count": getPageCount().trim(),
       "page_limits": BaseSingleton.shared.pageLimits
@@ -1165,6 +1072,78 @@ class ProductListsScreenState
 
   @override
   void onTapAlertProductCalculationListener(ProductDetails productDetails) {
+    setState(() {});
+  }
+
+  @override
+  void errorValidationMgs(String error) {
+    setState(() {
+      showToast(error);
+    });
+  }
+
+  @override
+  String getProductCodeUpdate() {
+    return "";
+  }
+
+  @override
+  String getProductCostUpdate() {
+    return "";
+  }
+
+  @override
+  String getProductIdUpdate() {
+    return _modaProductCrud.productId;
+  }
+
+  @override
+  String getProductNameUpdate() {
+    return "";
+  }
+
+  @override
+  String getProductStatusUpdate() {
+    return "false";
+  }
+
+  @override
+  String getProductStockKgUpdate() {
+    return "";
+  }
+
+  @override
+  void onFailureMessageUpdateProduct(String error) {
+    setState(() {
+      showErrorAlert(error);
+      dismissLoadingDialog();
+    });
+  }
+
+  @override
+  void onSuccessResponseUpdateProduct(
+      UpdateProductResponseModel updateProductResponseModel) {
+    setState(() {
+      dismissLoadingDialog();
+      showToast(updateProductResponseModel.message);
+      apiCallBack(6);
+    });
+  }
+
+  @override
+  Map parseUpdateProductData() {
+    return {
+      "product_id": getProductIdUpdate(),
+      "product_name": getProductNameUpdate(),
+      "product_cost": getProductCostUpdate(),
+      "product_stock_kg": getProductStockKgUpdate(),
+      "product_code": getProductCodeUpdate(),
+      "product_status": getProductStatusUpdate()
+    };
+  }
+
+  @override
+  void postUpdateProductData() {
     setState(() {});
   }
 

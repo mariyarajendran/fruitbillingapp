@@ -6,12 +6,16 @@ import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/di/di.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/BillPreviewScreen.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
+import 'package:IGO/src/ui/bills/pendingbalancescreen/PendingBalanceListScreen.dart';
+import 'package:IGO/src/ui/bills/updatependingbalance/ModelUpdatePending.dart';
 import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
 import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 import 'package:IGO/src/ui/customer/customerlist/CustomerListsScreen.dart';
 import 'package:IGO/src/ui/dashboard/DashboardScreen.dart';
 import 'package:IGO/src/ui/product/addproductscreen/AddProductScreen.dart';
 import 'package:IGO/src/ui/product/cartscreen/CartListScreen.dart';
+import 'package:IGO/src/ui/product/productcrud/ProductCrudScreen.dart';
 import 'package:IGO/src/ui/product/productlist/ProductLists.dart';
 import 'package:IGO/src/ui/report/overalldetailreport/OverAllDetailedReportScreen.dart';
 import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
@@ -32,6 +36,12 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
   BuildContext contextLoadingDialog, contextAlertDialog;
   SessionManager _sessionManager;
   TextEditingController textEditingControllerKilograms =
+      new TextEditingController();
+
+  TextEditingController textEditingControllerReceivedAmount =
+      new TextEditingController();
+
+  TextEditingController textEditingControllerPendingAmount =
       new TextEditingController();
 
   BaseStateStatefulState() {
@@ -251,6 +261,18 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => CustomerListsCrudScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 11) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => ProductCrudScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 12) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => PendingBalanceListScreen()),
         (Route<dynamic> route) => false,
       );
     }
@@ -701,6 +723,577 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
         });
   }
 
+  void clearReceivedAmount(ModelBalanceReceived modelBalanceReceived) {
+    setState(() {
+      textEditingControllerReceivedAmount.text = "";
+      modelBalanceReceived.receivedCost = 0;
+      modelBalanceReceived.pendingCost = 0;
+    });
+  }
+
+  void clearPendingAmount(ModelUpdatePending modelUpdatePending,
+      ModelUpdatePending dummyModelBalanceReceived) {
+    setState(() {
+      textEditingControllerPendingAmount.text = "";
+      modelUpdatePending.receivedCost = dummyModelBalanceReceived.receivedCost;
+      modelUpdatePending.pendingCost = dummyModelBalanceReceived.pendingCost;
+      modelUpdatePending.totalCost = dummyModelBalanceReceived.totalCost;
+      modelUpdatePending.orderPendinghistoryPendingCost = 0;
+      modelUpdatePending.orderPendinghistoryReceivedCost = 0;
+    });
+  }
+
+  showProductReceivedAlertDialog(
+      String msg,
+      String positive,
+      int events,
+      ModelBalanceReceived modelBalanceReceived,
+      BaseAlertListener baseAlertListener) async {
+    textEditingControllerReceivedAmount.text =
+        modelBalanceReceived.receivedCost.toString();
+    return showDialog(
+        context: context,
+        barrierDismissible: false, //w user must tap button!
+        builder: (BuildContext context) {
+          contextAlertDialog = context;
+          return new WillPopScope(
+              onWillPop: () async => false,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+//              contentPadding: EdgeInsets.all(0.0),
+//              backgroundColor: Colors.transparent,
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            InkWell(
+                              child: Container(
+                                child: Image.asset(
+                                  "assets/images/close.png",
+                                  width: 35,
+                                  height: 35,
+                                ),
+                                alignment: Alignment.topRight,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  Navigator.pop(context);
+                                  dismissKeyboard();
+                                });
+                              },
+                            ),
+                            Center(
+                              child: new Container(
+                                child: new Text(msg,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontSize: ConstantSize.FONT_LARGE_X,
+                                        fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 10, top: 10),
+                              ),
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  child: new Text(
+                                    "Total Cost",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "Pending",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  child: new Text(
+                                    "${modelBalanceReceived.totalCost} kg",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily:
+                                            ConstantCommon.BASE_FONT_REGULAR,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 15, bottom: 10),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "₹ ${modelBalanceReceived.pendingCost}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily:
+                                            ConstantCommon.BASE_FONT_REGULAR,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 15, bottom: 10),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  child: new Text(
+                                    "Amount",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "Received",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  margin: EdgeInsets.only(top: 10, bottom: 30),
+                                  width: 100,
+                                  child: TextField(
+                                    controller:
+                                        textEditingControllerReceivedAmount,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                        labelText: "Amount",
+                                        labelStyle: TextStyle(
+                                            color: ConstantColor.COLOR_BLACK),
+                                        hintStyle: TextStyle(
+                                            color: ConstantColor.COLOR_BLACK),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                    ConstantColor.COLOR_BLACK,
+                                                width: 1.5),
+                                            gapPadding: 5.0,
+                                            borderRadius:
+                                                BorderRadius.circular(1.0)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(1.0),
+                                            borderSide: BorderSide(
+                                                color:
+                                                    ConstantColor.COLOR_BLACK,
+                                                width: 1.3),
+                                            gapPadding: 10.0),
+                                        contentPadding: EdgeInsets.all(10.0)),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: ConstantColor.COLOR_BLACK,
+                                      fontFamily:
+                                          ConstantCommon.BASE_FONT_REGULAR,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value.isEmpty) {
+                                          clearReceivedAmount(
+                                              modelBalanceReceived);
+                                        } else {
+                                          modelBalanceReceived.pendingCost =
+                                              modelBalanceReceived.totalCost -
+                                                  int.parse(value);
+                                          modelBalanceReceived.receivedCost =
+                                              int.parse(value);
+                                          //
+                                          // productDetails.totalKiloGrams =
+                                          //     int.parse(value);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "₹ ${modelBalanceReceived.receivedCost}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily:
+                                            ConstantCommon.BASE_FONT_REGULAR,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10, bottom: 30),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                new Container(
+                                    height: 50,
+                                    child: FloatingActionButton.extended(
+                                        backgroundColor:
+                                            ConstantColor.COLOR_GREEN,
+                                        elevation: 5.0,
+                                        onPressed: () {
+                                          dismissKeyboard();
+                                          if (events == 0) {
+                                            Navigator.pop(context);
+                                            baseAlertListener
+                                                .onTapAlertOkayListener();
+                                          } else if (events == 1) {
+                                            setState(() {
+                                              if (textEditingControllerReceivedAmount
+                                                      .text.isEmpty ||
+                                                  textEditingControllerReceivedAmount
+                                                          .text ==
+                                                      "0") {
+                                                showToast(AppLocalizations
+                                                    .instance
+                                                    .text(
+                                                        'key_enter_kilograms'));
+                                              } else {
+                                                textEditingControllerReceivedAmount
+                                                    .text = "";
+                                                Navigator.pop(context);
+                                                baseAlertListener
+                                                    .onTapAlertReceivedCalculationListener(
+                                                        modelBalanceReceived);
+                                              }
+                                            });
+                                          }
+                                        },
+                                        label: Text(
+                                          positive,
+                                          style: TextStyle(
+                                              fontSize:
+                                                  ConstantSize.BUTTON_TEXT_SIZE,
+                                              color: ConstantColor.COLOR_CORE,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily:
+                                                  ConstantCommon.BASE_FONT),
+                                        )))
+                              ],
+                            ),
+                          ],
+                        ),
+                      ));
+                },
+              ));
+        });
+  }
+
+  showUpdatePendingBalanceAlertDialog(
+      String msg,
+      String positive,
+      int events,
+      ModelUpdatePending modelUpdatePending,
+      ModelUpdatePending dummyModelUpdatePending,
+      BaseAlertListener baseAlertListener) async {
+    textEditingControllerPendingAmount.text =
+        modelUpdatePending.orderPendinghistoryReceivedCost.toString();
+    return showDialog(
+        context: context,
+        barrierDismissible: false, //w user must tap button!
+        builder: (BuildContext context) {
+          contextAlertDialog = context;
+          return new WillPopScope(
+              onWillPop: () async => false,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+//              contentPadding: EdgeInsets.all(0.0),
+//              backgroundColor: Colors.transparent,
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            InkWell(
+                              child: Container(
+                                child: Image.asset(
+                                  "assets/images/close.png",
+                                  width: 35,
+                                  height: 35,
+                                ),
+                                alignment: Alignment.topRight,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  Navigator.pop(context);
+                                  dismissKeyboard();
+                                });
+                              },
+                            ),
+                            Center(
+                              child: new Container(
+                                child: new Text(msg,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontSize: ConstantSize.FONT_LARGE_X,
+                                        fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 10, top: 10),
+                              ),
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  child: new Text(
+                                    "Total Cost",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "Pending",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  child: new Text(
+                                    "${modelUpdatePending.totalCost} kg",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily:
+                                            ConstantCommon.BASE_FONT_REGULAR,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 15, bottom: 10),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "₹ ${modelUpdatePending.pendingCost}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily:
+                                            ConstantCommon.BASE_FONT_REGULAR,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 15, bottom: 10),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  child: new Text(
+                                    "Amount",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "Received",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily: ConstantCommon.BASE_FONT,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                new Container(
+                                  margin: EdgeInsets.only(top: 10, bottom: 30),
+                                  width: 100,
+                                  child: TextField(
+                                    controller:
+                                        textEditingControllerPendingAmount,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                        labelText: "Amount",
+                                        labelStyle: TextStyle(
+                                            color: ConstantColor.COLOR_BLACK),
+                                        hintStyle: TextStyle(
+                                            color: ConstantColor.COLOR_BLACK),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                    ConstantColor.COLOR_BLACK,
+                                                width: 1.5),
+                                            gapPadding: 5.0,
+                                            borderRadius:
+                                                BorderRadius.circular(1.0)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(1.0),
+                                            borderSide: BorderSide(
+                                                color:
+                                                    ConstantColor.COLOR_BLACK,
+                                                width: 1.3),
+                                            gapPadding: 10.0),
+                                        contentPadding: EdgeInsets.all(10.0)),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: ConstantColor.COLOR_BLACK,
+                                      fontFamily:
+                                          ConstantCommon.BASE_FONT_REGULAR,
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value.isEmpty) {
+                                          clearPendingAmount(modelUpdatePending,
+                                              dummyModelUpdatePending);
+                                        } else {
+                                          int pendingBalance =
+                                              dummyModelUpdatePending
+                                                  .pendingCost;
+                                          int receivedBalance =
+                                              dummyModelUpdatePending
+                                                  .receivedCost;
+                                          modelUpdatePending.pendingCost =
+                                              pendingBalance - int.parse(value);
+                                          modelUpdatePending.receivedCost =
+                                              receivedBalance +
+                                                  int.parse(value);
+                                          modelUpdatePending
+                                                  .orderPendinghistoryReceivedCost =
+                                              int.parse(value);
+                                          modelUpdatePending
+                                                  .orderPendinghistoryPendingCost =
+                                              pendingBalance - int.parse(value);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                                new Container(
+                                  child: new Text(
+                                    "₹ ${modelUpdatePending.receivedCost}",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        color: ConstantColor.COLOR_BLACK,
+                                        fontFamily:
+                                            ConstantCommon.BASE_FONT_REGULAR,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                  margin: EdgeInsets.only(top: 10, bottom: 30),
+                                ),
+                              ],
+                            ),
+                            new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                new Container(
+                                    height: 50,
+                                    child: FloatingActionButton.extended(
+                                        backgroundColor:
+                                            ConstantColor.COLOR_GREEN,
+                                        elevation: 5.0,
+                                        onPressed: () {
+                                          dismissKeyboard();
+                                          if (events == 0) {
+                                            Navigator.pop(context);
+                                            baseAlertListener
+                                                .onTapAlertOkayListener();
+                                          } else if (events == 1) {
+                                            setState(() {
+                                              if (textEditingControllerPendingAmount
+                                                      .text.isEmpty ||
+                                                  textEditingControllerPendingAmount
+                                                          .text ==
+                                                      "0") {
+                                                showToast(AppLocalizations
+                                                    .instance
+                                                    .text(
+                                                        'key_enter_kilograms'));
+                                              } else {
+                                                Navigator.pop(context);
+                                              }
+                                            });
+                                          }
+                                        },
+                                        label: Text(
+                                          positive,
+                                          style: TextStyle(
+                                              fontSize:
+                                                  ConstantSize.BUTTON_TEXT_SIZE,
+                                              color: ConstantColor.COLOR_CORE,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily:
+                                                  ConstantCommon.BASE_FONT),
+                                        )))
+                              ],
+                            ),
+                          ],
+                        ),
+                      ));
+                },
+              ));
+        });
+  }
+
   showMessageAlert(String msg, String btnText, int events) async {
     return showDialog(
         context: context,
@@ -810,6 +1403,10 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
 
   dismissKeyboard() {
     FocusScope.of(context).requestFocus(new FocusNode());
+  }
+
+  String cutNull(Object value) {
+    return value == null ? "" : value.toString();
   }
 
   @override

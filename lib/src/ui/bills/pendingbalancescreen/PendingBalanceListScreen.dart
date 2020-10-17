@@ -1,18 +1,22 @@
+import 'package:IGO/src/data/apis/bills/getallpendingbalance/IGetPendingBalanceListener.dart';
+import 'package:IGO/src/data/apis/bills/getallpendingbalance/PresenterPendingBalanceList.dart';
 import 'package:IGO/src/data/apis/report/orderreports/IOrderReportListener.dart';
 import 'package:IGO/src/data/apis/report/orderreports/PresenterOrderReportList.dart';
+import 'package:IGO/src/models/responsemodel/bills/getallpendingbalance/GetPendingBalanceResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/report/orderreport/OrderReportResponseModel.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
+import 'package:IGO/src/ui/bills/updatependingbalance/UpdatePendingBalanceScreen.dart';
 import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 import 'package:IGO/src/ui/dashboard/DashboardScreen.dart';
 import 'package:IGO/src/ui/dashboard/DateModel.dart';
 import 'package:IGO/src/ui/report/overalldetailreport/OverAllDetailedReportScreen.dart';
+import 'package:IGO/src/ui/report/overallreport/OverAllParamModel.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
-import 'ModalOverallReport.dart';
-import 'OverAllParamModel.dart';
+import 'ModalPendingBalance.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
@@ -24,11 +28,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-void main() => runApp(OverallReportListScreen());
+void main() => runApp(PendingBalanceListScreen());
 OverAllParamModel overAllParamModel;
 
-class OverallReportListScreen extends StatelessWidget {
-  const OverallReportListScreen({Key key}) : super(key: key);
+class PendingBalanceListScreen extends StatelessWidget {
+  const PendingBalanceListScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,61 +41,61 @@ class OverallReportListScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: OverallReportListStateful(),
+      home: PendingBalanceListStateful(),
     );
   }
 }
 
-class OverallReportListStateful extends StatefulWidget {
+class PendingBalanceListStateful extends StatefulWidget {
   String title;
 
-  OverallReportListStateful({Key key, this.title}) : super(key: key);
+  PendingBalanceListStateful({Key key, this.title}) : super(key: key);
 
   @override
-  OverallReportListState createState() => OverallReportListState();
+  PendingBalanceListState createState() => PendingBalanceListState();
 }
 
-class OverallReportListState
-    extends BaseStateStatefulState<OverallReportListStateful>
+class PendingBalanceListState
+    extends BaseStateStatefulState<PendingBalanceListStateful>
     with TickerProviderStateMixin
     implements
         ViewContractConnectivityListener,
         BaseAlertListener,
-        IOrderReportListener {
+        IGetPendingBalanceListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
-  ModalOverallReport _modalOverallReport;
+  ModalPendingBalance _modalPendingBalance;
   TextEditingController searchcontroller = new TextEditingController();
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
-  PresenterOrderReportList _presenterOrderReportList;
   List<CustomerDetails> customerDetails = [];
   List<CustomerDetails> duplicateCustomerDetails = [];
-  List<OverAllReports> listOverAllReports = [];
+  List<PendingBalanceDetails> listPendingBalanceDetails = [];
   DashboardScreen dashboardScreen;
   CustomerListsCrudScreen customerListsCrudScreen;
+  PresenterPendingBalanceList _presenterPendingBalanceList;
 
   //Keys//
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  OverallReportListState() {
-    this._modalOverallReport = new ModalOverallReport();
+  PendingBalanceListState() {
+    this._modalPendingBalance = new ModalPendingBalance();
     this._connectivity = new Connectivitys(this);
-    this._presenterOrderReportList = new PresenterOrderReportList(this);
+    this._presenterPendingBalanceList = new PresenterPendingBalanceList(this);
   }
 
   void updateInternetConnectivity(bool networkStatus) {
-    _modalOverallReport.isNetworkStatus = networkStatus;
+    _modalPendingBalance.isNetworkStatus = networkStatus;
   }
 
   void updateNoData(bool status) {
-    _modalOverallReport.boolNodata = status;
+    _modalPendingBalance.boolNodata = status;
   }
 
   void updateEventCircularLoader(bool status) {
-    _modalOverallReport.eventCircularLoader = status;
+    _modalPendingBalance.eventCircularLoader = status;
   }
 
   @override
@@ -122,20 +126,26 @@ class OverallReportListState
                                         setState(() {
                                           overAllParamModel =
                                               new OverAllParamModel(
-                                                  listOverAllReports[index]
+                                                  listPendingBalanceDetails[
+                                                          index]
                                                       .orderId,
-                                                  listOverAllReports[index]
+                                                  listPendingBalanceDetails[
+                                                          index]
                                                       .customerId,
-                                                  listOverAllReports[index]
+                                                  listPendingBalanceDetails[
+                                                          index]
                                                       .totalAmount,
-                                                  listOverAllReports[index]
+                                                  listPendingBalanceDetails[
+                                                          index]
                                                       .receivedAmount,
-                                                  listOverAllReports[index]
+                                                  listPendingBalanceDetails[
+                                                          index]
                                                       .pendingAmount,
-                                                  listOverAllReports[index]
+                                                  listPendingBalanceDetails[
+                                                          index]
                                                       .orderSummaryId);
                                           navigationPushReplacementPassParams(
-                                              OverAllDetailedReportStateful(
+                                              UpdatePendingBalanceStateful(
                                                   overAllParamModel:
                                                       overAllParamModel));
                                         });
@@ -228,7 +238,7 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "# ${listOverAllReports[index].orderId ?? ''}",
+                                                                  "# ${listPendingBalanceDetails[index].orderId ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
@@ -259,7 +269,7 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "₹ ${listOverAllReports[index].totalAmount ?? 0}",
+                                                                  "₹ ${listPendingBalanceDetails[index].totalAmount ?? 0}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .right,
@@ -377,7 +387,7 @@ class OverallReportListState
                                                                 child:
                                                                     FlatButton(
                                                                   child: Text(
-                                                                      "₹ ${listOverAllReports[index].receivedAmount ?? 0}",
+                                                                      "₹ ${listPendingBalanceDetails[index].receivedAmount ?? 0}",
                                                                       textAlign:
                                                                           TextAlign
                                                                               .center,
@@ -418,7 +428,7 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "₹ ${listOverAllReports[index].pendingAmount ?? 0}",
+                                                                  "₹ ${listPendingBalanceDetails[index].pendingAmount ?? 0}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
@@ -465,7 +475,7 @@ class OverallReportListState
                         ],
                       ),
                     ),
-                childCount: listOverAllReports.length),
+                childCount: listPendingBalanceDetails.length),
           ),
         ],
       ),
@@ -501,7 +511,7 @@ class OverallReportListState
             contentPadding: EdgeInsets.all(20.0)),
         onFieldSubmitted: (v) {},
         textCapitalization: TextCapitalization.sentences,
-        controller: _modalOverallReport.textEditingControllerFromDate,
+        controller: _modalPendingBalance.textEditingControllerFromDate,
         readOnly: true,
         onTap: () {
           setState(() {
@@ -540,7 +550,7 @@ class OverallReportListState
             contentPadding: EdgeInsets.all(20.0)),
         onFieldSubmitted: (v) {},
         textCapitalization: TextCapitalization.sentences,
-        controller: _modalOverallReport.textEditingControllerToDate,
+        controller: _modalPendingBalance.textEditingControllerToDate,
         readOnly: true,
         onTap: () {
           setState(() {
@@ -610,7 +620,7 @@ class OverallReportListState
       child: new Stack(
         children: <Widget>[
           containerAppTitleHintBar,
-          _modalOverallReport.boolNodata
+          _modalPendingBalance.boolNodata
               ? containerNoData
               : new Container(
                   margin: EdgeInsets.only(top: appConfig.rHP(8)),
@@ -684,7 +694,7 @@ class OverallReportListState
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,
-        value: _modalOverallReport.loadingCircularBar,
+        value: _modalPendingBalance.loadingCircularBar,
         valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
       )),
@@ -704,17 +714,13 @@ class OverallReportListState
             actions: <Widget>[],
             bottomOpacity: 1,
           ),
-          body: !_modalOverallReport.isNetworkStatus
+          body: !_modalPendingBalance.isNetworkStatus
               ? containerClubListsAll
               : centerContainerNoNetwork,
         ),
         onWillPop: () {
           setState(() {
-            if (BaseSingleton.shared.dateModel.eventId == 0) {
-              navigateBaseRouting(7);
-            } else {
-              navigateBaseRouting(10);
-            }
+            navigateBaseRouting(7);
           });
         });
   }
@@ -751,26 +757,26 @@ class OverallReportListState
 
   String returnFromDate(DateTime dateTime, bool hitCall) {
     DateFormat formatter = DateFormat('dd-MM-yyyy');
-    _modalOverallReport.textEditingControllerFromDate.text =
+    _modalPendingBalance.textEditingControllerFromDate.text =
         formatter.format(dateTime);
     DateFormat yearformatter = DateFormat('yyyy-MM-dd');
-    _modalOverallReport.fromDate = yearformatter.format(dateTime);
+    _modalPendingBalance.fromDate = yearformatter.format(dateTime);
     if (true) {
       apiCallBack(1);
     }
-    return _modalOverallReport.fromDate;
+    return _modalPendingBalance.fromDate;
   }
 
   String returnToDate(DateTime dateTime, bool hitCall) {
     DateFormat formatter = DateFormat('dd-MM-yyyy');
-    _modalOverallReport.textEditingControllerToDate.text =
+    _modalPendingBalance.textEditingControllerToDate.text =
         formatter.format(dateTime);
     DateFormat yearformatter = DateFormat('yyyy-MM-dd');
-    _modalOverallReport.toDate = yearformatter.format(dateTime);
+    _modalPendingBalance.toDate = yearformatter.format(dateTime);
     if (true) {
       apiCallBack(1);
     }
-    return _modalOverallReport.toDate;
+    return _modalPendingBalance.toDate;
   }
 
   void filterSearchResults(String query) {
@@ -810,15 +816,15 @@ class OverallReportListState
 
   void showDialog() {
     setState(() {
-      _modalOverallReport.loadingEnableDisable = true;
-      _modalOverallReport.loadingCircularBar = null;
+      _modalPendingBalance.loadingEnableDisable = true;
+      _modalPendingBalance.loadingCircularBar = null;
     });
   }
 
   void dismissLoadingDialog() {
     setState(() {
-      _modalOverallReport.loadingEnableDisable = false;
-      _modalOverallReport.loadingCircularBar = 0.0;
+      _modalPendingBalance.loadingEnableDisable = false;
+      _modalPendingBalance.loadingCircularBar = 0.0;
     });
   }
 
@@ -854,12 +860,12 @@ class OverallReportListState
     }
   }
 
-  void getOverAllReportList() {
+  void getAllPendingBalanceList() {
     checkConnectivityResponse().then((data) {
       if (data) {
         setState(() {
           updateInternetConnectivity(false);
-          _presenterOrderReportList.getOrderReportList();
+          _presenterPendingBalanceList.getPendingBalance();
         });
       } else {
         setState(() {
@@ -873,7 +879,7 @@ class OverallReportListState
     setState(() {
       if (event == 1) {
         showDialog();
-        getOverAllReportList();
+        getAllPendingBalanceList();
       }
     });
   }
@@ -889,7 +895,7 @@ class OverallReportListState
 
   void updateNoDataController() {
     setState(() {
-      if (listOverAllReports.length > 0) {
+      if (listPendingBalanceDetails.length > 0) {
         updateNoData(false);
       } else {
         updateNoData(true);
@@ -913,28 +919,14 @@ class OverallReportListState
   void onTapAlertProductCalculationListener(ProductDetails productDetails) {}
 
   @override
-  int eventId() {
-    return BaseSingleton.shared.dateModel.eventId;
-  }
-
-  @override
-  String getCustomerId() {
-    return BaseSingleton.shared.dateModel.customerId;
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
   }
 
   @override
   String getFromDate() {
-    return _modalOverallReport.fromDate;
-  }
-
-  @override
-  String getPageCount() {
-    return "0";
-  }
-
-  @override
-  String getPageLimits() {
-    return "100";
+    return _modalPendingBalance.fromDate.trim();
   }
 
   @override
@@ -944,11 +936,11 @@ class OverallReportListState
 
   @override
   String getToDate() {
-    return _modalOverallReport.toDate;
+    return _modalPendingBalance.toDate.trim();
   }
 
   @override
-  void onFailureResponseGetOverAllOrderList(String statusCode) {
+  void onFailureResponseGetAllPendingBalance(String statusCode) {
     setState(() {
       updateNoDataController();
       dismissLoadingDialog();
@@ -957,33 +949,23 @@ class OverallReportListState
   }
 
   @override
-  void onSuccessResponseGetOverAllOrderList(
-      List<OverAllReports> listOverAllReports) {
+  void onSuccessResponseGetAllPendingBalanceList(
+      List<PendingBalanceDetails> listPendingBalanceDetails) {
     setState(() {
       dismissLoadingDialog();
-      if (listOverAllReports != null) {
-        this.listOverAllReports = listOverAllReports;
+      if (listPendingBalanceDetails != null) {
+        this.listPendingBalanceDetails = listPendingBalanceDetails;
         updateNoDataController();
       }
     });
   }
 
   @override
-  Map parseGetOverAllOrderRequestData() {
+  Map parseGetAllPendingBalanceRequestData() {
     return {
-      "customer_id": getCustomerId(),
       "search_keyword": getSearchkeyword(),
-      "page_count": getPageCount(),
-      "page_limits": getPageLimits(),
       "from_date": getFromDate(),
-      "to_date": getToDate(),
-      "event_id": eventId()
+      "to_date": getToDate()
     };
-  }
-
-  @override
-  void onTapAlertReceivedCalculationListener(
-      ModelBalanceReceived modelBalanceReceived) {
-    // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

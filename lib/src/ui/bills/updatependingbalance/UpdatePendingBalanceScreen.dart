@@ -1,11 +1,19 @@
 import 'package:IGO/src/data/apis/bills/savebill/ISaveBillListener.dart';
 import 'package:IGO/src/data/apis/bills/savebill/PresenterSaveBillData.dart';
+import 'package:IGO/src/data/apis/bills/updatependingbalance/IUpdatePendingBalanceListener.dart';
+import 'package:IGO/src/data/apis/bills/updatependingbalance/PresenterUpdatePendingBalance.dart';
+import 'package:IGO/src/data/apis/report/orderdetailsreport/IOrderDetailReportListener.dart';
+import 'package:IGO/src/data/apis/report/orderdetailsreport/PresenterOrderDetailReportList.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
+import 'package:IGO/src/ui/bills/pendingbalancescreen/PendingBalanceListScreen.dart';
+import 'package:IGO/src/ui/report/overallreport/OverAllParamModel.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
-import 'ModalBillPreview.dart';
+import 'ModalUpdatePendingBalance.dart';
+import 'ModelUpdatePending.dart';
 import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
@@ -16,9 +24,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(BillPreviewScreen());
+void main() => runApp(UpdatePendingBalanceScreen());
 
-class BillPreviewScreen extends StatelessWidget {
+class UpdatePendingBalanceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,35 +34,45 @@ class BillPreviewScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BillPreviewScreenStateful(),
+      home: UpdatePendingBalanceStateful(),
     );
   }
 }
 
-class BillPreviewScreenStateful extends StatefulWidget {
-  BillPreviewScreenStateful({Key key, this.title}) : super(key: key);
-
+class UpdatePendingBalanceStateful extends StatefulWidget {
+  UpdatePendingBalanceStateful(
+      {Key key, this.title, @required this.overAllParamModel})
+      : super(key: key);
+  final OverAllParamModel overAllParamModel;
   final String title;
+  PendingBalanceListScreen pendingBalanceListScreen;
 
   @override
-  BillPreviewScreenState createState() => BillPreviewScreenState();
+  UpdatePendingBalanceState createState() => UpdatePendingBalanceState();
 }
 
-class BillPreviewScreenState
-    extends BaseStateStatefulState<BillPreviewScreenStateful>
+class UpdatePendingBalanceState
+    extends BaseStateStatefulState<UpdatePendingBalanceStateful>
     with TickerProviderStateMixin
     implements
         ViewContractConnectivityListener,
         BaseAlertListener,
-        ISaveBillListener {
+        IOrderDetailReportListener,
+        IUpdatePendingBalanceListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
-  ModalBillPreview _modalBillPreview;
-  PresenterSaveBillData _presenterSaveBillData;
-  ModelBalanceReceived modelBalanceReceived;
+  ModalUpdatePendingBalance _modalUpdatePendingBalance;
+  PresenterOrderDetailReportList _presenterOrderDetailReportList;
   AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
+  List<OverAllDetailReports> overAllDetailReports = [];
+  OrderDetailsReportResponseModel orderDetailsReportResponseModel =
+      new OrderDetailsReportResponseModel();
+  CustomerDetails customerDetails = new CustomerDetails();
+  ModelUpdatePending modelUpdatePending;
+  ModelUpdatePending dummyModelUpdatePending;
+  PresenterUpdatePendingBalance _presenterUpdatePendingBalance;
 
   //Keys//
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -63,11 +81,26 @@ class BillPreviewScreenState
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
-  BillPreviewScreenState() {
-    this._modalBillPreview = new ModalBillPreview();
-    this._presenterSaveBillData = new PresenterSaveBillData(this);
+  UpdatePendingBalanceState() {
+    this._modalUpdatePendingBalance = new ModalUpdatePendingBalance();
     this._connectivity = new Connectivitys(this);
-    this.modelBalanceReceived = new ModelBalanceReceived(0, 0, 0);
+    _presenterOrderDetailReportList = new PresenterOrderDetailReportList(this);
+    this._presenterUpdatePendingBalance =
+        new PresenterUpdatePendingBalance(this);
+    this.modelUpdatePending = new ModelUpdatePending(
+        overAllParamModel.totalBalanceAmount,
+        int.parse(overAllParamModel.receivedBalanceAmount),
+        overAllParamModel.pendingBalanceAmount,
+        overAllParamModel.pendingBalanceAmount,
+        0,
+        0);
+    this.dummyModelUpdatePending = new ModelUpdatePending(
+        overAllParamModel.totalBalanceAmount,
+        int.parse(overAllParamModel.receivedBalanceAmount),
+        overAllParamModel.pendingBalanceAmount,
+        overAllParamModel.pendingBalanceAmount,
+        0,
+        0);
   }
 
   void checkInternetAlert() {
@@ -78,23 +111,29 @@ class BillPreviewScreenState
   }
 
   void updateInternetConnectivity(bool networkStatus) {
-    _modalBillPreview.isNetworkStatus = networkStatus;
+    _modalUpdatePendingBalance.isNetworkStatus = networkStatus;
   }
 
   void updateNoData(bool status) {
-    _modalBillPreview.boolNodata = status;
+    _modalUpdatePendingBalance.boolNodata = status;
   }
 
   void updateEventCircularLoader(bool status) {
-    _modalBillPreview.eventCircularLoader = status;
+    _modalUpdatePendingBalance.eventCircularLoader = status;
   }
 
-  void calculateReceivedAmountAlert() {
+  void calculatePendingAmountAlert() {
     setState(() {
-      modelBalanceReceived = new ModelBalanceReceived(calculateTotalCost(),
-          modelBalanceReceived.receivedCost, modelBalanceReceived.pendingCost);
-      showProductReceivedAlertDialog(
-          "Receive Amount", "Done", 1, modelBalanceReceived, this);
+      modelUpdatePending = new ModelUpdatePending(
+        modelUpdatePending.totalCost,
+        modelUpdatePending.receivedCost,
+        modelUpdatePending.pendingCost,
+        modelUpdatePending.orderSummaryPendingCost,
+        modelUpdatePending.orderPendinghistoryReceivedCost,
+        modelUpdatePending.orderPendinghistoryPendingCost,
+      );
+      showUpdatePendingBalanceAlertDialog("Update Pending Amount", "Done", 1,
+          modelUpdatePending, dummyModelUpdatePending, this);
     });
   }
 
@@ -147,7 +186,7 @@ class BillPreviewScreenState
                                         child: new Container(
                                           child: new Text(
                                             AppLocalizations.instance
-                                                .text('key_old_balance'),
+                                                .text('key_customer_bill_name'),
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 color:
@@ -172,11 +211,7 @@ class BillPreviewScreenState
                                       child: new Align(
                                         child: new Container(
                                           child: new Text(
-                                            BaseSingleton
-                                                    .shared
-                                                    .customerDetails[0]
-                                                    .customerName ??
-                                                '',
+                                            customerDetails.customerName ?? '',
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 color:
@@ -197,7 +232,8 @@ class BillPreviewScreenState
                                       child: Align(
                                         child: new Container(
                                           child: new Text(
-                                            "₹ ${BaseSingleton.shared.customerDetails[0].customerTotalPendingBalance}" ??
+                                            customerDetails
+                                                    .customerBillingName ??
                                                 '',
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
@@ -217,6 +253,109 @@ class BillPreviewScreenState
                                     ),
                                   ],
                                 ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            AppLocalizations.instance
+                                                .text('key_customer_phone_no'),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily:
+                                                    ConstantCommon.BASE_FONT,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(3.5)),
+                                        ),
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    new Expanded(
+                                      child: Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            AppLocalizations.instance.text(
+                                                'key_customer_whatsapp_no'),
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily:
+                                                    ConstantCommon.BASE_FONT,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(3.5)),
+                                        ),
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                      flex: 1,
+                                    )
+                                  ],
+                                ),
+                                new Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            customerDetails.customerMobileNo ??
+                                                '',
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily: ConstantCommon
+                                                    .BASE_FONT_REGULAR,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(1.5),
+                                              bottom: appConfig.rHP(1.5)),
+                                        ),
+                                        alignment: Alignment.bottomLeft,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                    new Expanded(
+                                      child: Align(
+                                        child: new Container(
+                                          child: new Text(
+                                            customerDetails
+                                                    .customerWhatsappNo ??
+                                                '',
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                                color:
+                                                    ConstantColor.COLOR_WHITE,
+                                                fontFamily: ConstantCommon
+                                                    .BASE_FONT_REGULAR,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                          margin: EdgeInsets.only(
+                                              top: appConfig.rHP(1.5),
+                                              bottom: appConfig.rHP(1.5)),
+                                        ),
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                      flex: 1,
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -246,7 +385,7 @@ class BillPreviewScreenState
               ),
               bottom: new PreferredSize(
                   child: new Container(),
-                  preferredSize: Size(appConfig.rW(50), appConfig.rH(5)))),
+                  preferredSize: Size(appConfig.rW(50), appConfig.rH(13)))),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (context, index) => new Container(
@@ -283,9 +422,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          BaseSingleton
-                                                              .shared
-                                                              .billingProductList[
+                                                          overAllDetailReports[
                                                                   index]
                                                               .productName,
                                                           textAlign:
@@ -310,7 +447,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
+                                                          "₹ ${overAllDetailReports[index].productCost}",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -334,7 +471,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                          "${overAllDetailReports[index].productStockKg} Kg",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -358,7 +495,7 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].totalCost}",
+                                                          "₹ ${overAllDetailReports[index].productTotalCost}",
                                                           textAlign:
                                                               TextAlign.right,
                                                           style: TextStyle(
@@ -394,7 +531,7 @@ class BillPreviewScreenState
                   ],
                 ),
               ),
-              childCount: BaseSingleton.shared.billingProductList.length,
+              childCount: overAllDetailReports.length,
             ),
           ),
         ],
@@ -543,7 +680,7 @@ class BillPreviewScreenState
                                   new Expanded(
                                     child: new Container(
                                       child: new Text(
-                                        "₹ ${calculateTotalCost()}",
+                                        "₹ ${modelUpdatePending.totalCost}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
@@ -573,7 +710,7 @@ class BillPreviewScreenState
     InkWell inkwellTotal = new InkWell(
       child: previewBillTotalContainer,
       onTap: () {
-        calculateReceivedAmountAlert();
+        calculatePendingAmountAlert();
       },
     );
 
@@ -617,7 +754,7 @@ class BillPreviewScreenState
                                   new Expanded(
                                     child: new Container(
                                       child: new Text(
-                                        "₹ ${modelBalanceReceived.receivedCost}",
+                                        "₹ ${modelUpdatePending.receivedCost}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
@@ -647,7 +784,7 @@ class BillPreviewScreenState
     InkWell inkwellReceived = new InkWell(
       child: previewBillReceivedContainer,
       onTap: () {
-        calculateReceivedAmountAlert();
+        calculatePendingAmountAlert();
       },
     );
 
@@ -691,7 +828,7 @@ class BillPreviewScreenState
                                   new Expanded(
                                     child: new Container(
                                       child: new Text(
-                                        "₹ ${modelBalanceReceived.pendingCost}",
+                                        "₹ ${modelUpdatePending.pendingCost}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
@@ -721,57 +858,9 @@ class BillPreviewScreenState
     InkWell inkwellPending = new InkWell(
       child: previewBillPendingContainer,
       onTap: () {
-        calculateReceivedAmountAlert();
+        calculatePendingAmountAlert();
       },
     );
-
-    Container containerAppTitleHintBar = new Container(
-        color: ConstantColor.COLOR_WHITE,
-        child: new Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                new Stack(
-                  children: [
-                    new Container(
-                      padding: EdgeInsets.only(
-                          right: appConfig.rWP(1),
-                          left: appConfig.rWP(5),
-                          top: appConfig.rWP(3),
-                          bottom: appConfig.rWP(2)),
-                      child: Image.asset(
-                        "assets/images/billing.png",
-                        width: 40,
-                        height: 40,
-                      ),
-                    ),
-                  ],
-                ),
-                new Container(
-                  child: new Text(
-                    AppLocalizations.instance.text('key_bill_preview_hint'),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
-                        fontFamily: ConstantCommon.BASE_FONT,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ),
-                Spacer(),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Container(
-                    height: 3.0,
-                    margin: EdgeInsets.only(left: appConfig.rWP(5)),
-                    width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
-              ],
-            ),
-          ],
-        ));
 
     Container containerBillPreview = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
@@ -786,6 +875,29 @@ class BillPreviewScreenState
           ),
         ],
       ),
+    );
+
+    Container previewBillContainer = new Container(
+      child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: double.infinity,
+            height: appConfig.rHP(6),
+            child: FlatButton(
+              child: Text(AppLocalizations.instance.text('key_save_bill'),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: ConstantColor.COLOR_WHITE,
+                      fontFamily: ConstantCommon.BASE_FONT,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w400)),
+              color: ConstantColor.COLOR_GREEN,
+              textColor: Colors.white,
+              onPressed: () {
+                setState(() {});
+              },
+            ),
+          )),
     );
 
     Container containerAppBar = Container(
@@ -805,7 +917,7 @@ class BillPreviewScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    navigateBaseRouting(3);
+                    navigateBaseRouting(12);
                   });
                 },
               ),
@@ -840,12 +952,7 @@ class BillPreviewScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    if (modelBalanceReceived.receivedCost > 0 &&
-                        modelBalanceReceived.pendingCost >= 0) {
-                      apiCallBack(0);
-                    } else {
-                      showToast("Please enter received amount");
-                    }
+                    apiCallBack(1);
                   });
                 },
               ),
@@ -912,7 +1019,7 @@ class BillPreviewScreenState
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,
-        value: _modalBillPreview.loadingCircularBar,
+        value: _modalUpdatePendingBalance.loadingCircularBar,
         valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
       )),
@@ -931,8 +1038,8 @@ class BillPreviewScreenState
             centerTitle: false,
             bottomOpacity: 1,
           ),
-          body: !_modalBillPreview.isNetworkStatus
-              ? _modalBillPreview.boolNodata
+          body: !_modalUpdatePendingBalance.isNetworkStatus
+              ? _modalUpdatePendingBalance.boolNodata
                   ? containerNoData
                   : AbsorbPointer(
                       child: new Stack(
@@ -946,13 +1053,14 @@ class BillPreviewScreenState
                               child: containerCircularLoader),
                         ],
                       ),
-                      absorbing: _modalBillPreview.loadingEnableDisable,
+                      absorbing:
+                          _modalUpdatePendingBalance.loadingEnableDisable,
                     )
               : centerContainerNoNetwork,
         ),
         onWillPop: () {
           setState(() {
-            navigateBaseRouting(3);
+            navigateBaseRouting(12);
           });
         });
   }
@@ -977,16 +1085,6 @@ class BillPreviewScreenState
     });
   }
 
-  int calculateTotalCost() {
-    int totalCount = 0;
-    setState(() {
-      for (int i = 0; i < BaseSingleton.shared.billingProductList.length; i++) {
-        totalCount += BaseSingleton.shared.billingProductList[i].totalCost;
-      }
-    });
-    return totalCount;
-  }
-
   void forSomeDelay() {
     Future.delayed(const Duration(milliseconds: 3000), () {
       // onlineDisappear();
@@ -995,15 +1093,15 @@ class BillPreviewScreenState
 
   void showDialog() {
     setState(() {
-      _modalBillPreview.loadingEnableDisable = true;
-      _modalBillPreview.loadingCircularBar = null;
+      _modalUpdatePendingBalance.loadingEnableDisable = true;
+      _modalUpdatePendingBalance.loadingCircularBar = null;
     });
   }
 
   void dismissLoadingDialog() {
     setState(() {
-      _modalBillPreview.loadingEnableDisable = false;
-      _modalBillPreview.loadingCircularBar = 0.0;
+      _modalUpdatePendingBalance.loadingEnableDisable = false;
+      _modalUpdatePendingBalance.loadingCircularBar = 0.0;
     });
   }
 
@@ -1015,8 +1113,7 @@ class BillPreviewScreenState
         _RefreshController = ScrollController();
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
-        updateNoDataController();
-        parseProductListData();
+        apiCallBack(0);
       });
     }
   }
@@ -1040,8 +1137,40 @@ class BillPreviewScreenState
     setState(() {
       if (event == 0) {
         showDialog();
-        saveBill();
-      } else if (event == 7) {}
+        getOverAllDetailsReportList();
+      } else if (event == 1) {
+        updatePendingBalance();
+      }
+    });
+  }
+
+  void getOverAllDetailsReportList() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterOrderDetailReportList.getOrderDetailsReportList();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
+  }
+
+  void updatePendingBalance() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterUpdatePendingBalance.hitPostUpdatePendingDataCall();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
     });
   }
 
@@ -1053,7 +1182,7 @@ class BillPreviewScreenState
   }
 
   void updateNoDataController() {
-    if (BaseSingleton.shared.billingProductList.length > 0) {
+    if (overAllDetailReports.length > 0) {
       updateNoData(false);
     } else {
       updateNoData(true);
@@ -1062,32 +1191,6 @@ class BillPreviewScreenState
 
   void clearBillingSessionData() {
     BaseSingleton.shared.billingProductList = [];
-  }
-
-  List<Map<String, dynamic>> parseProductListData() {
-    List<Map<String, dynamic>> productListData = [];
-    setState(() {
-      for (int i = 0; i < BaseSingleton.shared.billingProductList.length; i++) {
-        Map<String, dynamic> productMapData = {
-          'product_id': BaseSingleton.shared.billingProductList[i].productId,
-          'product_name':
-              BaseSingleton.shared.billingProductList[i].productName,
-          'product_cost':
-              BaseSingleton.shared.billingProductList[i].productCost,
-          'product_date':
-              BaseSingleton.shared.billingProductList[i].productDate,
-          'product_stock_kg':
-              BaseSingleton.shared.billingProductList[i].totalKiloGrams,
-          'product_total_cost':
-              BaseSingleton.shared.billingProductList[i].totalCost,
-          'product_code':
-              BaseSingleton.shared.billingProductList[i].productCode,
-        };
-        productListData.add(productMapData);
-      }
-      print(productListData);
-    });
-    return productListData;
   }
 
   @override
@@ -1108,30 +1211,89 @@ class BillPreviewScreenState
   }
 
   @override
-  void errorValidationMgs(String error) {}
+  String getCustomerId() {
+    return overAllParamModel.customerId;
+  }
 
   @override
-  String getCustomerId() {
-    return BaseSingleton.shared.customerDetails[0].customerId;
+  String getOrderId() {
+    return overAllParamModel.orderId;
+  }
+
+  @override
+  void onFailureResponseGetOverAllDetailsOrderList(String statusCode) {
+    setState(() {
+      dismissLoadingDialog();
+      showErrorAlert(statusCode);
+      updateNoDataController();
+    });
+  }
+
+  @override
+  void onSuccessResponseGetOverAllDetailsOrderList(
+      OrderDetailsReportResponseModel orderDetailsReportResponseModel) {
+    setState(() {
+      dismissLoadingDialog();
+      if (orderDetailsReportResponseModel != null) {
+        this.orderDetailsReportResponseModel = orderDetailsReportResponseModel;
+        this.overAllDetailReports =
+            (orderDetailsReportResponseModel.overAllDetailReports)
+                .map((datas) => new OverAllDetailReports.fromMap(datas))
+                .toList();
+        this.customerDetails = orderDetailsReportResponseModel.customerDetails;
+        updateNoDataController();
+      }
+    });
+  }
+
+  @override
+  Map parseGetProductDetailsRequestData() {
+    return {'order_id': getOrderId(), 'customer_id': getCustomerId()};
+  }
+
+  @override
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
+  }
+
+  @override
+  void errorValidationMgs(String error) {
+    setState(() {});
+  }
+
+  @override
+  String getOrderPendingHistoryPendingAmount() {
+    return modelUpdatePending.orderPendinghistoryPendingCost.toString();
+  }
+
+  @override
+  String getOrderPendingHistoryReceivedAmount() {
+    return modelUpdatePending.orderPendinghistoryReceivedCost.toString();
+  }
+
+  @override
+  String getOrderSummaryId() {
+    return overAllParamModel.orderSummaryId.trim();
+  }
+
+  @override
+  String getOrderSummaryPendingAmount() {
+    return modelUpdatePending.orderSummaryPendingCost.toString();
   }
 
   @override
   String getPendingAmount() {
-    return modelBalanceReceived.pendingCost.toString();
+    return modelUpdatePending.pendingCost.toString();
   }
 
   @override
   String getReceivedAmount() {
-    return modelBalanceReceived.receivedCost.toString();
+    return modelUpdatePending.receivedCost.toString();
   }
 
   @override
-  String getTotalAmount() {
-    return calculateTotalCost().toString();
-  }
-
-  @override
-  void onFailureMessageSaveBill(String error) {
+  void onFailureMessageUpdatePendingBalance(String error) {
     setState(() {
       dismissLoadingDialog();
       showErrorAlert(error);
@@ -1139,47 +1301,28 @@ class BillPreviewScreenState
   }
 
   @override
-  void onSuccessResponseSaveBill(String msg) {
+  void onSuccessResponseUpdatePendingBalance(String msg) {
     setState(() {
       dismissLoadingDialog();
       showToast(msg);
-      navigateBaseRouting(7);
-      clearBillingSessionData();
+      navigateBaseRouting(12);
     });
   }
 
   @override
-  Map parseSaveBillData() {
+  Map parseUpdatePendingBalanceData() {
     return {
-      'customer_id': getCustomerId(),
-      'total_amount': getTotalAmount(),
-      'received_amount': getReceivedAmount(),
-      'pending_amount': getPendingAmount(),
-      'product_list_data': parseProductListData(),
+      "order_summary_id": getOrderSummaryId(),
+      "pending_amount": getPendingAmount(),
+      "received_amount": getReceivedAmount(),
+      "order_summary_pending_amount": getOrderSummaryPendingAmount(),
+      "order_pending_history_received": getOrderPendingHistoryReceivedAmount(),
+      "order_pending_history_pending": getOrderPendingHistoryPendingAmount()
     };
   }
 
-  void saveBill() {
-    checkConnectivityResponse().then((data) {
-      if (data) {
-        setState(() {
-          updateInternetConnectivity(false);
-          _presenterSaveBillData.hitPostSaveBillCall();
-        });
-      } else {
-        setState(() {
-          updateInternetConnectivity(true);
-        });
-      }
-    });
-  }
-
   @override
-  void postSaveBillData() {}
-
-  @override
-  void onTapAlertReceivedCalculationListener(
-      ModelBalanceReceived modelBalanceReceived) {
-    this.modelBalanceReceived = modelBalanceReceived;
+  void postUpdatePendingBalanceData() {
+    setState(() {});
   }
 }

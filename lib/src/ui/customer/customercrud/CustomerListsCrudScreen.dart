@@ -5,7 +5,10 @@ import 'package:IGO/src/data/apis/customer/updatecustomer/PresenterUpdateCustome
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
+import 'package:IGO/src/ui/dashboard/DateModel.dart';
+import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
@@ -22,6 +25,7 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(CustomerListsCrudScreen());
 CustomerDetails customerDetailsNavigate = new CustomerDetails();
+DateModel dateModel;
 
 class CustomerListsCrudScreen extends StatelessWidget {
   @override
@@ -444,7 +448,13 @@ class CustomerListsCrudScreenState
                                             color: ConstantColor.COLOR_GREEN,
                                             textColor: Colors.white,
                                             onPressed: () {
-                                              setState(() {});
+                                              setState(() {
+                                                BaseSingleton.shared.dateModel =
+                                                    new DateModel("", "",
+                                                        item.customerId, 1);
+                                                navigationPushReplacementPassParams(
+                                                    OverallReportListStateful());
+                                              });
                                             },
                                           ),
                                         ),
@@ -1039,5 +1049,10 @@ class CustomerListsCrudScreenState
   @override
   String getCustomerNameUpdate() {
     return "";
+  }
+
+  @override
+  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

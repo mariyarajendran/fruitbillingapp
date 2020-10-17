@@ -4,6 +4,7 @@ import 'package:IGO/src/data/apis/report/orderdetailsreport/IOrderDetailReportLi
 import 'package:IGO/src/data/apis/report/orderdetailsreport/PresenterOrderDetailReportList.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
+import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/ui/report/overallreport/OverAllParamModel.dart';
 import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
@@ -601,7 +602,7 @@ class OverAllDetailedReportState
     );
 
     Container previewBillTotalContainer = new Container(
-      //margin: EdgeInsets.only(bottom: appConfig.rHP(6)),
+      margin: EdgeInsets.only(bottom: appConfig.rHP(10)),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: new Column(
@@ -642,6 +643,140 @@ class OverAllDetailedReportState
                                     child: new Container(
                                       child: new Text(
                                         "₹ ${overAllParamModel.totalBalanceAmount}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ConstantColor.COLOR_WHITE,
+                                            fontFamily:
+                                                ConstantCommon.BASE_FONT,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Container previewBillReceivedContainer = new Container(
+      margin: EdgeInsets.only(bottom: appConfig.rHP(5)),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            new Card(
+              color: ConstantColor.COLOR_GREEN,
+              child: new Stack(
+                children: <Widget>[
+                  new Container(
+                    width: double.infinity,
+                    height: appConfig.rH(5),
+                    child: new Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        new Container(
+                          child: new Column(
+                            children: <Widget>[
+                              new Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  new Expanded(
+                                    child: new Container(
+                                      child: new Text(
+                                        "Received",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ConstantColor.COLOR_WHITE,
+                                            fontFamily:
+                                                ConstantCommon.BASE_FONT,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                  ),
+                                  new Expanded(
+                                    child: new Container(
+                                      child: new Text(
+                                        "₹ ${overAllParamModel.receivedBalanceAmount}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ConstantColor.COLOR_WHITE,
+                                            fontFamily:
+                                                ConstantCommon.BASE_FONT,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Container previewBillPendingContainer = new Container(
+      margin: EdgeInsets.only(bottom: appConfig.rHP(0)),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            new Card(
+              color: ConstantColor.COLOR_RED,
+              child: new Stack(
+                children: <Widget>[
+                  new Container(
+                    width: double.infinity,
+                    height: appConfig.rH(5),
+                    child: new Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        new Container(
+                          child: new Column(
+                            children: <Widget>[
+                              new Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  new Expanded(
+                                    child: new Container(
+                                      child: new Text(
+                                        "Pending",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ConstantColor.COLOR_WHITE,
+                                            fontFamily:
+                                                ConstantCommon.BASE_FONT,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                  ),
+                                  new Expanded(
+                                    child: new Container(
+                                      child: new Text(
+                                        "₹ ${overAllParamModel.pendingBalanceAmount}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
@@ -830,6 +965,8 @@ class OverAllDetailedReportState
                       child: new Stack(
                         children: [
                           containerBillPreview,
+                          previewBillPendingContainer,
+                          previewBillReceivedContainer,
                           previewBillTotalContainer,
                           //previewBillContainer,
                           new Align(
@@ -1016,5 +1153,11 @@ class OverAllDetailedReportState
   @override
   Map parseGetProductDetailsRequestData() {
     return {'order_id': getOrderId(), 'customer_id': getCustomerId()};
+  }
+
+  @override
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
+    // TODO: implement onTapAlertReceivedCalculationListener
   }
 }
