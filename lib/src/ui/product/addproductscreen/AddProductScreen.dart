@@ -1,4 +1,3 @@
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/data/apis/product/addproduct/IAddProductListener.dart';
 import 'package:IGO/src/data/apis/product/addproduct/PresenterAddProduct.dart';
 import 'package:IGO/src/data/apis/product/updateproduct/IUpdateProductListener.dart';
@@ -14,6 +13,7 @@ import 'package:IGO/src/utils/constants/ConstantCommon.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../utils/localizations.dart';
 import 'ModalAddProduct.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';

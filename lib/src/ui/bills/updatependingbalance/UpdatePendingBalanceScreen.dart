@@ -12,9 +12,9 @@ import 'package:IGO/src/ui/report/overallreport/OverAllParamModel.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModalUpdatePendingBalance.dart';
 import 'ModelUpdatePending.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -379,7 +379,7 @@ class UpdatePendingBalanceState
               floating: false,
               pinned: false,
               snap: false,
-              backgroundColor: ConstantColor.COLOR_APP_BASE,
+              backgroundColor: ConstantColor.COLOR_COOL_RED,
               flexibleSpace: SingleChildScrollView(
                 child: containerBillPreviewCustomerDetails,
               ),
@@ -546,7 +546,7 @@ class UpdatePendingBalanceState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             new Card(
-              color: ConstantColor.COLOR_APP_BASE,
+              color: ConstantColor.COLOR_COOL_RED,
               elevation: 3,
               child: new Stack(
                 children: <Widget>[
@@ -929,7 +929,7 @@ class UpdatePendingBalanceState
             flex: 4,
             child: Container(
               child: Text(
-                  AppLocalizations.instance.text('key_bill_preview_hint'),
+                  AppLocalizations.instance.text('key_bill_pending_history'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: ConstantColor.COLOR_WHITE,
@@ -944,7 +944,7 @@ class UpdatePendingBalanceState
               child: InkWell(
                 child: Container(
                   child: Image.asset(
-                    "assets/images/billing.png",
+                    "assets/images/re_pay.png",
                     width: 35,
                     height: 35,
                     color: ConstantColor.COLOR_WHITE,
@@ -952,7 +952,20 @@ class UpdatePendingBalanceState
                 ),
                 onTap: () {
                   setState(() {
-                    apiCallBack(1);
+                    if (modelUpdatePending.receivedCost >
+                            modelUpdatePending.totalCost &&
+                        modelUpdatePending.pendingCost < 0) {
+                      showToast(AppLocalizations.instance
+                          .text('key_enter_correct_amount'));
+                    } else {
+                      showAlertDialog(
+                          AppLocalizations.instance
+                              .text('key_are_pay_pending_money'),
+                          AppLocalizations.instance.text('key_yes'),
+                          AppLocalizations.instance.text('key_no'),
+                          0,
+                          this);
+                    }
                   });
                 },
               ),
@@ -1015,15 +1028,13 @@ class UpdatePendingBalanceState
     );
 
     Container containerCircularLoader = new Container(
-      margin: EdgeInsets.only(top: 20, bottom: 10),
-      child: Center(
-          child: CircularProgressIndicator(
-        strokeWidth: 6,
-        value: _modalUpdatePendingBalance.loadingCircularBar,
-        valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
-      )),
-    );
+        margin: EdgeInsets.only(top: appConfig.rHP(11), bottom: 10),
+        child: CircularProgressIndicator(
+          strokeWidth: 6,
+          value: _modalUpdatePendingBalance.loadingCircularBar,
+          valueColor:
+              new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_COOL_RED),
+        ));
 
     return new WillPopScope(
         child: Scaffold(
@@ -1032,7 +1043,7 @@ class UpdatePendingBalanceState
           backgroundColor: ConstantColor.COLOR_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_COOL_RED,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
@@ -1139,6 +1150,7 @@ class UpdatePendingBalanceState
         showDialog();
         getOverAllDetailsReportList();
       } else if (event == 1) {
+        showDialog();
         updatePendingBalance();
       }
     });
@@ -1195,7 +1207,9 @@ class UpdatePendingBalanceState
 
   @override
   void onTapAlertOkayListener() {
-    setState(() {});
+    setState(() {
+      apiCallBack(1);
+    });
   }
 
   @override
@@ -1253,9 +1267,7 @@ class UpdatePendingBalanceState
 
   @override
   void onTapAlertReceivedCalculationListener(
-      ModelBalanceReceived modelBalanceReceived) {
-    // TODO: implement onTapAlertReceivedCalculationListener
-  }
+      ModelBalanceReceived modelBalanceReceived) {}
 
   @override
   void errorValidationMgs(String error) {

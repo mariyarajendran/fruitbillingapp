@@ -1,8 +1,8 @@
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
+import '../../../utils/localizations.dart';
 import 'ModalCartLists.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -55,7 +55,6 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
 
   AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
-
 
   //Keys//
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -526,7 +525,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                     height: 3.0,
                     margin: EdgeInsets.only(left: appConfig.rWP(5)),
                     width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
+                    color: ConstantColor.COLOR_PREVIEW_BILL),
               ],
             ),
           ],
@@ -693,7 +692,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
           backgroundColor: ConstantColor.COLOR_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_BILLINGS,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
@@ -827,7 +826,8 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
   }
 
   @override
-  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

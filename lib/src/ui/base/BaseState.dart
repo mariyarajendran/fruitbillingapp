@@ -1,7 +1,5 @@
 import 'package:IGO/src/data/HttpStatusString.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/di/di.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
@@ -30,6 +28,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:toast/toast.dart';
 import 'package:vibration/vibration.dart';
+
+import '../../utils/localizations.dart';
 
 abstract class BaseStateStatefulState<T extends StatefulWidget>
     extends State<T> {
@@ -1407,6 +1407,14 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
 
   String cutNull(Object value) {
     return value == null ? "" : value.toString();
+  }
+
+  String returnTime(String date) {
+    return DateFormat.jms().format(DateTime.parse(date ?? ''));
+  }
+
+  String returnDate(String date) {
+    return DateFormat.yMMMEd().format(DateTime.parse(date ?? ''));
   }
 
   @override

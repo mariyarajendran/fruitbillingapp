@@ -22,6 +22,7 @@ class OverAllReports {
   String receivedAmount;
   int pendingAmount;
   String orderSummaryDate;
+  String customerName;
 
   OverAllReports({
     this.orderSummaryId,
@@ -31,6 +32,7 @@ class OverAllReports {
     this.receivedAmount,
     this.pendingAmount,
     this.orderSummaryDate,
+    this.customerName,
   });
 
   OverAllReports.fromMap(Map<String, dynamic> map)
@@ -40,5 +42,6 @@ class OverAllReports {
         totalAmount = map['total_amount'] ?? 0,
         receivedAmount = map['received_amount'] ?? '',
         pendingAmount = map['pending_amount'] ?? 0,
-        orderSummaryDate = map['order_summary_date'] ?? '';
+        orderSummaryDate = map['order_summary_date'] ?? '',
+        customerName = map['customer_name'] ?? '';
 }

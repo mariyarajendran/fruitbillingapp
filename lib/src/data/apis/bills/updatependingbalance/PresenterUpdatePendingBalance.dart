@@ -1,6 +1,7 @@
 import 'package:IGO/src/data/apis/bills/updatependingbalance/IUpdatePendingBalanceListener.dart';
+import '../../../../utils/localizations.dart';
 import 'IntractorUpdatePendingBalance.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
+
 
 class PresenterUpdatePendingBalance {
   IUpdatePendingBalanceListener _iUpdatePendingBalanceListener;

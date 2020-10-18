@@ -1,8 +1,9 @@
 import 'package:IGO/src/data/AllApiRepository.dart';
 import 'package:IGO/src/di/di.dart';
+import '../../../../utils/localizations.dart';
 import 'IAddCustomerListener.dart';
 import 'IntractorAddCustomer.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
+
 
 class PresenterAddCustomer {
   IAddCustomerListener _addCustomerListener;

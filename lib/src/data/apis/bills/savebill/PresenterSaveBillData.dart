@@ -1,6 +1,5 @@
 import 'package:IGO/src/data/apis/bills/savebill/ISaveBillListener.dart';
 import 'IntractorSaveBill.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 
 class PresenterSaveBillData {
   ISaveBillListener _saveBillListener;

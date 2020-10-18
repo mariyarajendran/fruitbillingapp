@@ -1,25 +1,19 @@
 import 'package:IGO/src/data/apis/bills/getallpendingbalance/IGetPendingBalanceListener.dart';
 import 'package:IGO/src/data/apis/bills/getallpendingbalance/PresenterPendingBalanceList.dart';
-import 'package:IGO/src/data/apis/report/orderreports/IOrderReportListener.dart';
-import 'package:IGO/src/data/apis/report/orderreports/PresenterOrderReportList.dart';
 import 'package:IGO/src/models/responsemodel/bills/getallpendingbalance/GetPendingBalanceResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
-import 'package:IGO/src/models/responsemodel/report/orderreport/OrderReportResponseModel.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/ui/bills/updatependingbalance/UpdatePendingBalanceScreen.dart';
 import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 import 'package:IGO/src/ui/dashboard/DashboardScreen.dart';
-import 'package:IGO/src/ui/dashboard/DateModel.dart';
-import 'package:IGO/src/ui/report/overalldetailreport/OverAllDetailedReportScreen.dart';
 import 'package:IGO/src/ui/report/overallreport/OverAllParamModel.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModalPendingBalance.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
-import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
 import 'package:IGO/src/utils/Connectivity.dart';
 import 'package:connectivity/connectivity.dart';
@@ -104,7 +98,7 @@ class PendingBalanceListState
 
     Container containerOverAllReports = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
-      margin: EdgeInsets.only(top: appConfig.rHP(1)),
+      margin: EdgeInsets.only(top: appConfig.rHP(3)),
       child: CustomScrollView(
         slivers: <Widget>[
           SliverList(
@@ -171,10 +165,7 @@ class PendingBalanceListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_product_name'),
+                                                                  "${listPendingBalanceDetails[index].customerName ?? ''}  ₹${listPendingBalanceDetails[index].totalAmount ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
@@ -185,7 +176,7 @@ class PendingBalanceListState
                                                                           ConstantCommon
                                                                               .BASE_FONT,
                                                                       fontSize:
-                                                                          14,
+                                                                          16,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w400),
@@ -201,21 +192,18 @@ class PendingBalanceListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_product_cost'),
+                                                                  "₹ ${listPendingBalanceDetails[index].receivedAmount ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_GREEN,
                                                                       fontFamily:
                                                                           ConstantCommon
                                                                               .BASE_FONT,
                                                                       fontSize:
-                                                                          14,
+                                                                          16,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w400),
@@ -238,16 +226,20 @@ class PendingBalanceListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "# ${listPendingBalanceDetails[index].orderId ?? ''}",
+                                                                  AppLocalizations
+                                                                          .instance
+                                                                          .text(
+                                                                              'key_order_id') +
+                                                                      " #${listPendingBalanceDetails[index].orderId ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_GERY_DATE,
                                                                       fontFamily:
                                                                           ConstantCommon
-                                                                              .BASE_FONT_REGULAR,
+                                                                              .BASE_FONT,
                                                                       fontSize:
                                                                           14,
                                                                       fontWeight:
@@ -257,7 +249,7 @@ class PendingBalanceListState
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
                                                                         .rHP(
-                                                                            1.5)),
+                                                                            0)),
                                                               ),
                                                               alignment: Alignment
                                                                   .bottomLeft,
@@ -269,26 +261,25 @@ class PendingBalanceListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "₹ ${listPendingBalanceDetails[index].totalAmount ?? 0}",
+                                                                  "₹ ${listPendingBalanceDetails[index].pendingAmount ?? 0}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .right,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_RED,
                                                                       fontFamily:
                                                                           ConstantCommon
-                                                                              .BASE_FONT_REGULAR,
+                                                                              .BASE_FONT,
                                                                       fontSize:
-                                                                          14,
+                                                                          15,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w400),
                                                                 ),
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
-                                                                        .rHP(
-                                                                            1.5),
+                                                                        .rHP(1),
                                                                     bottom: appConfig
                                                                         .rHP(
                                                                             1.5)),
@@ -313,13 +304,13 @@ class PendingBalanceListState
                                                                   AppLocalizations
                                                                       .instance
                                                                       .text(
-                                                                          'key_edit_kg'),
+                                                                          'key_bill_pending'),
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_RED,
                                                                       fontFamily:
                                                                           ConstantCommon
                                                                               .BASE_FONT,
@@ -332,7 +323,10 @@ class PendingBalanceListState
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
                                                                         .rHP(
-                                                                            3)),
+                                                                            1.5),
+                                                                    bottom: appConfig
+                                                                        .rHP(
+                                                                            1.5)),
                                                               ),
                                                               alignment: Alignment
                                                                   .bottomLeft,
@@ -344,16 +338,20 @@ class PendingBalanceListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_total_cost'),
+                                                                  returnTime(listPendingBalanceDetails[
+                                                                              index]
+                                                                          .orderSummaryDate) +
+                                                                      "\n" +
+                                                                      returnDate(
+                                                                          (listPendingBalanceDetails[index]
+                                                                              .orderSummaryDate)),
+                                                                  //"₹ ${listOverAllReports[index].orderSummaryDate ?? 0}",
                                                                   textAlign:
                                                                       TextAlign
-                                                                          .left,
+                                                                          .right,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_GERY_DATE,
                                                                       fontFamily:
                                                                           ConstantCommon
                                                                               .BASE_FONT,
@@ -366,90 +364,10 @@ class PendingBalanceListState
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
                                                                         .rHP(
-                                                                            3)),
-                                                              ),
-                                                              alignment: Alignment
-                                                                  .bottomRight,
-                                                            ),
-                                                            flex: 1,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      new Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          new Expanded(
-                                                            child: new Align(
-                                                              child:
-                                                                  new Container(
-                                                                child:
-                                                                    FlatButton(
-                                                                  child: Text(
-                                                                      "₹ ${listPendingBalanceDetails[index].receivedAmount ?? 0}",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          color: ConstantColor
-                                                                              .COLOR_WHITE,
-                                                                          fontFamily: ConstantCommon
-                                                                              .BASE_FONT,
-                                                                          fontSize:
-                                                                              17,
-                                                                          fontWeight:
-                                                                              FontWeight.w400)),
-                                                                  color: ConstantColor
-                                                                      .COLOR_RED,
-                                                                  textColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  onPressed:
-                                                                      () {
-                                                                    setState(
-                                                                        () {});
-                                                                  },
-                                                                ),
-                                                                margin: EdgeInsets.only(
-                                                                    top: appConfig
-                                                                        .rHP(3),
+                                                                            1.5),
                                                                     bottom: appConfig
                                                                         .rHP(
-                                                                            3)),
-                                                              ),
-                                                              alignment: Alignment
-                                                                  .bottomLeft,
-                                                            ),
-                                                            flex: 1,
-                                                          ),
-                                                          new Expanded(
-                                                            child: Align(
-                                                              child:
-                                                                  new Container(
-                                                                child: new Text(
-                                                                  "₹ ${listPendingBalanceDetails[index].pendingAmount ?? 0}",
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style: TextStyle(
-                                                                      color: ConstantColor
-                                                                          .COLOR_BLACK,
-                                                                      fontFamily:
-                                                                          ConstantCommon
-                                                                              .BASE_FONT_REGULAR,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                                margin: EdgeInsets.only(
-                                                                    top: appConfig
-                                                                        .rHP(3),
-                                                                    bottom: appConfig
-                                                                        .rHP(
-                                                                            3)),
+                                                                            1.5)),
                                                               ),
                                                               alignment: Alignment
                                                                   .bottomRight,
@@ -461,7 +379,7 @@ class PendingBalanceListState
                                                     ],
                                                   ),
                                                   margin: EdgeInsets.only(
-                                                      top: appConfig.rHP(4)),
+                                                      top: appConfig.rHP(2)),
                                                 ),
                                               ],
                                             ),
@@ -487,7 +405,7 @@ class PendingBalanceListState
       height: 40,
       child: new TextFormField(
         style: TextStyle(
-            color: ConstantColor.COLOR_BLACK,
+            color: ConstantColor.COLOR_WHITE,
             fontSize: 16,
             fontFamily: ConstantCommon.BASE_FONT_SEMI_BOLD),
         enableInteractiveSelection: true,
@@ -496,8 +414,8 @@ class PendingBalanceListState
         decoration: InputDecoration(
             //labelText: AppLocalizations.instance.text('key_product_name'),
             labelText: "From Date",
-            labelStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
-            hintStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
+            labelStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
+            hintStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -506,7 +424,7 @@ class PendingBalanceListState
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(1.0),
                 borderSide:
-                    BorderSide(color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                    BorderSide(color: ConstantColor.COLOR_WHITE, width: 1.3),
                 gapPadding: 10.0),
             contentPadding: EdgeInsets.all(20.0)),
         onFieldSubmitted: (v) {},
@@ -526,7 +444,7 @@ class PendingBalanceListState
       height: 40,
       child: new TextFormField(
         style: TextStyle(
-            color: ConstantColor.COLOR_BLACK,
+            color: ConstantColor.COLOR_WHITE,
             fontSize: 16,
             fontFamily: ConstantCommon.BASE_FONT_SEMI_BOLD),
         enableInteractiveSelection: false,
@@ -535,8 +453,8 @@ class PendingBalanceListState
         decoration: InputDecoration(
             //labelText: AppLocalizations.instance.text('key_product_name'),
             labelText: "To Date",
-            labelStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
-            hintStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
+            labelStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
+            hintStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -545,7 +463,7 @@ class PendingBalanceListState
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(1.0),
                 borderSide:
-                    BorderSide(color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                    BorderSide(color: ConstantColor.COLOR_WHITE, width: 1.3),
                 gapPadding: 10.0),
             contentPadding: EdgeInsets.all(20.0)),
         onFieldSubmitted: (v) {},
@@ -566,6 +484,7 @@ class PendingBalanceListState
           margin:
               EdgeInsets.only(left: appConfig.rWP(1), right: appConfig.rW(1)),
           child: Card(
+            color: ConstantColor.COLOR_COOL_RED,
             child: new Row(
               children: [
                 new Expanded(flex: 2, child: containerFromDate),
@@ -615,6 +534,15 @@ class PendingBalanceListState
       )),
     );
 
+    Container containerCircularLoader = new Container(
+        margin: EdgeInsets.only(top: appConfig.rHP(11), bottom: 10),
+        child: CircularProgressIndicator(
+          strokeWidth: 6,
+          value: _modalPendingBalance.loadingCircularBar,
+          valueColor:
+              new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_COOL_RED),
+        ));
+
     Container containerClubListsAll = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
       child: new Stack(
@@ -626,6 +554,8 @@ class PendingBalanceListState
                   margin: EdgeInsets.only(top: appConfig.rHP(8)),
                   child: containerOverAllReports,
                 ),
+          new Align(
+              alignment: Alignment.topCenter, child: containerCircularLoader),
         ],
       ),
     );
@@ -689,17 +619,6 @@ class PendingBalanceListState
           onTap: () {},
         ));
 
-    Container containerCircularLoader = new Container(
-      margin: EdgeInsets.only(top: 20, bottom: 10),
-      child: Center(
-          child: CircularProgressIndicator(
-        strokeWidth: 6,
-        value: _modalPendingBalance.loadingCircularBar,
-        valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
-      )),
-    );
-
     return new WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
@@ -707,7 +626,7 @@ class PendingBalanceListState
           backgroundColor: ConstantColor.COLOR_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_COOL_RED,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
