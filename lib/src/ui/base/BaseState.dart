@@ -370,7 +370,7 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                         new Container(
                             height: 50,
                             child: FloatingActionButton.extended(
-                                backgroundColor: ConstantColor.COLOR_APP_BASE,
+                                backgroundColor: ConstantColor.COLOR_RED,
                                 elevation: 5.0,
                                 onPressed: () {
                                   dismissKeyboard();
@@ -387,7 +387,7 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                         new Container(
                             height: 50,
                             child: FloatingActionButton.extended(
-                                backgroundColor: ConstantColor.COLOR_APP_BASE,
+                                backgroundColor: ConstantColor.COLOR_GREEN,
                                 elevation: 5.0,
                                 onPressed: () {
                                   dismissKeyboard();

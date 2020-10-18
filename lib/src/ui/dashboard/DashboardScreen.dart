@@ -111,7 +111,7 @@ class DashboardScreenState
 
     Container containerDashTitle = new Container(
       child: new Text(
-        "Dashboard",
+        AppLocalizations.instance.text('key_dashboard'),
         textAlign: TextAlign.left,
         style: TextStyle(
             color: ConstantColor.COLOR_BLACK,
@@ -124,7 +124,7 @@ class DashboardScreenState
 
     Container containerDashTitleUser = new Container(
       child: new Text(
-        "Welcome Raja",
+        AppLocalizations.instance.text('key_welcome'),
         textAlign: TextAlign.left,
         style: TextStyle(
             color: ConstantColor.COLOR_BLACK,
@@ -257,9 +257,9 @@ class DashboardScreenState
                   ),
                 ),
                 new Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: new Text(
-                    "Customer",
+                    AppLocalizations.instance.text('key_customers'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: ConstantColor.COLOR_BLACK,
@@ -269,7 +269,7 @@ class DashboardScreenState
                   ),
                 ),
                 new Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: new Container(
                       child: new Text(
                         "${_dashboardDetails.customerCount ?? 0}",
@@ -301,31 +301,27 @@ class DashboardScreenState
     );
 
     Container previewBillContainer = new Container(
-      margin: EdgeInsets.only(top: appConfig.rH(2)),
-      child: Positioned.fill(
-          child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.infinity,
-                height: appConfig.rHP(6),
-                child: FlatButton(
-                  child: Text("Billing",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: ConstantColor.COLOR_WHITE,
-                          fontFamily: ConstantCommon.BASE_FONT,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400)),
-                  color: ConstantColor.COLOR_GREEN,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    setState(() {
-                      navigateBaseRouting(6);
-                    });
-                  },
-                ),
-              ))),
-    );
+        margin: EdgeInsets.only(top: appConfig.rH(2)),
+        child: Container(
+          width: double.infinity,
+          height: appConfig.rHP(8),
+          child: FlatButton(
+            child: Text(AppLocalizations.instance.text('key_billing'),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: ConstantColor.COLOR_WHITE,
+                    fontFamily: ConstantCommon.BASE_FONT,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400)),
+            color: ConstantColor.COLOR_BILLINGS,
+            textColor: Colors.white,
+            onPressed: () {
+              setState(() {
+                navigateBaseRouting(6);
+              });
+            },
+          ),
+        ));
 
     Column columnTotalProduct = new Column(
       children: [
@@ -350,9 +346,9 @@ class DashboardScreenState
                   ),
                 ),
                 new Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: new Text(
-                    "Products",
+                    AppLocalizations.instance.text('key_items'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: ConstantColor.COLOR_BLACK,
@@ -362,7 +358,7 @@ class DashboardScreenState
                   ),
                 ),
                 new Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: new Container(
                       child: new Text(
                         "${_dashboardDetails.productCount ?? 0}",
@@ -403,7 +399,7 @@ class DashboardScreenState
             children: [
               new Container(
                 child: new Text(
-                  "Overall Selled Price",
+                  AppLocalizations.instance.text('key_overall_selled_price'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: ConstantColor.COLOR_BLACK,
@@ -459,7 +455,7 @@ class DashboardScreenState
                   new Expanded(
                     flex: 2,
                     child: new Text(
-                      "Received",
+                      AppLocalizations.instance.text('key_overall_received'),
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: ConstantColor.COLOR_BLACK,
@@ -517,7 +513,7 @@ class DashboardScreenState
                   new Expanded(
                     flex: 2,
                     child: new Text(
-                      "Pending",
+                      AppLocalizations.instance.text('key_overall_pending'),
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: ConstantColor.COLOR_BLACK,
@@ -551,7 +547,6 @@ class DashboardScreenState
             });
           },
         ),
-        previewBillContainer,
       ],
     );
 
@@ -573,6 +568,7 @@ class DashboardScreenState
           key: _scaffoldKey,
           backgroundColor: ConstantColor.COLOR_BACKGROUND,
           drawerEdgeDragWidth: 0,
+          bottomNavigationBar: previewBillContainer,
           body: !_modelDashboard.isNetworkStatus
               ? SingleChildScrollView(
                   child: AbsorbPointer(

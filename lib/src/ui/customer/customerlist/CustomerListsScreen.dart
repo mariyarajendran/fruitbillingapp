@@ -372,7 +372,7 @@ class CustomerListsScreenState
                                                       ConstantCommon.BASE_FONT,
                                                   fontSize: 17,
                                                   fontWeight: FontWeight.w400)),
-                                          color: ConstantColor.COLOR_GREEN,
+                                          color: ConstantColor.COLOR_BILLINGS,
                                           textColor: Colors.white,
                                           onPressed: () {
                                             setState(() {
@@ -404,7 +404,7 @@ class CustomerListsScreenState
     );
 
     Container containerAppTitleHintBar = new Container(
-        color: ConstantColor.COLOR_WHITE,
+        color: ConstantColor.COLOR_BILLINGS,
         child: new Column(
           children: <Widget>[
             Row(
@@ -426,7 +426,7 @@ class CustomerListsScreenState
                     AppLocalizations.instance.text('key_customers'),
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        color: ConstantColor.COLOR_BLACK,
+                        color: ConstantColor.COLOR_WHITE,
                         fontFamily: ConstantCommon.BASE_FONT,
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
@@ -440,7 +440,7 @@ class CustomerListsScreenState
                     height: 3.0,
                     margin: EdgeInsets.only(left: appConfig.rWP(5)),
                     width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_APP_BASE),
+                    color: ConstantColor.COLOR_BILLINGS_LIGHT),
               ],
             ),
           ],
@@ -458,7 +458,7 @@ class CustomerListsScreenState
               AppLocalizations.instance.text('key_customers'),
               textAlign: TextAlign.left,
               style: TextStyle(
-                  color: ConstantColor.COLOR_APP_BASE,
+                  color: ConstantColor.COLOR_BILLINGS,
                   fontFamily: ConstantCommon.BASE_FONT,
                   fontSize: 18,
                   fontWeight: FontWeight.w400),
@@ -580,7 +580,7 @@ class CustomerListsScreenState
         strokeWidth: 6,
         value: _modalCustomerLists.loadingCircularBar,
         valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_WHITE),
       )),
     );
 
@@ -588,10 +588,10 @@ class CustomerListsScreenState
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
           key: _scaffoldKey,
-          backgroundColor: ConstantColor.COLOR_BACKGROUND,
+          backgroundColor: ConstantColor.COLOR_BILLINGS_LIGHT,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_BILLINGS,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,
@@ -862,7 +862,8 @@ class CustomerListsScreenState
   }
 
   @override
-  void onTapAlertReceivedCalculationListener(ModelBalanceReceived modelBalanceReceived) {
+  void onTapAlertReceivedCalculationListener(
+      ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
   }
 }

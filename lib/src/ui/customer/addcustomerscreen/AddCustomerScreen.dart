@@ -123,8 +123,8 @@ class AddCustomerScreenState
           focusNode: _modalAddCustomer.focusCustomerName,
           decoration: InputDecoration(
               labelText: AppLocalizations.instance.text('key_customer_name'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -133,7 +133,7 @@ class AddCustomerScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_CUSTOMER, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -159,8 +159,8 @@ class AddCustomerScreenState
           decoration: InputDecoration(
               labelText:
                   AppLocalizations.instance.text('key_customer_bill_name'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -169,7 +169,7 @@ class AddCustomerScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_CUSTOMER, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -196,8 +196,8 @@ class AddCustomerScreenState
           focusNode: _modalAddCustomer.focusCustomerAddress,
           decoration: InputDecoration(
               labelText: AppLocalizations.instance.text('key_customer_address'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -206,7 +206,7 @@ class AddCustomerScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_CUSTOMER, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -234,8 +234,8 @@ class AddCustomerScreenState
           decoration: InputDecoration(
               labelText:
                   AppLocalizations.instance.text('key_customer_phone_no'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -244,7 +244,7 @@ class AddCustomerScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_CUSTOMER, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -272,8 +272,8 @@ class AddCustomerScreenState
           decoration: InputDecoration(
               labelText:
                   AppLocalizations.instance.text('key_customer_whatsapp_no'),
-              labelStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
-              hintStyle: TextStyle(color: ConstantColor.COLOR_APP_BASE),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_CUSTOMER),
               enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                       color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
@@ -282,7 +282,7 @@ class AddCustomerScreenState
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(1.0),
                   borderSide: BorderSide(
-                      color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                      color: ConstantColor.COLOR_CUSTOMER, width: 1.3),
                   gapPadding: 10.0),
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
@@ -298,7 +298,7 @@ class AddCustomerScreenState
         child: new RaisedButton(
           padding: const EdgeInsets.all(8.0),
           textColor: Colors.white,
-          color: ConstantColor.COLOR_APP_BASE,
+          color: ConstantColor.COLOR_CUSTOMER,
           onPressed: () {
             if (customerDetailsNavigate.customerId == null) {
               apiCallBacks(1);
@@ -324,7 +324,7 @@ class AddCustomerScreenState
           child: CircularProgressIndicator(
         value: _modalAddCustomer.loadingCircularBar,
         valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_CUSTOMER),
         strokeWidth: 6,
       )),
     );
@@ -373,7 +373,7 @@ class AddCustomerScreenState
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: ConstantColor.COLOR_APP_BASE,
+          backgroundColor: ConstantColor.COLOR_CUSTOMER,
           automaticallyImplyLeading: false,
           title: containerAppBar,
           centerTitle: false,
@@ -399,7 +399,7 @@ class AddCustomerScreenState
                 ),
               )
             : centerContainerNoNetwork,
-        backgroundColor: ConstantColor.COLOR_BACKGROUND,
+        backgroundColor: ConstantColor.COLOR_WHITE,
       ),
       onWillPop: () {
         setState(() {
