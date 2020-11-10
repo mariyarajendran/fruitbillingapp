@@ -1,7 +1,8 @@
 import 'package:IGO/src/data/apis/customer/updatecustomer/IUpdateCustomerListener.dart';
 import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
+import '../../../../utils/localizations.dart';
 import 'IntractorUpdateCustomer.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
+
 
 class PresenterUpdateCustomer {
   IUpdateCustomerListener _updateCustomerListener;

@@ -2,8 +2,9 @@ import 'package:IGO/src/data/AllApiRepository.dart';
 import 'package:IGO/src/data/apis/product/updateproduct/IUpdateProductListener.dart';
 import 'package:IGO/src/data/apis/product/updateproduct/IntractorUpdateProduct.dart';
 import 'package:IGO/src/di/di.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/models/responsemodel/product/updateproduct/UpdateProductResponseModel.dart';
+
+import '../../../../utils/localizations.dart';
 
 class PresenterUpdateProduct {
   AllApiRepository _allApiRepository;

@@ -6,8 +6,8 @@ import 'package:IGO/src/models/responsemodel/customer/customerlist/CustomerListR
 import 'package:IGO/src/models/responsemodel/customer/updatecustomer/UpdateCustomerResponseModel.dart';
 import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 
+import '../../../utils/localizations.dart';
 import 'ModalAddCustomer.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/Connectivity.dart';
 import 'package:IGO/src/utils/SessionManager.dart';

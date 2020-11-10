@@ -1,7 +1,7 @@
 import 'package:IGO/src/data/AllApiRepository.dart';
 import 'package:IGO/src/di/di.dart';
+import '../../../../utils/localizations.dart';
 import 'IntractorAddProduct.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'IAddProductListener.dart';
 
 class PresenterAddProduct {

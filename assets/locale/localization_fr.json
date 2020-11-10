@@ -107,7 +107,16 @@
   "key_editing": "திருத்து",
   "key_delete": "நீக்கு",
   "key_bills": "பில்கள்",
+  "key_order_id": "ஆர்டர் ஐடி",
+  "key_bill_full_history": "பில் முழு விவரங்கள்",
+  "key_bill_pending_history": "பில் நிலுவை",
+  "key_bill_pending": "பில் நிலுவையில் உள்ளது",
+  "key_bill_paid": "பில் முழுமையாக செலுத்தப்பட்டது",
+  "key_enter_correct_amount": "பெறப்பட்ட சரியான தொகையை உள்ளிடவும்",
   "key_customer_edit": "வாடிக்கையாளரைத் திருத்து",
   "key_customer_edit_title": "திருத்துதல்",
-  "key_are_you_delete": "நீங்கள் நிச்சயமாக நீக்குகிறீர்களா?"
+  "key_are_you_delete": "நீங்கள் நிச்சயமாக நீக்குகிறீர்களா?",
+  "key_are_confirm_billing": "நிச்சயமாக பில் சேமிக்கிறீர்களா ?",
+  "key_are_pay_pending_money": "கணக்கு முடிக்க நிலுவையில் உள்ள பணத்தை நிச்சயமாக செலுத்துகிறீர்களா ?",
+  "key_enter_received_amount": "பெறப்பட்ட தொகையை உள்ளிடவும்"
 }

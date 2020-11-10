@@ -12,8 +12,8 @@ import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModalCustomerListsCrud.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -660,7 +660,7 @@ class CustomerListsCrudScreenState
     );
 
     Container containerCircularLoader = new Container(
-      margin: EdgeInsets.only(top: 20, bottom: 10),
+      margin: EdgeInsets.only(top: appConfig.rHP(7), bottom: 10),
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,

@@ -11,9 +11,9 @@ import 'package:IGO/src/ui/report/overalldetailreport/OverAllDetailedReportScree
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModalOverallReport.dart';
 import 'OverAllParamModel.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -100,16 +100,16 @@ class OverallReportListState
 
     Container containerOverAllReports = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
-      margin: EdgeInsets.only(top: appConfig.rHP(1)),
+      margin: EdgeInsets.only(top: appConfig.rHP(3)),
       child: CustomScrollView(
         slivers: <Widget>[
           SliverList(
             delegate: SliverChildBuilderDelegate(
                 (context, index) => new Container(
                       margin: EdgeInsets.only(
-                          left: appConfig.rWP(1),
-                          right: appConfig.rWP(1),
-                          top: appConfig.rHP(0.1)),
+                        left: appConfig.rWP(1),
+                        right: appConfig.rWP(1),
+                      ),
                       child: new Column(
                         children: <Widget>[
                           new Container(
@@ -161,10 +161,7 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_product_name'),
+                                                                  "${listOverAllReports[index].customerName ?? ''}  ₹${listOverAllReports[index].totalAmount ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
@@ -175,7 +172,7 @@ class OverallReportListState
                                                                           ConstantCommon
                                                                               .BASE_FONT,
                                                                       fontSize:
-                                                                          14,
+                                                                          16,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w400),
@@ -191,21 +188,18 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_product_cost'),
+                                                                  "₹ ${listOverAllReports[index].receivedAmount ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_GREEN,
                                                                       fontFamily:
                                                                           ConstantCommon
                                                                               .BASE_FONT,
                                                                       fontSize:
-                                                                          14,
+                                                                          16,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w400),
@@ -228,16 +222,20 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "# ${listOverAllReports[index].orderId ?? ''}",
+                                                                  AppLocalizations
+                                                                          .instance
+                                                                          .text(
+                                                                              'key_order_id') +
+                                                                      " #${listOverAllReports[index].orderId ?? ''}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_GERY_DATE,
                                                                       fontFamily:
                                                                           ConstantCommon
-                                                                              .BASE_FONT_REGULAR,
+                                                                              .BASE_FONT,
                                                                       fontSize:
                                                                           14,
                                                                       fontWeight:
@@ -247,7 +245,7 @@ class OverallReportListState
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
                                                                         .rHP(
-                                                                            1.5)),
+                                                                            0)),
                                                               ),
                                                               alignment: Alignment
                                                                   .bottomLeft,
@@ -259,26 +257,25 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  "₹ ${listOverAllReports[index].totalAmount ?? 0}",
+                                                                  "₹ ${listOverAllReports[index].pendingAmount ?? 0}",
                                                                   textAlign:
                                                                       TextAlign
                                                                           .right,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_RED,
                                                                       fontFamily:
                                                                           ConstantCommon
-                                                                              .BASE_FONT_REGULAR,
+                                                                              .BASE_FONT,
                                                                       fontSize:
-                                                                          14,
+                                                                          15,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w400),
                                                                 ),
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
-                                                                        .rHP(
-                                                                            1.5),
+                                                                        .rHP(1),
                                                                     bottom: appConfig
                                                                         .rHP(
                                                                             1.5)),
@@ -300,16 +297,26 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_edit_kg'),
+                                                                  listOverAllReports[index]
+                                                                              .pendingAmount ==
+                                                                          0
+                                                                      ? AppLocalizations
+                                                                          .instance
+                                                                          .text(
+                                                                              'key_bill_paid')
+                                                                      : AppLocalizations
+                                                                          .instance
+                                                                          .text(
+                                                                              'key_bill_pending'),
                                                                   textAlign:
                                                                       TextAlign
                                                                           .left,
                                                                   style: TextStyle(
-                                                                      color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                      color: listOverAllReports[index].pendingAmount == 0
+                                                                          ? ConstantColor
+                                                                              .COLOR_COOL_GREEN
+                                                                          : ConstantColor
+                                                                              .COLOR_RED,
                                                                       fontFamily:
                                                                           ConstantCommon
                                                                               .BASE_FONT,
@@ -322,7 +329,10 @@ class OverallReportListState
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
                                                                         .rHP(
-                                                                            3)),
+                                                                            1.5),
+                                                                    bottom: appConfig
+                                                                        .rHP(
+                                                                            1.5)),
                                                               ),
                                                               alignment: Alignment
                                                                   .bottomLeft,
@@ -334,16 +344,20 @@ class OverallReportListState
                                                               child:
                                                                   new Container(
                                                                 child: new Text(
-                                                                  AppLocalizations
-                                                                      .instance
-                                                                      .text(
-                                                                          'key_total_cost'),
+                                                                  returnTime(listOverAllReports[
+                                                                              index]
+                                                                          .orderSummaryDate) +
+                                                                      "\n" +
+                                                                      returnDate(
+                                                                          (listOverAllReports[index]
+                                                                              .orderSummaryDate)),
+                                                                  //"₹ ${listOverAllReports[index].orderSummaryDate ?? 0}",
                                                                   textAlign:
                                                                       TextAlign
-                                                                          .left,
+                                                                          .right,
                                                                   style: TextStyle(
                                                                       color: ConstantColor
-                                                                          .COLOR_BLACK,
+                                                                          .COLOR_GERY_DATE,
                                                                       fontFamily:
                                                                           ConstantCommon
                                                                               .BASE_FONT,
@@ -356,90 +370,10 @@ class OverallReportListState
                                                                 margin: EdgeInsets.only(
                                                                     top: appConfig
                                                                         .rHP(
-                                                                            3)),
-                                                              ),
-                                                              alignment: Alignment
-                                                                  .bottomRight,
-                                                            ),
-                                                            flex: 1,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      new Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          new Expanded(
-                                                            child: new Align(
-                                                              child:
-                                                                  new Container(
-                                                                child:
-                                                                    FlatButton(
-                                                                  child: Text(
-                                                                      "₹ ${listOverAllReports[index].receivedAmount ?? 0}",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          color: ConstantColor
-                                                                              .COLOR_WHITE,
-                                                                          fontFamily: ConstantCommon
-                                                                              .BASE_FONT,
-                                                                          fontSize:
-                                                                              17,
-                                                                          fontWeight:
-                                                                              FontWeight.w400)),
-                                                                  color: ConstantColor
-                                                                      .COLOR_RED,
-                                                                  textColor:
-                                                                      Colors
-                                                                          .white,
-                                                                  onPressed:
-                                                                      () {
-                                                                    setState(
-                                                                        () {});
-                                                                  },
-                                                                ),
-                                                                margin: EdgeInsets.only(
-                                                                    top: appConfig
-                                                                        .rHP(3),
+                                                                            1.5),
                                                                     bottom: appConfig
                                                                         .rHP(
-                                                                            3)),
-                                                              ),
-                                                              alignment: Alignment
-                                                                  .bottomLeft,
-                                                            ),
-                                                            flex: 1,
-                                                          ),
-                                                          new Expanded(
-                                                            child: Align(
-                                                              child:
-                                                                  new Container(
-                                                                child: new Text(
-                                                                  "₹ ${listOverAllReports[index].pendingAmount ?? 0}",
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style: TextStyle(
-                                                                      color: ConstantColor
-                                                                          .COLOR_BLACK,
-                                                                      fontFamily:
-                                                                          ConstantCommon
-                                                                              .BASE_FONT_REGULAR,
-                                                                      fontSize:
-                                                                          14,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                                margin: EdgeInsets.only(
-                                                                    top: appConfig
-                                                                        .rHP(3),
-                                                                    bottom: appConfig
-                                                                        .rHP(
-                                                                            3)),
+                                                                            1.5)),
                                                               ),
                                                               alignment: Alignment
                                                                   .bottomRight,
@@ -451,7 +385,7 @@ class OverallReportListState
                                                     ],
                                                   ),
                                                   margin: EdgeInsets.only(
-                                                      top: appConfig.rHP(4)),
+                                                      top: appConfig.rHP(2)),
                                                 ),
                                               ],
                                             ),
@@ -477,7 +411,7 @@ class OverallReportListState
       height: 40,
       child: new TextFormField(
         style: TextStyle(
-            color: ConstantColor.COLOR_BLACK,
+            color: ConstantColor.COLOR_WHITE,
             fontSize: 16,
             fontFamily: ConstantCommon.BASE_FONT_SEMI_BOLD),
         enableInteractiveSelection: true,
@@ -486,17 +420,17 @@ class OverallReportListState
         decoration: InputDecoration(
             //labelText: AppLocalizations.instance.text('key_product_name'),
             labelText: "From Date",
-            labelStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
-            hintStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
+            labelStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
+            hintStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
+                borderSide:
+                    BorderSide(color: ConstantColor.COLOR_WHITE, width: 0.5),
                 gapPadding: 10.0,
                 borderRadius: BorderRadius.circular(1.0)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(1.0),
                 borderSide:
-                    BorderSide(color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                    BorderSide(color: ConstantColor.COLOR_WHITE, width: 1.3),
                 gapPadding: 10.0),
             contentPadding: EdgeInsets.all(20.0)),
         onFieldSubmitted: (v) {},
@@ -516,7 +450,7 @@ class OverallReportListState
       height: 40,
       child: new TextFormField(
         style: TextStyle(
-            color: ConstantColor.COLOR_BLACK,
+            color: ConstantColor.COLOR_WHITE,
             fontSize: 16,
             fontFamily: ConstantCommon.BASE_FONT_SEMI_BOLD),
         enableInteractiveSelection: false,
@@ -525,17 +459,17 @@ class OverallReportListState
         decoration: InputDecoration(
             //labelText: AppLocalizations.instance.text('key_product_name'),
             labelText: "To Date",
-            labelStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
-            hintStyle: TextStyle(color: ConstantColor.COLOR_BLACK),
+            labelStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
+            hintStyle: TextStyle(color: ConstantColor.COLOR_WHITE),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
+                borderSide:
+                    BorderSide(color: ConstantColor.COLOR_WHITE, width: 0.5),
                 gapPadding: 10.0,
                 borderRadius: BorderRadius.circular(1.0)),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(1.0),
                 borderSide:
-                    BorderSide(color: ConstantColor.COLOR_APP_BASE, width: 1.3),
+                    BorderSide(color: ConstantColor.COLOR_WHITE, width: 1.3),
                 gapPadding: 10.0),
             contentPadding: EdgeInsets.all(20.0)),
         onFieldSubmitted: (v) {},
@@ -556,6 +490,7 @@ class OverallReportListState
           margin:
               EdgeInsets.only(left: appConfig.rWP(1), right: appConfig.rW(1)),
           child: Card(
+            color: ConstantColor.COLOR_COOL_DARK_GERY,
             child: new Row(
               children: [
                 new Expanded(flex: 2, child: containerFromDate),
@@ -605,6 +540,15 @@ class OverallReportListState
       )),
     );
 
+    Container containerCircularLoader = new Container(
+        margin: EdgeInsets.only(top: appConfig.rHP(11), bottom: 10),
+        child: CircularProgressIndicator(
+          strokeWidth: 6,
+          value: _modalOverallReport.loadingCircularBar,
+          valueColor:
+              new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_COOL_DARK_GERY),
+        ));
+
     Container containerClubListsAll = new Container(
       color: ConstantColor.COLOR_LIGHT_GREY,
       child: new Stack(
@@ -616,6 +560,8 @@ class OverallReportListState
                   margin: EdgeInsets.only(top: appConfig.rHP(8)),
                   child: containerOverAllReports,
                 ),
+          new Align(
+              alignment: Alignment.topCenter, child: containerCircularLoader),
         ],
       ),
     );
@@ -679,17 +625,6 @@ class OverallReportListState
           onTap: () {},
         ));
 
-    Container containerCircularLoader = new Container(
-      margin: EdgeInsets.only(top: 20, bottom: 10),
-      child: Center(
-          child: CircularProgressIndicator(
-        strokeWidth: 6,
-        value: _modalOverallReport.loadingCircularBar,
-        valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
-      )),
-    );
-
     return new WillPopScope(
         child: Scaffold(
           resizeToAvoidBottomPadding: false,
@@ -697,7 +632,7 @@ class OverallReportListState
           backgroundColor: ConstantColor.COLOR_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_COOL_DARK_GERY,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,

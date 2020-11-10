@@ -21,7 +21,7 @@ class BaseSingleton {
   var userEmailId = "";
   int userID = 0;
   List<ProductDetails> billingProductList = [];
-  int pageLimits = 100;
+  int pageLimits = 100000000;
   List<CustomerDetails> customerDetails = [];
   DateModel dateModel;
 

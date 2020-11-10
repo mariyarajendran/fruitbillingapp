@@ -5,8 +5,8 @@ import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModalBillPreview.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -840,11 +840,20 @@ class BillPreviewScreenState
                 ),
                 onTap: () {
                   setState(() {
-                    if (modelBalanceReceived.receivedCost > 0 &&
-                        modelBalanceReceived.pendingCost >= 0) {
-                      apiCallBack(0);
+                    if (modelBalanceReceived.receivedCost <= 0) {
+                      showToast(AppLocalizations.instance
+                          .text('key_enter_received_amount'));
+                    } else if (modelBalanceReceived.pendingCost < 0) {
+                      showToast(AppLocalizations.instance
+                          .text('key_enter_correct_amount'));
                     } else {
-                      showToast("Please enter received amount");
+                      showAlertDialog(
+                          AppLocalizations.instance
+                              .text('key_are_confirm_billing'),
+                          AppLocalizations.instance.text('key_yes'),
+                          AppLocalizations.instance.text('key_no'),
+                          0,
+                          this);
                     }
                   });
                 },
@@ -1092,7 +1101,9 @@ class BillPreviewScreenState
 
   @override
   void onTapAlertOkayListener() {
-    setState(() {});
+    setState(() {
+      apiCallBack(0);
+    });
   }
 
   @override

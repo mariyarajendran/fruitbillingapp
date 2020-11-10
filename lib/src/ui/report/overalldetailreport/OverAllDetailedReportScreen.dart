@@ -10,8 +10,8 @@ import 'package:IGO/src/ui/report/overallreport/OverallReportListScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModalOverAllDetailedReport.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -341,7 +341,7 @@ class OverAllDetailedReportState
               floating: false,
               pinned: false,
               snap: false,
-              backgroundColor: ConstantColor.COLOR_APP_BASE,
+              backgroundColor: ConstantColor.COLOR_COOL_DARK_GERY,
               flexibleSpace: SingleChildScrollView(
                 child: containerBillPreviewCustomerDetails,
               ),
@@ -508,7 +508,7 @@ class OverAllDetailedReportState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             new Card(
-              color: ConstantColor.COLOR_APP_BASE,
+              color: ConstantColor.COLOR_COOL_DARK_GERY,
               elevation: 3,
               child: new Stack(
                 children: <Widget>[
@@ -609,7 +609,7 @@ class OverAllDetailedReportState
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             new Card(
-              color: ConstantColor.COLOR_APP_BASE,
+              color: ConstantColor.COLOR_COOL_DARK_GERY,
               child: new Stack(
                 children: <Widget>[
                   new Container(
@@ -870,7 +870,7 @@ class OverAllDetailedReportState
             flex: 4,
             child: Container(
               child: Text(
-                  AppLocalizations.instance.text('key_bill_preview_hint'),
+                  AppLocalizations.instance.text('key_bill_full_history'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: ConstantColor.COLOR_WHITE,
@@ -940,8 +940,8 @@ class OverAllDetailedReportState
           child: CircularProgressIndicator(
         strokeWidth: 6,
         value: _modalOverAllDetailedReport.loadingCircularBar,
-        valueColor:
-            new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
+        valueColor: new AlwaysStoppedAnimation<Color>(
+            ConstantColor.COLOR_COOL_DARK_GERY),
       )),
     );
 
@@ -952,7 +952,7 @@ class OverAllDetailedReportState
           backgroundColor: ConstantColor.COLOR_BACKGROUND,
           drawerEdgeDragWidth: 0,
           appBar: AppBar(
-            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            backgroundColor: ConstantColor.COLOR_COOL_DARK_GERY,
             automaticallyImplyLeading: false,
             title: containerAppBar,
             centerTitle: false,

@@ -5,8 +5,8 @@ import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
 import 'package:IGO/src/utils/constants/ConstantCommon.dart';
+import '../../../utils/localizations.dart';
 import 'ModaProductLists.dart';
-import 'file:///D:/CGS/PBXAPP/igo-flutter/lib/src/utils/localizations.dart';
 import 'package:IGO/src/ui/base/BaseAlertListener.dart';
 import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
@@ -423,7 +423,7 @@ class ProductListsScreenState
                                               AppLocalizations.instance
                                                   .text('key_add_to_bill'),
                                               textAlign: TextAlign.center,
-                                               style: TextStyle(
+                                              style: TextStyle(
                                                   color:
                                                       ConstantColor.COLOR_WHITE,
                                                   fontFamily:
@@ -567,15 +567,6 @@ class ProductListsScreenState
                 ),
               ],
             ),
-            new Row(
-              children: <Widget>[
-                new Container(
-                    height: 3.0,
-                    margin: EdgeInsets.only(left: appConfig.rWP(5)),
-                    width: appConfig.rW(39),
-                    color: ConstantColor.COLOR_BILLINGS_LIGHT),
-              ],
-            ),
           ],
         ));
 
@@ -605,7 +596,6 @@ class ProductListsScreenState
       child: new Column(
         children: <Widget>[
           containerAppTitleHintBar,
-          containerAppHint,
           new Container(
             padding: EdgeInsets.all(appConfig.rWP(3)),
             child: expansionPanelList,
@@ -707,7 +697,7 @@ class ProductListsScreenState
     );
 
     Container containerCircularLoader = new Container(
-      margin: EdgeInsets.only(top: 20, bottom: 10),
+      margin: EdgeInsets.only(top: appConfig.rHP(8), bottom: 10),
       child: Center(
           child: CircularProgressIndicator(
         strokeWidth: 6,

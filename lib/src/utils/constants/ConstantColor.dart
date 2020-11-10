@@ -40,4 +40,12 @@ class ConstantColor {
   static const Color COLOR_PRODUCTS_BACKGROUND = Color(0xFFE0E3DE);
   static const Color COLOR_BILLINGS = Color(0xFF3D550C);
   static const Color COLOR_BILLINGS_LIGHT = Color(0xFFB2D2A4);
+  static const Color COLOR_PREVIEW_BILL = Color(0xFF741E71);
+  static const Color COLOR_GERY_DATE = Color(0xFF747474);
+  static const Color COLOR_COOL_GERY = Color(0xFF444444);
+  static const Color COLOR_COOL_DARK_GERY = Color(0xFF666666);
+  static const Color COLOR_COOL_GREEN = Color(0xFF1D741B);
+  static const Color COLOR_COOL_RED = Color(0xFFC85250);
+
+
 }
