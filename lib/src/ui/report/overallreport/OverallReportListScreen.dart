@@ -6,7 +6,6 @@ import 'package:IGO/src/models/responsemodel/report/orderreport/OrderReportRespo
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 import 'package:IGO/src/ui/dashboard/DashboardScreen.dart';
-import 'package:IGO/src/ui/dashboard/DateModel.dart';
 import 'package:IGO/src/ui/report/overalldetailreport/OverAllDetailedReportScreen.dart';
 import 'package:IGO/src/utils/AppConfig.dart';
 import 'package:IGO/src/utils/constants/ConstantColor.dart';
@@ -545,8 +544,8 @@ class OverallReportListState
         child: CircularProgressIndicator(
           strokeWidth: 6,
           value: _modalOverallReport.loadingCircularBar,
-          valueColor:
-              new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_COOL_DARK_GERY),
+          valueColor: new AlwaysStoppedAnimation<Color>(
+              ConstantColor.COLOR_COOL_DARK_GERY),
         ));
 
     Container containerClubListsAll = new Container(
@@ -766,8 +765,9 @@ class OverallReportListState
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
         DateTime pastMonth = DateTime.now().subtract(Duration(days: 30));
-        returnFromDate(pastMonth, false);
+        //returnFromDate(pastMonth, false);
         DateTime now = DateTime.now();
+        returnFromDate(now, false);
         returnToDate(now, false);
         apiCallBack(1);
       });

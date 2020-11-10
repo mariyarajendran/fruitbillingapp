@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:IGO/src/models/responsemodel/bills/getallpendingbalance/GetPendingBalanceResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/bills/getallpendingbalancehistory/GetPendingBalanceHistoryResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/bills/savebill/SaveBillResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/bills/updatependingbalance/UpdatePendBalanceResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/addcustomer/AddCustomerResponseModel.dart';
@@ -468,6 +469,44 @@ class ServiceRequest implements AllApiRepository {
       }
     });
     return updatePendBalanceResponseModel;
+  }
+
+  @override
+  Future<GetPendingBalanceHistoryResponseModel> getPendingBalanceHistory(
+      Map requestData, int event) async {
+    String GET_PENDING_BALANCE_HISTORY =
+        FRUIT_BILLING_BASE_URL + "api/json/getPendingBalanceHistory";
+
+    GetPendingBalanceHistoryResponseModel
+        getPendingBalanceHistoryResponseModel =
+        new GetPendingBalanceHistoryResponseModel();
+
+    var headers = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    var body = json.encode(requestData);
+    await HttpClientHelper.post(GET_PENDING_BALANCE_HISTORY,
+            headers: headers,
+            body: body,
+            timeRetry: Duration(milliseconds: 100),
+            retries: 3,
+            timeLimit: Duration(seconds: 10))
+        .then((response) {
+      print("url: " + GET_PENDING_BALANCE_HISTORY);
+      print("header: " + body);
+      int statusCode = response.statusCode;
+      final Map responseBody = json.decode(response.body);
+      print("status code: $statusCode");
+      print(response.body);
+      getPendingBalanceHistoryResponseModel =
+          new GetPendingBalanceHistoryResponseModel.fromMap(responseBody);
+      if (statusCode != 200 && responseBody == null) {
+        throw new FetchDataException(
+            "An error ocurred : [Status Code : $statusCode]  Message : $responseBody");
+      }
+    });
+    return getPendingBalanceHistoryResponseModel;
   }
 
 /////////////////////////////////////////
