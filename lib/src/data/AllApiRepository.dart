@@ -1,4 +1,5 @@
 import 'package:IGO/src/models/responsemodel/bills/getallpendingbalance/GetPendingBalanceResponseModel.dart';
+import 'package:IGO/src/models/responsemodel/bills/getallpendingbalancehistory/GetPendingBalanceHistoryResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/bills/savebill/SaveBillResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/bills/updatependingbalance/UpdatePendBalanceResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/customer/addcustomer/AddCustomerResponseModel.dart';
@@ -61,6 +62,10 @@ abstract class AllApiRepository {
       Map requestData, int event);
 
   Future<GetPendingBalanceResponseModel> getPendingBalance(
+      Map requestData, int event);
+
+
+  Future<GetPendingBalanceHistoryResponseModel> getPendingBalanceHistory(
       Map requestData, int event);
 
 ////////////////////////////////////////////////////////////////////////bills

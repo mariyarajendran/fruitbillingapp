@@ -71,10 +71,11 @@ class BillPreviewScreenState
   }
 
   void checkInternetAlert() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => showMessageAlert(
-        AppLocalizations.instance.text('key_no_network'),
-        AppLocalizations.instance.text('key_retry'),
-        0));
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        showMessageAlert(
+            AppLocalizations.instance.text('key_no_network'),
+            AppLocalizations.instance.text('key_retry'),
+            0));
   }
 
   void updateInternetConnectivity(bool networkStatus) {
@@ -120,7 +121,7 @@ class BillPreviewScreenState
                               children: <Widget>[
                                 new Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     new Expanded(
                                       child: new Align(
@@ -131,9 +132,9 @@ class BillPreviewScreenState
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 color:
-                                                    ConstantColor.COLOR_WHITE,
+                                                ConstantColor.COLOR_WHITE,
                                                 fontFamily:
-                                                    ConstantCommon.BASE_FONT,
+                                                ConstantCommon.BASE_FONT,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400),
                                           ),
@@ -151,9 +152,9 @@ class BillPreviewScreenState
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 color:
-                                                    ConstantColor.COLOR_WHITE,
+                                                ConstantColor.COLOR_WHITE,
                                                 fontFamily:
-                                                    ConstantCommon.BASE_FONT,
+                                                ConstantCommon.BASE_FONT,
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400),
                                           ),
@@ -166,21 +167,21 @@ class BillPreviewScreenState
                                 ),
                                 new Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     new Expanded(
                                       child: new Align(
                                         child: new Container(
                                           child: new Text(
                                             BaseSingleton
-                                                    .shared
-                                                    .customerDetails[0]
-                                                    .customerName ??
+                                                .shared
+                                                .customerDetails[0]
+                                                .customerName ??
                                                 '',
                                             textAlign: TextAlign.left,
                                             style: TextStyle(
                                                 color:
-                                                    ConstantColor.COLOR_WHITE,
+                                                ConstantColor.COLOR_WHITE,
                                                 fontFamily: ConstantCommon
                                                     .BASE_FONT_REGULAR,
                                                 fontSize: 14,
@@ -197,12 +198,14 @@ class BillPreviewScreenState
                                       child: Align(
                                         child: new Container(
                                           child: new Text(
-                                            "₹ ${BaseSingleton.shared.customerDetails[0].customerTotalPendingBalance}" ??
+                                            "₹ ${BaseSingleton.shared
+                                                .customerDetails[0]
+                                                .customerTotalPendingBalance}" ??
                                                 '',
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
                                                 color:
-                                                    ConstantColor.COLOR_WHITE,
+                                                ConstantColor.COLOR_WHITE,
                                                 fontFamily: ConstantCommon
                                                     .BASE_FONT_REGULAR,
                                                 fontSize: 14,
@@ -249,7 +252,8 @@ class BillPreviewScreenState
                   preferredSize: Size(appConfig.rW(50), appConfig.rH(5)))),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (context, index) => new Container(
+                  (context, index) =>
+              new Container(
                 margin: EdgeInsets.only(
                   left: appConfig.rWP(1),
                   right: appConfig.rWP(1),
@@ -269,15 +273,15 @@ class BillPreviewScreenState
                                       width: double.infinity,
                                       child: new Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           new Container(
                                             child: new Column(
                                               children: <Widget>[
                                                 new Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: <Widget>[
                                                     new Expanded(
                                                       flex: 1,
@@ -286,20 +290,20 @@ class BillPreviewScreenState
                                                           BaseSingleton
                                                               .shared
                                                               .billingProductList[
-                                                                  index]
+                                                          index]
                                                               .productName,
                                                           textAlign:
-                                                              TextAlign.left,
+                                                          TextAlign.left,
                                                           style: TextStyle(
                                                               color: ConstantColor
                                                                   .COLOR_BLACK,
                                                               fontFamily:
-                                                                  ConstantCommon
-                                                                      .BASE_FONT_REGULAR,
+                                                              ConstantCommon
+                                                                  .BASE_FONT_REGULAR,
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                              FontWeight
+                                                                  .w400),
                                                         ),
                                                         margin: EdgeInsets.only(
                                                             top: appConfig
@@ -310,19 +314,22 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
+                                                          "₹ ${BaseSingleton
+                                                              .shared
+                                                              .billingProductList[index]
+                                                              .productCost}",
                                                           textAlign:
-                                                              TextAlign.center,
+                                                          TextAlign.center,
                                                           style: TextStyle(
                                                               color: ConstantColor
                                                                   .COLOR_BLACK,
                                                               fontFamily:
-                                                                  ConstantCommon
-                                                                      .BASE_FONT_REGULAR,
+                                                              ConstantCommon
+                                                                  .BASE_FONT_REGULAR,
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                              FontWeight
+                                                                  .w400),
                                                         ),
                                                         margin: EdgeInsets.only(
                                                           top: appConfig
@@ -334,19 +341,22 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                          "${BaseSingleton
+                                                              .shared
+                                                              .billingProductList[index]
+                                                              .totalKiloGrams} Kg",
                                                           textAlign:
-                                                              TextAlign.center,
+                                                          TextAlign.center,
                                                           style: TextStyle(
                                                               color: ConstantColor
                                                                   .COLOR_BLACK,
                                                               fontFamily:
-                                                                  ConstantCommon
-                                                                      .BASE_FONT_REGULAR,
+                                                              ConstantCommon
+                                                                  .BASE_FONT_REGULAR,
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                              FontWeight
+                                                                  .w400),
                                                         ),
                                                         margin: EdgeInsets.only(
                                                           top: appConfig
@@ -358,19 +368,22 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].totalCost}",
+                                                          "₹ ${BaseSingleton
+                                                              .shared
+                                                              .billingProductList[index]
+                                                              .totalCost}",
                                                           textAlign:
-                                                              TextAlign.right,
+                                                          TextAlign.right,
                                                           style: TextStyle(
                                                               color: ConstantColor
                                                                   .COLOR_BLACK,
                                                               fontFamily:
-                                                                  ConstantCommon
-                                                                      .BASE_FONT_REGULAR,
+                                                              ConstantCommon
+                                                                  .BASE_FONT_REGULAR,
                                                               fontSize: 14,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                              FontWeight
+                                                                  .w400),
                                                         ),
                                                         margin: EdgeInsets.only(
                                                             top: appConfig
@@ -424,7 +437,7 @@ class BillPreviewScreenState
                             children: <Widget>[
                               new Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   new Expanded(
                                     child: new Container(
@@ -435,7 +448,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -450,7 +463,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -465,7 +478,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -480,7 +493,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -534,7 +547,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -548,7 +561,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -608,7 +621,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -617,12 +630,13 @@ class BillPreviewScreenState
                                   new Expanded(
                                     child: new Container(
                                       child: new Text(
-                                        "₹ ${modelBalanceReceived.receivedCost}",
+                                        "₹ ${modelBalanceReceived
+                                            .receivedCost}",
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -682,7 +696,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -696,7 +710,7 @@ class BillPreviewScreenState
                                         style: TextStyle(
                                             color: ConstantColor.COLOR_WHITE,
                                             fontFamily:
-                                                ConstantCommon.BASE_FONT,
+                                            ConstantCommon.BASE_FONT,
                                             fontSize: 15,
                                             fontWeight: FontWeight.w400),
                                       ),
@@ -791,140 +805,140 @@ class BillPreviewScreenState
     Container containerAppBar = Container(
       child: new Container(
           child: new Row(
-        children: [
-          new Expanded(
-            child: new Container(
-              width: appConfig.rW(20),
-              child: InkWell(
-                child: Container(
-                  child: Image.asset(
-                    "assets/images/back.png",
-                    width: 35,
-                    height: 35,
+            children: [
+              new Expanded(
+                child: new Container(
+                  width: appConfig.rW(20),
+                  child: InkWell(
+                    child: Container(
+                      child: Image.asset(
+                        "assets/images/back.png",
+                        width: 35,
+                        height: 35,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        navigateBaseRouting(3);
+                      });
+                    },
                   ),
+                  alignment: Alignment.topLeft,
                 ),
-                onTap: () {
-                  setState(() {
-                    navigateBaseRouting(3);
-                  });
-                },
+                flex: 0,
               ),
-              alignment: Alignment.topLeft,
-            ),
-            flex: 0,
-          ),
-          new Expanded(
-            flex: 4,
-            child: Container(
-              child: Text(
-                  AppLocalizations.instance.text('key_bill_preview_hint'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: ConstantColor.COLOR_WHITE,
-                      fontFamily: ConstantCommon.BASE_FONT,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400)),
-              margin: EdgeInsets.only(right: appConfig.rWP(15)),
-            ),
-          ),
-          new Expanded(
-            child: new Container(
-              child: InkWell(
+              new Expanded(
+                flex: 4,
                 child: Container(
-                  child: Image.asset(
-                    "assets/images/billing.png",
-                    width: 35,
-                    height: 35,
-                    color: ConstantColor.COLOR_WHITE,
-                  ),
+                  child: Text(
+                      AppLocalizations.instance.text('key_bill_preview_hint'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: ConstantColor.COLOR_WHITE,
+                          fontFamily: ConstantCommon.BASE_FONT,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400)),
+                  margin: EdgeInsets.only(right: appConfig.rWP(15)),
                 ),
-                onTap: () {
-                  setState(() {
-                    if (modelBalanceReceived.receivedCost <= 0) {
-                      showToast(AppLocalizations.instance
-                          .text('key_enter_received_amount'));
-                    } else if (modelBalanceReceived.pendingCost < 0) {
-                      showToast(AppLocalizations.instance
-                          .text('key_enter_correct_amount'));
-                    } else {
-                      showAlertDialog(
-                          AppLocalizations.instance
-                              .text('key_are_confirm_billing'),
-                          AppLocalizations.instance.text('key_yes'),
-                          AppLocalizations.instance.text('key_no'),
-                          0,
-                          this);
-                    }
-                  });
-                },
               ),
-              alignment: Alignment.topRight,
-            ),
-            flex: 0,
-          ),
-        ],
-      )),
+              new Expanded(
+                child: new Container(
+                  child: InkWell(
+                    child: Container(
+                      child: Image.asset(
+                        "assets/images/billing.png",
+                        width: 35,
+                        height: 35,
+                        color: ConstantColor.COLOR_WHITE,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        if (modelBalanceReceived.receivedCost <= 0) {
+                          showToast(AppLocalizations.instance
+                              .text('key_enter_received_amount'));
+                        } else if (modelBalanceReceived.pendingCost < 0) {
+                          showToast(AppLocalizations.instance
+                              .text('key_enter_correct_amount'));
+                        } else {
+                          showAlertDialog(
+                              AppLocalizations.instance
+                                  .text('key_are_confirm_billing'),
+                              AppLocalizations.instance.text('key_yes'),
+                              AppLocalizations.instance.text('key_no'),
+                              0,
+                              this);
+                        }
+                      });
+                    },
+                  ),
+                  alignment: Alignment.topRight,
+                ),
+                flex: 0,
+              ),
+            ],
+          )),
     );
 
     Center containerNoData = new Center(
       child: new Container(
           child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          new Center(
-            child: new Container(
-              child: Image.asset(
-                "assets/images/empty.png",
-                width: 50,
-                height: 50,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              new Center(
+                child: new Container(
+                  child: Image.asset(
+                    "assets/images/empty.png",
+                    width: 50,
+                    height: 50,
+                  ),
+                ),
               ),
-            ),
-          ),
-          new Center(
-            child: new Container(
-              padding: EdgeInsets.all(10),
-              child: Text(AppLocalizations.instance.text('key_cart_empty'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: ConstantColor.COLOR_APP_BASE,
-                      fontFamily: ConstantCommon.BASE_FONT,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400)),
-            ),
-          ),
-          new Container(
-              height: 40,
-              child: FloatingActionButton.extended(
-                  backgroundColor: ConstantColor.COLOR_APP_BASE,
-                  elevation: 5.0,
-                  onPressed: () {
-                    dismissKeyboard();
-                    setState(() {
-                      navigateBaseRouting(3);
-                    });
-                  },
-                  label: Text(
-                    AppLocalizations.instance.text('key_add_product'),
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: ConstantColor.COLOR_WHITE,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: ConstantCommon.BASE_FONT),
-                  ))),
-        ],
-      )),
+              new Center(
+                child: new Container(
+                  padding: EdgeInsets.all(10),
+                  child: Text(AppLocalizations.instance.text('key_cart_empty'),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: ConstantColor.COLOR_APP_BASE,
+                          fontFamily: ConstantCommon.BASE_FONT,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400)),
+                ),
+              ),
+              new Container(
+                  height: 40,
+                  child: FloatingActionButton.extended(
+                      backgroundColor: ConstantColor.COLOR_APP_BASE,
+                      elevation: 5.0,
+                      onPressed: () {
+                        dismissKeyboard();
+                        setState(() {
+                          navigateBaseRouting(3);
+                        });
+                      },
+                      label: Text(
+                        AppLocalizations.instance.text('key_add_product'),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: ConstantColor.COLOR_WHITE,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: ConstantCommon.BASE_FONT),
+                      ))),
+            ],
+          )),
     );
 
     Container containerCircularLoader = new Container(
       margin: EdgeInsets.only(top: 20, bottom: 10),
       child: Center(
           child: CircularProgressIndicator(
-        strokeWidth: 6,
-        value: _modalBillPreview.loadingCircularBar,
-        valueColor:
+            strokeWidth: 6,
+            value: _modalBillPreview.loadingCircularBar,
+            valueColor:
             new AlwaysStoppedAnimation<Color>(ConstantColor.COLOR_APP_BASE),
-      )),
+          )),
     );
 
     return new WillPopScope(
@@ -942,21 +956,21 @@ class BillPreviewScreenState
           ),
           body: !_modalBillPreview.isNetworkStatus
               ? _modalBillPreview.boolNodata
-                  ? containerNoData
-                  : AbsorbPointer(
-                      child: new Stack(
-                        children: [
-                          containerBillPreview,
-                          inkwellPending,
-                          inkwellReceived,
-                          inkwellTotal,
-                          new Align(
-                              alignment: Alignment.center,
-                              child: containerCircularLoader),
-                        ],
-                      ),
-                      absorbing: _modalBillPreview.loadingEnableDisable,
-                    )
+              ? containerNoData
+              : AbsorbPointer(
+            child: new Stack(
+              children: [
+                containerBillPreview,
+                inkwellPending,
+                inkwellReceived,
+                inkwellTotal,
+                new Align(
+                    alignment: Alignment.center,
+                    child: containerCircularLoader),
+              ],
+            ),
+            absorbing: _modalBillPreview.loadingEnableDisable,
+          )
               : centerContainerNoNetwork,
         ),
         onWillPop: () {
@@ -969,7 +983,7 @@ class BillPreviewScreenState
   _refreshScrollListener() {
     String message = "";
     if (_RefreshController.offset <=
-            _RefreshController.position.minScrollExtent &&
+        _RefreshController.position.minScrollExtent &&
         !_RefreshController.position.outOfRange) {
       setState(() {
         message = "reach the top";
@@ -1080,17 +1094,17 @@ class BillPreviewScreenState
         Map<String, dynamic> productMapData = {
           'product_id': BaseSingleton.shared.billingProductList[i].productId,
           'product_name':
-              BaseSingleton.shared.billingProductList[i].productName,
+          BaseSingleton.shared.billingProductList[i].productName,
           'product_cost':
-              BaseSingleton.shared.billingProductList[i].productCost,
+          BaseSingleton.shared.billingProductList[i].productCost,
           'product_date':
-              BaseSingleton.shared.billingProductList[i].productDate,
+          BaseSingleton.shared.billingProductList[i].productDate,
           'product_stock_kg':
-              BaseSingleton.shared.billingProductList[i].totalKiloGrams,
+          BaseSingleton.shared.billingProductList[i].totalKiloGrams,
           'product_total_cost':
-              BaseSingleton.shared.billingProductList[i].totalCost,
+          BaseSingleton.shared.billingProductList[i].totalCost,
           'product_code':
-              BaseSingleton.shared.billingProductList[i].productCode,
+          BaseSingleton.shared.billingProductList[i].productCode,
         };
         productListData.add(productMapData);
       }

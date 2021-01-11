@@ -756,8 +756,9 @@ class PendingBalanceListState
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
         DateTime pastMonth = DateTime.now().subtract(Duration(days: 30));
-        returnFromDate(pastMonth, false);
+        //returnFromDate(pastMonth, false);
         DateTime now = DateTime.now();
+        returnFromDate(now, false);
         returnToDate(now, false);
         apiCallBack(1);
       });

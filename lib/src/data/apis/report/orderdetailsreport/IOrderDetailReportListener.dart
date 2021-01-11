@@ -10,5 +10,7 @@ abstract class IOrderDetailReportListener {
 
   String getCustomerId();
 
+  String getOrderSummaryId();
+
   Map parseGetProductDetailsRequestData();
 }

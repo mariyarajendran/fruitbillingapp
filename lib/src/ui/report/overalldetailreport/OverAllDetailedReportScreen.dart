@@ -1,7 +1,10 @@
+import 'package:IGO/src/data/apis/bills/getallpendingbalancehistory/IGetPendingBalanceHistoryListener.dart';
+import 'package:IGO/src/data/apis/bills/getallpendingbalancehistory/PresenterPendingBalanceHistory.dart';
 import 'package:IGO/src/data/apis/bills/savebill/ISaveBillListener.dart';
 import 'package:IGO/src/data/apis/bills/savebill/PresenterSaveBillData.dart';
 import 'package:IGO/src/data/apis/report/orderdetailsreport/IOrderDetailReportListener.dart';
 import 'package:IGO/src/data/apis/report/orderdetailsreport/PresenterOrderDetailReportList.dart';
+import 'package:IGO/src/models/responsemodel/bills/getallpendingbalancehistory/GetPendingBalanceHistoryResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/product/productlist/ProductListResponseModel.dart';
 import 'package:IGO/src/models/responsemodel/report/orderdetailsreport/OrderDetailsReportResponseModel.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
@@ -54,15 +57,20 @@ class OverAllDetailedReportState
     implements
         ViewContractConnectivityListener,
         BaseAlertListener,
-        IOrderDetailReportListener {
+        IOrderDetailReportListener,
+        IGetPendingBalanceHistoryListener {
   AppConfig appConfig;
   ScrollController _RefreshController;
   Connectivitys _connectivity = Connectivitys.instance;
   ModalOverAllDetailedReport _modalOverAllDetailedReport;
   PresenterOrderDetailReportList _presenterOrderDetailReportList;
+
+  PresenterPendingBalanceHistory _presenterPendingBalanceHistory;
+
   AnimationController _animationController;
   Map _sourceConnectionStatus = {ConnectivityResult.none: false};
   List<OverAllDetailReports> overAllDetailReports = [];
+  List<PendingBalanceHistoryDetails> pendingBalanceHistoryDetails = [];
   OrderDetailsReportResponseModel orderDetailsReportResponseModel =
       new OrderDetailsReportResponseModel();
   CustomerDetails customerDetails = new CustomerDetails();
@@ -74,10 +82,15 @@ class OverAllDetailedReportState
 
   var refreshKey = GlobalKey<RefreshIndicatorState>();
 
+  AnimationController _controller;
+  Duration _duration = Duration(milliseconds: 500);
+  Tween<Offset> _tween = Tween(begin: Offset(0, 1), end: Offset(0, 0));
+
   OverAllDetailedReportState() {
     this._modalOverAllDetailedReport = new ModalOverAllDetailedReport();
     this._connectivity = new Connectivitys(this);
     _presenterOrderDetailReportList = new PresenterOrderDetailReportList(this);
+    _presenterPendingBalanceHistory = new PresenterPendingBalanceHistory(this);
   }
 
   void checkInternetAlert() {
@@ -818,6 +831,215 @@ class OverAllDetailedReportState
       ),
     );
 
+    Container containerBottomHistorySheet = new Container(
+      child: SizedBox.expand(
+          child: SlideTransition(
+        position: _tween.animate(_controller),
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.1,
+          minChildSize: 0.1,
+          maxChildSize: 1,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return CustomScrollView(
+              controller: scrollController,
+              slivers: <Widget>[
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                      (context, index) => new Container(
+                            margin: EdgeInsets.only(
+                              left: appConfig.rWP(1),
+                              right: appConfig.rWP(1),
+                            ),
+                            child: new Column(
+                              children: <Widget>[
+                                new Container(
+                                  color: ConstantColor.COLOR_COOL_RED,
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Card(
+                                          color: ConstantColor.COLOR_WHITE,
+                                          elevation: 100,
+                                          child: new ListTile(
+                                            title: new Stack(
+                                              children: <Widget>[
+                                                new Container(
+                                                  width: double.infinity,
+                                                  child: new Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: <Widget>[
+                                                      new Container(
+                                                        child: new Column(
+                                                          children: <Widget>[
+                                                            new Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: <
+                                                                  Widget>[
+                                                                new Expanded(
+                                                                  child:
+                                                                      new Align(
+                                                                    child:
+                                                                        new Container(
+                                                                      child:
+                                                                          new Text(
+                                                                        "${'Old Balance'}  ₹${pendingBalanceHistoryDetails[index].totalAmount ?? ''}",
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        style: TextStyle(
+                                                                            color: ConstantColor
+                                                                                .COLOR_BLACK,
+                                                                            fontFamily: ConstantCommon
+                                                                                .BASE_FONT,
+                                                                            fontSize:
+                                                                                16,
+                                                                            fontWeight:
+                                                                                FontWeight.w400),
+                                                                      ),
+                                                                    ),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomLeft,
+                                                                  ),
+                                                                  flex: 1,
+                                                                ),
+                                                                new Expanded(
+                                                                  child: Align(
+                                                                    child:
+                                                                        new Container(
+                                                                      child:
+                                                                          new Text(
+                                                                        "₹ ${pendingBalanceHistoryDetails[index].receivedAmount ?? ''}",
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        style: TextStyle(
+                                                                            color: ConstantColor
+                                                                                .COLOR_GREEN,
+                                                                            fontFamily: ConstantCommon
+                                                                                .BASE_FONT,
+                                                                            fontSize:
+                                                                                16,
+                                                                            fontWeight:
+                                                                                FontWeight.w400),
+                                                                      ),
+                                                                    ),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomRight,
+                                                                  ),
+                                                                  flex: 1,
+                                                                )
+                                                              ],
+                                                            ),
+                                                            new Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: <
+                                                                  Widget>[
+                                                                new Expanded(
+                                                                  child:
+                                                                      new Align(
+                                                                    child:
+                                                                        new Container(
+                                                                      child:
+                                                                          new Text(
+                                                                        returnTime(pendingBalanceHistoryDetails[index].orderPendingHistoryDate) +
+                                                                            "\n" +
+                                                                            returnDate((pendingBalanceHistoryDetails[index].orderPendingHistoryDate)),
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        style: TextStyle(
+                                                                            color: ConstantColor
+                                                                                .COLOR_GERY_DATE,
+                                                                            fontFamily: ConstantCommon
+                                                                                .BASE_FONT,
+                                                                            fontSize:
+                                                                                14,
+                                                                            fontWeight:
+                                                                                FontWeight.w400),
+                                                                      ),
+                                                                      margin: EdgeInsets.only(
+                                                                          top: appConfig.rHP(
+                                                                              0),
+                                                                          bottom:
+                                                                              appConfig.rHP(2)),
+                                                                    ),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomLeft,
+                                                                  ),
+                                                                  flex: 1,
+                                                                ),
+                                                                new Expanded(
+                                                                  child: Align(
+                                                                    child:
+                                                                        new Container(
+                                                                      child:
+                                                                          new Text(
+                                                                        "₹ ${pendingBalanceHistoryDetails[index].pendingAmount ?? 0}",
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        style: TextStyle(
+                                                                            color: ConstantColor
+                                                                                .COLOR_RED,
+                                                                            fontFamily: ConstantCommon
+                                                                                .BASE_FONT,
+                                                                            fontSize:
+                                                                                15,
+                                                                            fontWeight:
+                                                                                FontWeight.w400),
+                                                                      ),
+                                                                      margin: EdgeInsets.only(
+                                                                          top: appConfig.rHP(
+                                                                              1),
+                                                                          bottom:
+                                                                              appConfig.rHP(1.5)),
+                                                                    ),
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomRight,
+                                                                  ),
+                                                                  flex: 1,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            new Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: <
+                                                                  Widget>[],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        margin: EdgeInsets.only(
+                                                            top: appConfig
+                                                                .rHP(2)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      childCount: pendingBalanceHistoryDetails.length),
+                ),
+              ],
+            );
+          },
+        ),
+      )),
+    );
+
     Container previewBillContainer = new Container(
       child: Align(
           alignment: Alignment.bottomCenter,
@@ -958,6 +1180,22 @@ class OverAllDetailedReportState
             centerTitle: false,
             bottomOpacity: 1,
           ),
+          floatingActionButton: GestureDetector(
+              child: FloatingActionButton(
+            child: AnimatedIcon(
+                icon: AnimatedIcons.menu_close, progress: _controller),
+            elevation: 5,
+            backgroundColor: ConstantColor.COLOR_APP_BASE,
+            foregroundColor: Colors.white,
+            onPressed: () async {
+              if (_controller.isDismissed) {
+                _controller.forward();
+                apiCallBack(1);
+              } else if (_controller.isCompleted) {
+                _controller.reverse();
+              }
+            },
+          )),
           body: !_modalOverAllDetailedReport.isNetworkStatus
               ? _modalOverAllDetailedReport.boolNodata
                   ? containerNoData
@@ -972,6 +1210,7 @@ class OverAllDetailedReportState
                           new Align(
                               alignment: Alignment.center,
                               child: containerCircularLoader),
+                          containerBottomHistorySheet
                         ],
                       ),
                       absorbing:
@@ -1032,6 +1271,7 @@ class OverAllDetailedReportState
     if (mounted) {
       setState(() {
         _RefreshController = ScrollController();
+        _controller = AnimationController(vsync: this, duration: _duration);
         _RefreshController.addListener(_refreshScrollListener);
         initNetworkConnectivity();
         apiCallBack(0);
@@ -1059,7 +1299,10 @@ class OverAllDetailedReportState
       if (event == 0) {
         showDialog();
         getOverAllDetailsReportList();
-      } else if (event == 7) {}
+      } else if (event == 1) {
+        showDialog();
+        getOverAllPendingBalanceHistory();
+      }
     });
   }
 
@@ -1069,6 +1312,21 @@ class OverAllDetailedReportState
         setState(() {
           updateInternetConnectivity(false);
           _presenterOrderDetailReportList.getOrderDetailsReportList();
+        });
+      } else {
+        setState(() {
+          updateInternetConnectivity(true);
+        });
+      }
+    });
+  }
+
+  void getOverAllPendingBalanceHistory() {
+    checkConnectivityResponse().then((data) {
+      if (data) {
+        setState(() {
+          updateInternetConnectivity(false);
+          _presenterPendingBalanceHistory.getPendingBalanceHistory();
         });
       } else {
         setState(() {
@@ -1159,5 +1417,36 @@ class OverAllDetailedReportState
   void onTapAlertReceivedCalculationListener(
       ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
+  }
+
+  @override
+  void onFailureResponseGetAllPendingBalanceHistory(String statusCode) {
+    setState(() {
+      dismissLoadingDialog();
+      showToast(statusCode);
+      //showErrorAlert(statusCode);
+    });
+  }
+
+  @override
+  void onSuccessResponseGetAllPendingBalanceHistory(
+      List<PendingBalanceHistoryDetails> pendingBalanceHistoryDetails) {
+    setState(() {
+      dismissLoadingDialog();
+      if (pendingBalanceHistoryDetails.isNotEmpty &&
+          pendingBalanceHistoryDetails != null) {
+        this.pendingBalanceHistoryDetails = pendingBalanceHistoryDetails;
+      }
+    });
+  }
+
+  @override
+  Map parseGetAllPendingBalanceHistoryRequestData() {
+    return {"order_summary_id": getOrderSummaryId()};
+  }
+
+  @override
+  String getOrderSummaryId() {
+    return overAllParamModel.orderSummaryId;
   }
 }

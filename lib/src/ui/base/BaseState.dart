@@ -1105,7 +1105,7 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                               children: <Widget>[
                                 new Container(
                                   child: new Text(
-                                    "${modelUpdatePending.totalCost} kg",
+                                    "₹ ${modelUpdatePending.totalCost}",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: ConstantColor.COLOR_BLACK,
