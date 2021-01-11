@@ -31,24 +31,36 @@ class PresenterUpdateProduct {
         .hitProductUpdateCall(_updateProductListener.parseUpdateProductData());
   }
 
-  void validateUpdateProductData() {
-    if (_updateProductListener.getProductNameUpdate().isEmpty) {
-      _updateProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_name'));
-    } else if (_updateProductListener.getProductCostUpdate().isEmpty) {
-      _updateProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_cost'));
-    } else if (_updateProductListener.getProductCodeUpdate().isEmpty) {
-      _updateProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_code'));
-    } else if (_updateProductListener.getProductStockKgUpdate().isEmpty) {
-      _updateProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_kg'));
-    } else if (_updateProductListener.getProductStatusUpdate().isEmpty) {
-      _updateProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_product_status'));
+  void validateUpdateProductData(bool status) {
+    if (status) {
+      if (_updateProductListener.getProductNameUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_previous_balance_hint'));
+      } else if (_updateProductListener.getProductCostUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_previous_balance'));
+      } else {
+        _updateProductListener.postUpdateProductData();
+      }
     } else {
-      _updateProductListener.postUpdateProductData();
+      if (_updateProductListener.getProductNameUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_name'));
+      } else if (_updateProductListener.getProductCostUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_cost'));
+      } else if (_updateProductListener.getProductCodeUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_code'));
+      } else if (_updateProductListener.getProductStockKgUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_kg'));
+      } else if (_updateProductListener.getProductStatusUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_product_status'));
+      } else {
+        _updateProductListener.postUpdateProductData();
+      }
     }
   }
 }

@@ -9,6 +9,7 @@ class ModalAddProduct {
   bool invisibleOffline = false;
   bool loadingEnableDisable = false;
   double loadingCircularBar = 0.0;
+  bool switchEnabledPreviousBalance = false;
 
   var emailPattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -22,6 +23,12 @@ class ModalAddProduct {
   TextEditingController controllerProductCost = new TextEditingController();
   TextEditingController controllerProductCode = new TextEditingController();
   TextEditingController controllerProductKg = new TextEditingController();
+
+  TextEditingController controllerPreviousBalanceHint = new TextEditingController();
+  TextEditingController controllerPreviousBalance = new TextEditingController();
+
+  final focusPreviousBalanceHint = FocusNode();
+  final focusPreviousBalance = FocusNode();
 
   final focusProductName = FocusNode();
   final focusProductCost = FocusNode();

@@ -32,6 +32,9 @@ dependencies:
   connectivity: ^0.4.8+2
   toast: ^0.1.5
   vibration: ^1.4.0
+  print_bluetooth_thermal: ^0.0.8
+  esc_pos_utils: ^0.4.9
+  bluetooth_thermal_printer: ^0.0.1
   path:
 
 

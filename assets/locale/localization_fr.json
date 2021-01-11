@@ -118,5 +118,11 @@
   "key_are_you_delete": "நீங்கள் நிச்சயமாக நீக்குகிறீர்களா?",
   "key_are_confirm_billing": "நிச்சயமாக பில் சேமிக்கிறீர்களா ?",
   "key_are_pay_pending_money": "கணக்கு முடிக்க நிலுவையில் உள்ள பணத்தை நிச்சயமாக செலுத்துகிறீர்களா ?",
-  "key_enter_received_amount": "பெறப்பட்ட தொகையை உள்ளிடவும்"
+  "key_enter_received_amount": "பெறப்பட்ட தொகையை உள்ளிடவும்",
+  "key_add_previous_balance_switch": "முந்தைய இருப்பு சேர்க்க இயக்கவும்",
+  "previous_balance_hint": "முந்தைய இருப்பு விவரங்கள்",
+  "previous_balance_details": "இருப்பு விவரம்",
+  "key_enter_previous_balance_hint": "முந்தைய இருப்பு விவரங்களை உள்ளிடவும்",
+  "previous_balance": "முந்தைய இருப்பு",
+  "key_enter_previous_balance": "முந்தைய இருப்புத் தொகையை உள்ளிடவும்"
 }

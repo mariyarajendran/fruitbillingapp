@@ -7,6 +7,7 @@ import 'package:IGO/src/ui/bills/billpreviewscreen/BillPreviewScreen.dart';
 import 'package:IGO/src/ui/bills/billpreviewscreen/ModelBalanceReceived.dart';
 import 'package:IGO/src/ui/bills/pendingbalancescreen/PendingBalanceListScreen.dart';
 import 'package:IGO/src/ui/bills/updatependingbalance/ModelUpdatePending.dart';
+import 'package:IGO/src/ui/bluetoothtest/BluetoothDemo.dart';
 import 'package:IGO/src/ui/customer/addcustomerscreen/AddCustomerScreen.dart';
 import 'package:IGO/src/ui/customer/customercrud/CustomerListsCrudScreen.dart';
 import 'package:IGO/src/ui/customer/customerlist/CustomerListsScreen.dart';
@@ -273,6 +274,12 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => PendingBalanceListScreen()),
+        (Route<dynamic> route) => false,
+      );
+    } else if (event == 13) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => BluetoothDemo()),
         (Route<dynamic> route) => false,
       );
     }
