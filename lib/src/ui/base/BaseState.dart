@@ -36,6 +36,7 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
     extends State<T> {
   BuildContext contextLoadingDialog, contextAlertDialog;
   SessionManager _sessionManager;
+
   TextEditingController textEditingControllerKilograms =
       new TextEditingController();
 
@@ -459,22 +460,58 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                       content: SingleChildScrollView(
                         child: ListBody(
                           children: <Widget>[
-                            InkWell(
-                              child: Container(
+                            Container(
+                              width: 35,
+                              height: 35,
+                              child: InkWell(
                                 child: Image.asset(
                                   "assets/images/close.png",
                                   width: 35,
                                   height: 35,
                                 ),
-                                alignment: Alignment.topRight,
+                                onTap: () {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                    dismissKeyboard();
+                                  });
+                                },
                               ),
-                              onTap: () {
-                                setState(() {
-                                  Navigator.pop(context);
-                                  dismissKeyboard();
-                                });
-                              },
+                              alignment: Alignment.topRight,
                             ),
+                            Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: new Row(
+                                  children: [
+                                    Switch(
+                                      value: productDetails.purchaseBoxFlag,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          productDetails.purchaseBoxFlag =
+                                              value;
+                                          clearResetCalculations(
+                                              productDetails);
+                                        });
+                                      },
+                                      activeTrackColor: Colors.lightGreenAccent,
+                                      activeColor: Colors.green,
+                                    ),
+                                    new Expanded(
+                                      child: new Text(
+                                        productDetails.purchaseBoxFlag
+                                            ? AppLocalizations.instance
+                                                .text('key_box')
+                                            : AppLocalizations.instance
+                                                .text('key_kilo'),
+                                        style: TextStyle(
+                                            color: ConstantColor.COLOR_COOL_RED,
+                                            fontFamily:
+                                                ConstantCommon.BASE_FONT,
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  ],
+                                )),
                             Center(
                               child: new Container(
                                 child: new Text(msg,
@@ -535,7 +572,9 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                                 ),
                                 new Container(
                                   child: new Text(
-                                    "₹ ${productDetails.productCost}",
+                                    productDetails.purchaseBoxFlag
+                                        ? "₹ ${productDetails.boxCost}"
+                                        : "₹ ${productDetails.productCost}",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: ConstantColor.COLOR_BLACK,
@@ -553,8 +592,11 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                               children: <Widget>[
                                 new Container(
                                   child: new Text(
-                                    AppLocalizations.instance
-                                        .text('key_enter_kilogram'),
+                                    productDetails.purchaseBoxFlag
+                                        ? AppLocalizations.instance
+                                            .text('key_box')
+                                        : AppLocalizations.instance
+                                            .text('key_enter_kilogram'),
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         color: ConstantColor.COLOR_BLACK,
@@ -588,8 +630,12 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                                     controller: textEditingControllerKilograms,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
-                                        labelText: AppLocalizations.instance
-                                            .text('key_kilograms'),
+                                        labelText:
+                                            productDetails.purchaseBoxFlag
+                                                ? AppLocalizations.instance
+                                                    .text('key_box')
+                                                : AppLocalizations.instance
+                                                    .text('key_kilograms'),
                                         labelStyle: TextStyle(
                                             color: ConstantColor.COLOR_BLACK),
                                         hintStyle: TextStyle(
@@ -623,11 +669,19 @@ abstract class BaseStateStatefulState<T extends StatefulWidget>
                                           clearResetCalculations(
                                               productDetails);
                                         } else {
-                                          productDetails.totalCost =
-                                              int.parse(value) *
-                                                  productDetails.productCost;
-                                          productDetails.totalKiloGrams =
-                                              int.parse(value);
+                                          if (productDetails.purchaseBoxFlag) {
+                                            productDetails.totalCost =
+                                                int.parse(value) *
+                                                    productDetails.boxCost;
+                                            productDetails.totalKiloGrams =
+                                                int.parse(value);
+                                          } else {
+                                            productDetails.totalCost =
+                                                int.parse(value) *
+                                                    productDetails.productCost;
+                                            productDetails.totalKiloGrams =
+                                                int.parse(value);
+                                          }
                                         }
                                       });
                                     },

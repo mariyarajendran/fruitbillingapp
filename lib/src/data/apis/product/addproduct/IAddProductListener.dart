@@ -3,6 +3,8 @@ abstract class IAddProductListener {
 
   String getProductPrice();
 
+  String getBoxPrice();
+
   String getProductCode();
 
   void postAddProductData();

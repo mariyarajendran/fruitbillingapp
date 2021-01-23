@@ -49,7 +49,10 @@ class PresenterUpdateProduct {
       } else if (_updateProductListener.getProductCostUpdate().isEmpty) {
         _updateProductListener.errorValidationMgs(
             AppLocalizations.instance.text('key_enter_product_cost'));
-      } else if (_updateProductListener.getProductCodeUpdate().isEmpty) {
+      } else if (_updateProductListener.getBoxCostUpdate().isEmpty) {
+        _updateProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_box_cost'));
+      }else if (_updateProductListener.getProductCodeUpdate().isEmpty) {
         _updateProductListener.errorValidationMgs(
             AppLocalizations.instance.text('key_enter_product_code'));
       } else if (_updateProductListener.getProductStockKgUpdate().isEmpty) {

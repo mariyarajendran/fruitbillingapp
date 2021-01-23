@@ -38,6 +38,7 @@
   "key_stock_status": "ஸ்டாக் நிலை",
   "key_product_code": "பொருளின் குறியீடு",
   "key_product_cost": "பொருளின் விலை",
+  "key_box_cost": "பெட்டி விலை",
   "key_product_stock": "பொருளின் பங்கு",
   "key_user_product_list": "பொருட்கள்",
   "key_dismiss": "நிராகரி",
@@ -73,6 +74,7 @@
   "key_total_costs": "மொத்த விலை",
   "key_enter_product_name": "பொருளின் பெயரை உள்ளிடவும் *",
   "key_enter_product_cost": "பொருளின் விலையை உள்ளிடவும் *",
+  "key_enter_box_cost": "பெட்டி விலையை உள்ளிடவும் *",
   "key_enter_product_code": "பொருளின் குறியீட்டை உள்ளிடவும் *",
   "key_enter_product_kg": "பொருளின் கிலோ உள்ளிடவும் *",
   "key_save_product": "சேமி",
@@ -124,5 +126,8 @@
   "previous_balance_details": "இருப்பு விவரம்",
   "key_enter_previous_balance_hint": "முந்தைய இருப்பு விவரங்களை உள்ளிடவும்",
   "previous_balance": "முந்தைய இருப்பு",
-  "key_enter_previous_balance": "முந்தைய இருப்புத் தொகையை உள்ளிடவும்"
+  "key_enter_previous_balance": "முந்தைய இருப்புத் தொகையை உள்ளிடவும்",
+  "key_kilo": "கிலோ",
+  "key_box": "பெட்டி",
+  "key_box_price": "பெட்டி விலை"
 }

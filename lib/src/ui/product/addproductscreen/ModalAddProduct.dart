@@ -21,6 +21,7 @@ class ModalAddProduct {
 
   TextEditingController controllerProductName = new TextEditingController();
   TextEditingController controllerProductCost = new TextEditingController();
+  TextEditingController controllerBoxCost = new TextEditingController();
   TextEditingController controllerProductCode = new TextEditingController();
   TextEditingController controllerProductKg = new TextEditingController();
 
@@ -32,6 +33,7 @@ class ModalAddProduct {
 
   final focusProductName = FocusNode();
   final focusProductCost = FocusNode();
+  final focusBoxCost = FocusNode();
   final focusProductCode = FocusNode();
   final focusProductKg = FocusNode();
 

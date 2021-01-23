@@ -234,7 +234,7 @@ class ProductListsScreenState
                                                   ? AppLocalizations.instance
                                                       .text('previous_balance')
                                                   : AppLocalizations.instance
-                                                      .text('key_product_code'),
+                                                      .text('key_product_cost'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -280,7 +280,9 @@ class ProductListsScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              "₹ ${item.productCost}",
+                                              item.purchaseBoxFlag
+                                                  ? "₹ ${item.boxCost}"
+                                                  : "₹ ${item.productCost}",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                   color:
@@ -367,7 +369,9 @@ class ProductListsScreenState
                                                 child: new Container(
                                                   child: FlatButton(
                                                     child: Text(
-                                                        "${item.totalKiloGrams} Kg",
+                                                        item.purchaseBoxFlag
+                                                            ? "${item.totalKiloGrams} Box"
+                                                            : "${item.totalKiloGrams} Kg",
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(

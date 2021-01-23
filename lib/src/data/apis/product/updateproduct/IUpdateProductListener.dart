@@ -7,6 +7,8 @@ abstract class IUpdateProductListener {
 
   String getProductCostUpdate();
 
+  String getBoxCostUpdate();
+
   String getProductStockKgUpdate();
 
   String getProductCodeUpdate();
