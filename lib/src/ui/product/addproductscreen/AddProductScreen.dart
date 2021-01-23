@@ -87,17 +87,29 @@ class AddProductScreenState
 
   void setEditDetails() {
     setState(() {
-      _modalAddProduct.controllerProductName.text =
-          productDetailsNavigate.productName;
-      if (productDetailsNavigate.productCost != null) {
-        _modalAddProduct.controllerProductCost.text =
-            cutNull(productDetailsNavigate.productCost.toString());
-      }
-      _modalAddProduct.controllerProductCode.text =
-          productDetailsNavigate.productCode;
-      if (productDetailsNavigate.productStockKg != null) {
-        _modalAddProduct.controllerProductKg.text =
-            cutNull(productDetailsNavigate.productStockKg.toString());
+      if (productDetailsNavigate.productPreviousBalanceFlag) {
+        _modalAddProduct.switchEnabledPreviousBalance =
+            productDetailsNavigate.productPreviousBalanceFlag;
+        _modalAddProduct.controllerPreviousBalanceHint.text =
+            productDetailsNavigate.productName;
+
+        if (productDetailsNavigate.productCost != null) {
+          _modalAddProduct.controllerPreviousBalance.text =
+              cutNull(productDetailsNavigate.productCost.toString());
+        }
+      } else {
+        _modalAddProduct.controllerProductName.text =
+            productDetailsNavigate.productName;
+        if (productDetailsNavigate.productCost != null) {
+          _modalAddProduct.controllerProductCost.text =
+              cutNull(productDetailsNavigate.productCost.toString());
+        }
+        _modalAddProduct.controllerProductCode.text =
+            productDetailsNavigate.productCode;
+        if (productDetailsNavigate.productStockKg != null) {
+          _modalAddProduct.controllerProductKg.text =
+              cutNull(productDetailsNavigate.productStockKg.toString());
+        }
       }
     });
   }
@@ -141,6 +153,42 @@ class AddProductScreenState
           textCapitalization: TextCapitalization.sentences,
         ));
 
+    Container containerPreviousBalanceDescription = new Container(
+        margin: EdgeInsets.only(top: 40),
+        padding: EdgeInsets.only(left: 30, right: 30, top: 15),
+        child: new TextFormField(
+          style: TextStyle(
+              color: ConstantColor.COLOR_DARK_GRAY,
+              fontSize: 16,
+              fontFamily: ConstantCommon.BASE_FONT_REGULAR),
+          enableInteractiveSelection: true,
+          textInputAction: TextInputAction.next,
+          controller: _modalAddProduct.controllerPreviousBalanceHint,
+          keyboardType: TextInputType.text,
+          focusNode: _modalAddProduct.focusPreviousBalanceHint,
+          decoration: InputDecoration(
+              labelText:
+                  AppLocalizations.instance.text('previous_balance_hint'),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
+                  gapPadding: 10.0,
+                  borderRadius: BorderRadius.circular(1.0)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(1.0),
+                  borderSide: BorderSide(
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
+                  gapPadding: 10.0),
+              contentPadding: EdgeInsets.all(20.0)),
+          onFieldSubmitted: (v) {
+            fieldFocusChange(context, _modalAddProduct.focusPreviousBalanceHint,
+                _modalAddProduct.focusPreviousBalance);
+          },
+          textCapitalization: TextCapitalization.sentences,
+        ));
+
     Container containerProductCost = new Container(
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.only(left: 30, right: 30, top: 15),
@@ -172,6 +220,40 @@ class AddProductScreenState
           onFieldSubmitted: (v) {
             fieldFocusChange(context, _modalAddProduct.focusProductCost,
                 _modalAddProduct.focusProductCode);
+          },
+          textCapitalization: TextCapitalization.sentences,
+        ));
+
+    Container containerPreviousBalance = new Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(left: 30, right: 30, top: 15),
+        child: new TextFormField(
+          style: TextStyle(
+              color: ConstantColor.COLOR_DARK_GRAY,
+              fontSize: 16,
+              fontFamily: ConstantCommon.BASE_FONT_REGULAR),
+          enableInteractiveSelection: true,
+          textInputAction: TextInputAction.done,
+          controller: _modalAddProduct.controllerPreviousBalance,
+          keyboardType: TextInputType.number,
+          focusNode: _modalAddProduct.focusPreviousBalance,
+          decoration: InputDecoration(
+              labelText: AppLocalizations.instance.text('previous_balance'),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
+                  gapPadding: 10.0,
+                  borderRadius: BorderRadius.circular(1.0)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(1.0),
+                  borderSide: BorderSide(
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
+                  gapPadding: 10.0),
+              contentPadding: EdgeInsets.all(20.0)),
+          onFieldSubmitted: (v) {
+            _modalAddProduct.focusPreviousBalance.unfocus();
           },
           textCapitalization: TextCapitalization.sentences,
         ));
@@ -245,6 +327,36 @@ class AddProductScreenState
           textCapitalization: TextCapitalization.sentences,
         ));
 
+    Container containerSwitchToPreviousBalanceEntry = new Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(left: 30, right: 30, top: 15),
+        child: new Row(
+          children: [
+            Switch(
+              value: _modalAddProduct.switchEnabledPreviousBalance,
+              onChanged: (value) {
+                setState(() {
+                  clearAllEditTextDatas();
+                  _modalAddProduct.switchEnabledPreviousBalance = value;
+                });
+              },
+              activeTrackColor: Colors.lightGreenAccent,
+              activeColor: Colors.green,
+            ),
+            new Expanded(
+              child: new Text(
+                AppLocalizations.instance
+                    .text('key_add_previous_balance_switch'),
+                style: TextStyle(
+                    color: ConstantColor.COLOR_COOL_RED,
+                    fontFamily: ConstantCommon.BASE_FONT,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
+        ));
+
     Container containerSaveProductButton = new Container(
       margin: EdgeInsets.only(top: _appConfig.rHP(5)),
       child: new SizedBox(
@@ -314,7 +426,10 @@ class AddProductScreenState
           new Expanded(
             flex: 4,
             child: Container(
-              child: Text(AppLocalizations.instance.text('key_product_add'),
+              child: Text(
+                  _modalAddProduct.switchEnabledPreviousBalance
+                      ? AppLocalizations.instance.text('previous_balance')
+                      : AppLocalizations.instance.text('key_product_add'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: ConstantColor.COLOR_WHITE,
@@ -342,17 +457,27 @@ class AddProductScreenState
             ? SingleChildScrollView(
                 child: AbsorbPointer(
                   child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        containerProductName,
-                        containerProductCost,
-                        containerProductCode,
-                        containerProductKg,
-                        containerSaveProductButton,
-                        containerCircularLoader,
-                      ],
-                    ),
-                  ),
+                      child: _modalAddProduct.switchEnabledPreviousBalance
+                          ? Column(
+                              children: <Widget>[
+                                containerPreviousBalanceDescription,
+                                containerPreviousBalance,
+                                containerSwitchToPreviousBalanceEntry,
+                                containerSaveProductButton,
+                                containerCircularLoader
+                              ],
+                            )
+                          : new Column(
+                              children: [
+                                containerProductName,
+                                containerProductCost,
+                                containerProductCode,
+                                containerProductKg,
+                                containerSwitchToPreviousBalanceEntry,
+                                containerSaveProductButton,
+                                containerCircularLoader
+                              ],
+                            )),
                   absorbing: _modalAddProduct.loadingEnableDisable,
                 ),
               )
@@ -424,7 +549,8 @@ class AddProductScreenState
   void apiCallBacks(int event) {
     if (event == 1) {
       setState(() {
-        _presenterAddProduct.validateAddProductData();
+        _presenterAddProduct.validateAddProductData(
+            _modalAddProduct.switchEnabledPreviousBalance);
       });
     } else if (event == 2) {
       setState(() {
@@ -433,7 +559,8 @@ class AddProductScreenState
       });
     } else if (event == 3) {
       setState(() {
-        _presenterUpdateProduct.validateUpdateProductData();
+        _presenterUpdateProduct.validateUpdateProductData(
+            _modalAddProduct.switchEnabledPreviousBalance);
       });
     } else if (event == 4) {
       setState(() {
@@ -470,12 +597,16 @@ class AddProductScreenState
 
   @override
   String getProductName() {
-    return _modalAddProduct.controllerProductName.text.trim().toString();
+    return _modalAddProduct.switchEnabledPreviousBalance
+        ? _modalAddProduct.controllerPreviousBalanceHint.text.toString()
+        : _modalAddProduct.controllerProductName.text.trim().toString();
   }
 
   @override
   String getProductPrice() {
-    return _modalAddProduct.controllerProductCost.text.trim().toString();
+    return _modalAddProduct.switchEnabledPreviousBalance
+        ? _modalAddProduct.controllerPreviousBalance.text.toString()
+        : _modalAddProduct.controllerProductCost.text.trim().toString();
   }
 
   @override
@@ -525,6 +656,7 @@ class AddProductScreenState
       "product_cost": getProductPrice().trim(),
       "product_stock_kg": getProductKg().trim(),
       "product_code": getProductCode().trim(),
+      "product_previous_balance_flag": getProductPreviousBalanceFlag(),
     };
   }
 
@@ -535,6 +667,8 @@ class AddProductScreenState
       _modalAddProduct.controllerProductCode.text = "";
       _modalAddProduct.controllerProductCost.text = "";
       _modalAddProduct.controllerProductKg.text = "";
+      _modalAddProduct.controllerPreviousBalance.text = "";
+      _modalAddProduct.controllerPreviousBalanceHint.text = "";
     });
   }
 
@@ -545,7 +679,9 @@ class AddProductScreenState
 
   @override
   String getProductCostUpdate() {
-    return _modalAddProduct.controllerProductCost.text;
+    return _modalAddProduct.switchEnabledPreviousBalance
+        ? _modalAddProduct.controllerPreviousBalance.text.toString()
+        : _modalAddProduct.controllerProductCost.text.trim().toString();
   }
 
   @override
@@ -555,7 +691,9 @@ class AddProductScreenState
 
   @override
   String getProductNameUpdate() {
-    return _modalAddProduct.controllerProductName.text;
+    return _modalAddProduct.switchEnabledPreviousBalance
+        ? _modalAddProduct.controllerPreviousBalanceHint.text.toString()
+        : _modalAddProduct.controllerProductName.text.trim().toString();
   }
 
   @override
@@ -594,7 +732,8 @@ class AddProductScreenState
       "product_cost": getProductCostUpdate(),
       "product_stock_kg": getProductStockKgUpdate(),
       "product_code": getProductCodeUpdate(),
-      "product_status": getProductStatusUpdate()
+      "product_status": getProductStatusUpdate(),
+      "product_previous_balance_flag": getProductPreviousBalanceFlag(),
     };
   }
 
@@ -603,5 +742,10 @@ class AddProductScreenState
     setState(() {
       apiCallBacks(4);
     });
+  }
+
+  @override
+  String getProductPreviousBalanceFlag() {
+    return _modalAddProduct.switchEnabledPreviousBalance ? "true" : "false";
   }
 }

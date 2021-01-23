@@ -131,7 +131,9 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                       height: 35,
                                                     ),
                                                     margin: EdgeInsets.only(
-                                                        top: appConfig.rHP(1)),
+                                                        top: appConfig.rHP(1),
+                                                        bottom:
+                                                            appConfig.rHP(2)),
                                                     alignment:
                                                         Alignment.topRight,
                                                   ),
@@ -153,10 +155,19 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                       child: new Align(
                                                         child: new Container(
                                                           child: new Text(
-                                                            AppLocalizations
-                                                                .instance
-                                                                .text(
-                                                                    'key_product_name'),
+                                                            BaseSingleton
+                                                                    .shared
+                                                                    .billingProductList[
+                                                                        index]
+                                                                    .productPreviousBalanceFlag
+                                                                ? AppLocalizations
+                                                                    .instance
+                                                                    .text(
+                                                                        'previous_balance_details')
+                                                                : AppLocalizations
+                                                                    .instance
+                                                                    .text(
+                                                                        'key_product_name'),
                                                             textAlign:
                                                                 TextAlign.left,
                                                             style: TextStyle(
@@ -180,10 +191,19 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                       child: Align(
                                                         child: new Container(
                                                           child: new Text(
-                                                            AppLocalizations
-                                                                .instance
-                                                                .text(
-                                                                    'key_product_cost'),
+                                                            BaseSingleton
+                                                                    .shared
+                                                                    .billingProductList[
+                                                                        index]
+                                                                    .productPreviousBalanceFlag
+                                                                ? AppLocalizations
+                                                                    .instance
+                                                                    .text(
+                                                                        'previous_balance')
+                                                                : AppLocalizations
+                                                                    .instance
+                                                                    .text(
+                                                                        'key_product_code'),
                                                             textAlign:
                                                                 TextAlign.left,
                                                             style: TextStyle(
@@ -232,11 +252,11 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                                     FontWeight
                                                                         .w400),
                                                           ),
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  top: appConfig
-                                                                      .rHP(
-                                                                          1.5)),
+                                                          margin: EdgeInsets.only(
+                                                              top: appConfig
+                                                                  .rHP(1.5),
+                                                              bottom: appConfig
+                                                                  .rHP(2)),
                                                         ),
                                                         alignment: Alignment
                                                             .bottomLeft,
@@ -265,7 +285,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                               top: appConfig
                                                                   .rHP(1.5),
                                                               bottom: appConfig
-                                                                  .rHP(1.5)),
+                                                                  .rHP(2)),
                                                         ),
                                                         alignment: Alignment
                                                             .bottomRight,
@@ -274,170 +294,192 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                     ),
                                                   ],
                                                 ),
-                                                new Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: <Widget>[
-                                                    new Expanded(
-                                                      child: new Align(
-                                                        child: new Container(
-                                                          child: new Text(
-                                                            AppLocalizations
-                                                                .instance
-                                                                .text(
-                                                                    'key_edit_kg'),
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: TextStyle(
-                                                                color: ConstantColor
-                                                                    .COLOR_BLACK,
-                                                                fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                BaseSingleton
+                                                        .shared
+                                                        .billingProductList[
+                                                            index]
+                                                        .productPreviousBalanceFlag
+                                                    ? new Container()
+                                                    : new Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: <Widget>[
+                                                          new Expanded(
+                                                            child: new Align(
+                                                              child:
+                                                                  new Container(
+                                                                child: new Text(
+                                                                  AppLocalizations
+                                                                      .instance
+                                                                      .text(
+                                                                          'key_edit_kg'),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      color: ConstantColor
+                                                                          .COLOR_BLACK,
+                                                                      fontFamily:
+                                                                          ConstantCommon
+                                                                              .BASE_FONT,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                ),
+                                                                margin: EdgeInsets.only(
+                                                                    top: appConfig
+                                                                        .rHP(
+                                                                            3)),
+                                                              ),
+                                                              alignment: Alignment
+                                                                  .bottomLeft,
+                                                            ),
+                                                            flex: 1,
                                                           ),
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  top: appConfig
-                                                                      .rHP(3)),
-                                                        ),
-                                                        alignment: Alignment
-                                                            .bottomLeft,
-                                                      ),
-                                                      flex: 1,
-                                                    ),
-                                                    new Expanded(
-                                                      child: Align(
-                                                        child: new Container(
-                                                          child: new Text(
-                                                            AppLocalizations
-                                                                .instance
-                                                                .text(
-                                                                    'key_total_cost'),
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: TextStyle(
-                                                                color: ConstantColor
-                                                                    .COLOR_BLACK,
-                                                                fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                          new Expanded(
+                                                            child: Align(
+                                                              child:
+                                                                  new Container(
+                                                                child: new Text(
+                                                                  AppLocalizations
+                                                                      .instance
+                                                                      .text(
+                                                                          'key_total_cost'),
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      color: ConstantColor
+                                                                          .COLOR_BLACK,
+                                                                      fontFamily:
+                                                                          ConstantCommon
+                                                                              .BASE_FONT,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                ),
+                                                                margin: EdgeInsets.only(
+                                                                    top: appConfig
+                                                                        .rHP(
+                                                                            3)),
+                                                              ),
+                                                              alignment: Alignment
+                                                                  .bottomRight,
+                                                            ),
+                                                            flex: 1,
                                                           ),
-                                                          margin:
-                                                              EdgeInsets.only(
-                                                                  top: appConfig
-                                                                      .rHP(3)),
-                                                        ),
-                                                        alignment: Alignment
-                                                            .bottomRight,
+                                                        ],
                                                       ),
-                                                      flex: 1,
-                                                    ),
-                                                  ],
-                                                ),
-                                                new Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    new Expanded(
-                                                      child: new Align(
-                                                        child: new Container(
-                                                          child: FlatButton(
-                                                            child: Text(
-                                                                "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
-                                                                style: TextStyle(
-                                                                    color: ConstantColor
-                                                                        .COLOR_WHITE,
-                                                                    fontFamily:
-                                                                        ConstantCommon
-                                                                            .BASE_FONT,
-                                                                    fontSize:
-                                                                        17,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400)),
-                                                            color: ConstantColor
-                                                                .COLOR_RED,
-                                                            textColor:
-                                                                Colors.white,
-                                                            onPressed: () {
-                                                              setState(() {
-                                                                showProductCalculationAlertDialog(
-                                                                    BaseSingleton
-                                                                        .shared
-                                                                        .billingProductList[
-                                                                            index]
-                                                                        .productName,
-                                                                    AppLocalizations
-                                                                        .instance
-                                                                        .text(
-                                                                            'key_done'),
-                                                                    AppLocalizations
-                                                                        .instance
-                                                                        .text(
-                                                                            'key_clear'),
-                                                                    1,
-                                                                    BaseSingleton
-                                                                        .shared
-                                                                        .billingProductList[index],
-                                                                    this);
-                                                              });
-                                                            },
+                                                BaseSingleton
+                                                        .shared
+                                                        .billingProductList[
+                                                            index]
+                                                        .productPreviousBalanceFlag
+                                                    ? new Container()
+                                                    : new Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          new Expanded(
+                                                            child: new Align(
+                                                              child:
+                                                                  new Container(
+                                                                child:
+                                                                    FlatButton(
+                                                                  child: Text(
+                                                                      "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          color: ConstantColor
+                                                                              .COLOR_WHITE,
+                                                                          fontFamily: ConstantCommon
+                                                                              .BASE_FONT,
+                                                                          fontSize:
+                                                                              17,
+                                                                          fontWeight:
+                                                                              FontWeight.w400)),
+                                                                  color: ConstantColor
+                                                                      .COLOR_RED,
+                                                                  textColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      showProductCalculationAlertDialog(
+                                                                          BaseSingleton
+                                                                              .shared
+                                                                              .billingProductList[
+                                                                                  index]
+                                                                              .productName,
+                                                                          AppLocalizations.instance.text(
+                                                                              'key_done'),
+                                                                          AppLocalizations.instance.text(
+                                                                              'key_clear'),
+                                                                          1,
+                                                                          BaseSingleton
+                                                                              .shared
+                                                                              .billingProductList[index],
+                                                                          this);
+                                                                    });
+                                                                  },
+                                                                ),
+                                                                margin: EdgeInsets.only(
+                                                                    top: appConfig
+                                                                        .rHP(3),
+                                                                    bottom: appConfig
+                                                                        .rHP(
+                                                                            3)),
+                                                              ),
+                                                              alignment: Alignment
+                                                                  .bottomLeft,
+                                                            ),
+                                                            flex: 1,
                                                           ),
-                                                          margin: EdgeInsets.only(
-                                                              top: appConfig
-                                                                  .rHP(3),
-                                                              bottom: appConfig
-                                                                  .rHP(3)),
-                                                        ),
-                                                        alignment: Alignment
-                                                            .bottomLeft,
-                                                      ),
-                                                      flex: 1,
-                                                    ),
-                                                    new Expanded(
-                                                      child: Align(
-                                                        child: new Container(
-                                                          child: new Text(
-                                                            "₹ ${BaseSingleton.shared.billingProductList[index].totalCost}",
-                                                            textAlign:
-                                                                TextAlign.left,
-                                                            style: TextStyle(
-                                                                color: ConstantColor
-                                                                    .COLOR_BLACK,
-                                                                fontFamily:
-                                                                    ConstantCommon
-                                                                        .BASE_FONT_REGULAR,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w400),
+                                                          new Expanded(
+                                                            child: Align(
+                                                              child:
+                                                                  new Container(
+                                                                child: new Text(
+                                                                  "₹ ${BaseSingleton.shared.billingProductList[index].totalCost}",
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      color: ConstantColor
+                                                                          .COLOR_BLACK,
+                                                                      fontFamily:
+                                                                          ConstantCommon
+                                                                              .BASE_FONT_REGULAR,
+                                                                      fontSize:
+                                                                          14,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                ),
+                                                                margin: EdgeInsets.only(
+                                                                    top: appConfig
+                                                                        .rHP(3),
+                                                                    bottom: appConfig
+                                                                        .rHP(
+                                                                            3)),
+                                                              ),
+                                                              alignment: Alignment
+                                                                  .bottomRight,
+                                                            ),
+                                                            flex: 1,
                                                           ),
-                                                          margin: EdgeInsets.only(
-                                                              top: appConfig
-                                                                  .rHP(3),
-                                                              bottom: appConfig
-                                                                  .rHP(3)),
-                                                        ),
-                                                        alignment: Alignment
-                                                            .bottomRight,
+                                                        ],
                                                       ),
-                                                      flex: 1,
-                                                    ),
-                                                  ],
-                                                ),
                                               ],
                                             ),
                                           ),

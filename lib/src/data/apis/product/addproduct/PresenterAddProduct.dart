@@ -27,21 +27,33 @@ class PresenterAddProduct {
         .hitProductAddCall(_addProductListener.parseAddProductData());
   }
 
-  void validateAddProductData() {
-    if (_addProductListener.getProductName().isEmpty) {
-      _addProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_name'));
-    } else if (_addProductListener.getProductPrice().isEmpty) {
-      _addProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_cost'));
-    } else if (_addProductListener.getProductCode().isEmpty) {
-      _addProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_code'));
-    } else if (_addProductListener.getProductKg().isEmpty) {
-      _addProductListener.errorValidationMgs(
-          AppLocalizations.instance.text('key_enter_product_kg'));
+  void validateAddProductData(bool status) {
+    if (status) {
+      if (_addProductListener.getProductName().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_previous_balance_hint'));
+      } else if (_addProductListener.getProductPrice().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_previous_balance'));
+      } else {
+        _addProductListener.postAddProductData();
+      }
     } else {
-      _addProductListener.postAddProductData();
+      if (_addProductListener.getProductName().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_name'));
+      } else if (_addProductListener.getProductPrice().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_cost'));
+      } else if (_addProductListener.getProductCode().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_code'));
+      } else if (_addProductListener.getProductKg().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_product_kg'));
+      } else {
+        _addProductListener.postAddProductData();
+      }
     }
   }
 }

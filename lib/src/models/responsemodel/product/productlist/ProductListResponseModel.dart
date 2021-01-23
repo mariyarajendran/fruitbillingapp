@@ -25,6 +25,7 @@ class ProductDetails {
   String productDate;
   int productStockKg;
   String productCode;
+  bool productPreviousBalanceFlag;
   bool isExpanded = false;
   int totalCost = 0;
   int totalKiloGrams = 0;
@@ -37,6 +38,7 @@ class ProductDetails {
       this.productDate,
       this.productStockKg,
       this.productCost,
+      this.productPreviousBalanceFlag,
       this.isExpanded,
       this.totalCost,
       this.textEditingController});
@@ -45,6 +47,8 @@ class ProductDetails {
       : productId = map['product_id'] ?? '',
         productName = map['product_name'] ?? '',
         productCost = map['product_cost'] ?? 0,
+        productPreviousBalanceFlag =
+            map['product_previous_balance_flag'] ?? false,
         productDate = map['product_date'] ?? '',
         productStockKg = map['product_stock_kg'] ?? 0,
         productCode = map['product_code'] ?? '';

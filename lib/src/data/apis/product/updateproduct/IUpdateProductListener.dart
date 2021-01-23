@@ -13,13 +13,16 @@ abstract class IUpdateProductListener {
 
   String getProductStatusUpdate();
 
+  String getProductPreviousBalanceFlag();
+
   Map parseUpdateProductData();
 
   void postUpdateProductData();
 
   void errorValidationMgs(String error);
 
-  void onSuccessResponseUpdateProduct(UpdateProductResponseModel updateProductResponseModel);
+  void onSuccessResponseUpdateProduct(
+      UpdateProductResponseModel updateProductResponseModel);
 
   void onFailureMessageUpdateProduct(String error);
 }

@@ -169,7 +169,7 @@ class ProductCrudScreenState
                         alignment: new FractionalOffset(0.0, 0.0),
                         decoration: new BoxDecoration(
                           border: new Border.all(
-                            color: item.productStockKg <= 0
+                            color: item.productPreviousBalanceFlag
                                 ? ConstantColor.COLOR_BLOCKED
                                 : ConstantColor.COLOR_UNBLOCKED,
                             width:
@@ -207,8 +207,11 @@ class ProductCrudScreenState
                                         child: new Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_name'),
+                                              item.productPreviousBalanceFlag
+                                                  ? AppLocalizations.instance.text(
+                                                      'previous_balance_details')
+                                                  : AppLocalizations.instance
+                                                      .text('key_product_name'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -227,8 +230,11 @@ class ProductCrudScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_code'),
+                                              item.productPreviousBalanceFlag
+                                                  ? AppLocalizations.instance
+                                                      .text('previous_balance')
+                                                  : AppLocalizations.instance
+                                                      .text('key_product_code'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -274,7 +280,9 @@ class ProductCrudScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              "${item.productCode}",
+                                              item.productPreviousBalanceFlag
+                                                  ? "₹ ${item.productCost}"
+                                                  : "${item.productCode}",
                                               textAlign: TextAlign.right,
                                               style: TextStyle(
                                                   color:
@@ -293,106 +301,122 @@ class ProductCrudScreenState
                                       ),
                                     ],
                                   ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_stock'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
+                                  item.productPreviousBalanceFlag
+                                      ? new Container()
+                                      : new Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: new Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    AppLocalizations.instance
+                                                        .text(
+                                                            'key_product_stock'),
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily:
+                                                            ConstantCommon
+                                                                .BASE_FONT,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(3.5)),
+                                                ),
+                                                alignment: Alignment.bottomLeft,
+                                              ),
+                                              flex: 1,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3.5)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
+                                            new Expanded(
+                                              child: Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    AppLocalizations.instance
+                                                        .text(
+                                                            'key_product_cost'),
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily:
+                                                            ConstantCommon
+                                                                .BASE_FONT,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(3.5)),
+                                                ),
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                              ),
+                                              flex: 1,
+                                            )
+                                          ],
                                         ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_cost'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
+                                  item.productPreviousBalanceFlag
+                                      ? new Container()
+                                      : new Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: new Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    "${item.productStockKg} kg",
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily: ConstantCommon
+                                                            .BASE_FONT_REGULAR,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(1.5),
+                                                      bottom:
+                                                          appConfig.rHP(1.5)),
+                                                ),
+                                                alignment: Alignment.bottomLeft,
+                                              ),
+                                              flex: 1,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3.5)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      )
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              "${item.productStockKg} kg",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
+                                            new Expanded(
+                                              child: Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    "₹ ${item.productCost}",
+                                                    textAlign: TextAlign.right,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily: ConstantCommon
+                                                            .BASE_FONT_REGULAR,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(1.5),
+                                                      bottom:
+                                                          appConfig.rHP(1.5)),
+                                                ),
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                              ),
+                                              flex: 1,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(1.5),
-                                                bottom: appConfig.rHP(1.5)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
+                                          ],
                                         ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              "₹ ${item.productCost}",
-                                              textAlign: TextAlign.right,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(1.5),
-                                                bottom: appConfig.rHP(1.5)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                    ],
-                                  ),
                                   new Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -1040,7 +1064,8 @@ class ProductCrudScreenState
       "product_cost": getProductCostUpdate(),
       "product_stock_kg": getProductStockKgUpdate(),
       "product_code": getProductCodeUpdate(),
-      "product_status": getProductStatusUpdate()
+      "product_status": getProductStatusUpdate(),
+      "product_previous_balance_flag": getProductPreviousBalanceFlag()
     };
   }
 
@@ -1053,5 +1078,10 @@ class ProductCrudScreenState
   void onTapAlertReceivedCalculationListener(
       ModelBalanceReceived modelBalanceReceived) {
     // TODO: implement onTapAlertReceivedCalculationListener
+  }
+
+  @override
+  String getProductPreviousBalanceFlag() {
+    return "";
   }
 }

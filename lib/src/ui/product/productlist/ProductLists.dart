@@ -169,7 +169,7 @@ class ProductListsScreenState
                         alignment: new FractionalOffset(0.0, 0.0),
                         decoration: new BoxDecoration(
                           border: new Border.all(
-                            color: item.productStockKg <= 0
+                            color: item.productPreviousBalanceFlag
                                 ? ConstantColor.COLOR_BLOCKED
                                 : ConstantColor.COLOR_UNBLOCKED,
                             width:
@@ -207,8 +207,11 @@ class ProductListsScreenState
                                         child: new Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_name'),
+                                              item.productPreviousBalanceFlag
+                                                  ? AppLocalizations.instance.text(
+                                                      'previous_balance_details')
+                                                  : AppLocalizations.instance
+                                                      .text('key_product_name'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -227,8 +230,11 @@ class ProductListsScreenState
                                         child: Align(
                                           child: new Container(
                                             child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_product_cost'),
+                                              item.productPreviousBalanceFlag
+                                                  ? AppLocalizations.instance
+                                                      .text('previous_balance')
+                                                  : AppLocalizations.instance
+                                                      .text('key_product_code'),
                                               textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   color:
@@ -293,123 +299,142 @@ class ProductListsScreenState
                                       ),
                                     ],
                                   ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_select_kg'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
+                                  item.productPreviousBalanceFlag
+                                      ? new Container()
+                                      : new Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            new Expanded(
+                                              child: new Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    AppLocalizations.instance
+                                                        .text('key_select_kg'),
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily:
+                                                            ConstantCommon
+                                                                .BASE_FONT,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(3)),
+                                                ),
+                                                alignment: Alignment.bottomLeft,
+                                              ),
+                                              flex: 1,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
+                                            new Expanded(
+                                              child: Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    AppLocalizations.instance
+                                                        .text('key_total_cost'),
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily:
+                                                            ConstantCommon
+                                                                .BASE_FONT,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(3)),
+                                                ),
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                              ),
+                                              flex: 1,
+                                            )
+                                          ],
                                         ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              AppLocalizations.instance
-                                                  .text('key_total_cost'),
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily:
-                                                      ConstantCommon.BASE_FONT,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
+                                  item.productPreviousBalanceFlag
+                                      ? new Container()
+                                      : new Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            new Expanded(
+                                              child: new Align(
+                                                child: new Container(
+                                                  child: FlatButton(
+                                                    child: Text(
+                                                        "${item.totalKiloGrams} Kg",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: ConstantColor
+                                                                .COLOR_WHITE,
+                                                            fontFamily:
+                                                                ConstantCommon
+                                                                    .BASE_FONT,
+                                                            fontSize: 17,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w400)),
+                                                    color:
+                                                        ConstantColor.COLOR_RED,
+                                                    textColor: Colors.white,
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        showProductCalculationAlertDialog(
+                                                            item.productName,
+                                                            AppLocalizations
+                                                                .instance
+                                                                .text(
+                                                                    'key_done'),
+                                                            AppLocalizations
+                                                                .instance
+                                                                .text(
+                                                                    'key_clear'),
+                                                            1,
+                                                            item,
+                                                            this);
+                                                      });
+                                                    },
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(3),
+                                                      bottom: appConfig.rHP(3)),
+                                                ),
+                                                alignment: Alignment.bottomLeft,
+                                              ),
+                                              flex: 1,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      )
-                                    ],
-                                  ),
-                                  new Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      new Expanded(
-                                        child: new Align(
-                                          child: new Container(
-                                            child: FlatButton(
-                                              child: Text(
-                                                  "${item.totalKiloGrams} Kg",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: ConstantColor
-                                                          .COLOR_WHITE,
-                                                      fontFamily: ConstantCommon
-                                                          .BASE_FONT,
-                                                      fontSize: 17,
-                                                      fontWeight:
-                                                          FontWeight.w400)),
-                                              color: ConstantColor.COLOR_RED,
-                                              textColor: Colors.white,
-                                              onPressed: () {
-                                                setState(() {
-                                                  showProductCalculationAlertDialog(
-                                                      item.productName,
-                                                      AppLocalizations.instance
-                                                          .text('key_done'),
-                                                      AppLocalizations.instance
-                                                          .text('key_clear'),
-                                                      1,
-                                                      item,
-                                                      this);
-                                                });
-                                              },
+                                            new Expanded(
+                                              child: Align(
+                                                child: new Container(
+                                                  child: new Text(
+                                                    "₹ ${item.totalCost}",
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: ConstantColor
+                                                            .COLOR_BLACK,
+                                                        fontFamily: ConstantCommon
+                                                            .BASE_FONT_REGULAR,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                  ),
+                                                  margin: EdgeInsets.only(
+                                                      top: appConfig.rHP(3),
+                                                      bottom: appConfig.rHP(3)),
+                                                ),
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                              ),
+                                              flex: 1,
                                             ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3),
-                                                bottom: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomLeft,
+                                          ],
                                         ),
-                                        flex: 1,
-                                      ),
-                                      new Expanded(
-                                        child: Align(
-                                          child: new Container(
-                                            child: new Text(
-                                              "₹ ${item.totalCost}",
-                                              textAlign: TextAlign.left,
-                                              style: TextStyle(
-                                                  color:
-                                                      ConstantColor.COLOR_BLACK,
-                                                  fontFamily: ConstantCommon
-                                                      .BASE_FONT_REGULAR,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            margin: EdgeInsets.only(
-                                                top: appConfig.rHP(3),
-                                                bottom: appConfig.rHP(3)),
-                                          ),
-                                          alignment: Alignment.bottomRight,
-                                        ),
-                                        flex: 1,
-                                      ),
-                                    ],
-                                  ),
                                   new Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -417,7 +442,8 @@ class ProductListsScreenState
                                         height: 40,
                                         alignment: Alignment.topRight,
                                         margin: EdgeInsets.only(
-                                            bottom: appConfig.rHP(3)),
+                                            bottom: appConfig.rHP(3),
+                                            top: appConfig.rHP(1)),
                                         child: FlatButton(
                                           child: Text(
                                               AppLocalizations.instance
@@ -436,20 +462,14 @@ class ProductListsScreenState
                                             setState(() {
                                               dismissKeyboard();
                                               setState(() {
-                                                if (item.totalCost == 0) {
-                                                  showToast(AppLocalizations
-                                                      .instance
-                                                      .text(
-                                                          'key_select_kilos'));
-                                                } else {
-                                                  ///add to bill array
-                                                  ///
-                                                  ///
-
+                                                if (item
+                                                    .productPreviousBalanceFlag) {
                                                   if (checkDuplicateBillInCart(
                                                       item)) {
                                                     runShakeAnimation();
                                                     vibratePhone();
+                                                    item.totalCost =
+                                                        item.productCost;
                                                     BaseSingleton.shared
                                                         .billingProductList
                                                         .add(item);
@@ -462,6 +482,35 @@ class ProductListsScreenState
                                                         .instance
                                                         .text(
                                                             'key_already_in_cart'));
+                                                  }
+                                                } else {
+                                                  if (item.totalCost == 0) {
+                                                    showToast(AppLocalizations
+                                                        .instance
+                                                        .text(
+                                                            'key_select_kilos'));
+                                                  } else {
+                                                    ///add to bill array
+                                                    ///
+                                                    ///
+
+                                                    if (checkDuplicateBillInCart(
+                                                        item)) {
+                                                      runShakeAnimation();
+                                                      vibratePhone();
+                                                      BaseSingleton.shared
+                                                          .billingProductList
+                                                          .add(item);
+                                                      showToast(AppLocalizations
+                                                          .instance
+                                                          .text(
+                                                              'key_added_cart'));
+                                                    } else {
+                                                      showToast(AppLocalizations
+                                                          .instance
+                                                          .text(
+                                                              'key_already_in_cart'));
+                                                    }
                                                   }
                                                 }
                                               });

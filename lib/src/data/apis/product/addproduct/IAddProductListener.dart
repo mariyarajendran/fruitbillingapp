@@ -9,6 +9,8 @@ abstract class IAddProductListener {
 
   String getProductKg();
 
+  String getProductPreviousBalanceFlag();
+
   Map parseAddProductData();
 
   void errorValidationMgs(String error);

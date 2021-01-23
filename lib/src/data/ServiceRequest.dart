@@ -88,7 +88,7 @@ class ServiceRequest implements AllApiRepository {
             timeLimit: Duration(seconds: 10))
         .then((response) {
       print("url: " + GET_PRODUCT_LIST);
-      print("header: " + headers.toString());
+      print("requestData: " + body);
       int statusCode = response.statusCode;
       final Map responseBody = json.decode(response.body);
       print("status code: $statusCode");
