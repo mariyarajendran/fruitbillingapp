@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 
 class ProductListResponseModel {
@@ -22,10 +20,12 @@ class ProductDetails {
   String productId;
   String productName;
   int productCost;
+  int boxCost;
   String productDate;
   int productStockKg;
   String productCode;
   bool productPreviousBalanceFlag;
+  bool purchaseBoxFlag = false;
   bool isExpanded = false;
   int totalCost = 0;
   int totalKiloGrams = 0;
@@ -38,6 +38,7 @@ class ProductDetails {
       this.productDate,
       this.productStockKg,
       this.productCost,
+      this.boxCost,
       this.productPreviousBalanceFlag,
       this.isExpanded,
       this.totalCost,
@@ -47,6 +48,7 @@ class ProductDetails {
       : productId = map['product_id'] ?? '',
         productName = map['product_name'] ?? '',
         productCost = map['product_cost'] ?? 0,
+        boxCost = map['box_cost'] ?? 0,
         productPreviousBalanceFlag =
             map['product_previous_balance_flag'] ?? false,
         productDate = map['product_date'] ?? '',

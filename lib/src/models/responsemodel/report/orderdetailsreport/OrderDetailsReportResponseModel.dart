@@ -53,6 +53,7 @@ class OverAllDetailReports {
   String productId;
   String productName;
   String productCost;
+  bool purchaseBoxFlag;
   String productStockKg;
   String productTotalCost;
   String productCode;
@@ -66,6 +67,7 @@ class OverAllDetailReports {
     this.productId,
     this.productName,
     this.productCost,
+    this.purchaseBoxFlag,
     this.productStockKg,
     this.productTotalCost,
     this.productCode,
@@ -80,6 +82,7 @@ class OverAllDetailReports {
         productId = map['product_id'] ?? '',
         productName = map['product_name'] ?? '',
         productCost = map['product_cost'] ?? '',
+        purchaseBoxFlag = map['purchase_box_flag'] ?? false,
         productStockKg = map['product_stock_kg'] ?? '',
         productTotalCost = map['product_total_cost'] ?? '',
         productCode = map['product_code'] ?? '',

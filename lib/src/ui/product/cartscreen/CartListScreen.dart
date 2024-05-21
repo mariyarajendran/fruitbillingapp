@@ -203,7 +203,7 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                                 : AppLocalizations
                                                                     .instance
                                                                     .text(
-                                                                        'key_product_code'),
+                                                                        'key_product_cost'),
                                                             textAlign:
                                                                 TextAlign.left,
                                                             style: TextStyle(
@@ -267,7 +267,13 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                       child: Align(
                                                         child: new Container(
                                                           child: new Text(
-                                                            "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
+                                                            BaseSingleton
+                                                                    .shared
+                                                                    .billingProductList[
+                                                                        index]
+                                                                    .purchaseBoxFlag
+                                                                ? "₹ ${BaseSingleton.shared.billingProductList[index].boxCost}"
+                                                                : "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
                                                             textAlign:
                                                                 TextAlign.right,
                                                             style: TextStyle(
@@ -393,10 +399,15 @@ class CartListScreenState extends BaseStateStatefulState<CartListScreenStateful>
                                                                 child:
                                                                     FlatButton(
                                                                   child: Text(
-                                                                      "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
+                                                                      BaseSingleton
+                                                                              .shared
+                                                                              .billingProductList[
+                                                                                  index]
+                                                                              .purchaseBoxFlag
+                                                                          ? "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Box"
+                                                                          : "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                                      textAlign: TextAlign
+                                                                          .center,
                                                                       style: TextStyle(
                                                                           color: ConstantColor
                                                                               .COLOR_WHITE,

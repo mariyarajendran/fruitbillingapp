@@ -310,7 +310,13 @@ class BillPreviewScreenState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
+                                                          BaseSingleton
+                                                                  .shared
+                                                                  .billingProductList[
+                                                                      index]
+                                                                  .purchaseBoxFlag
+                                                              ? "₹ ${BaseSingleton.shared.billingProductList[index].boxCost}"
+                                                              : "₹ ${BaseSingleton.shared.billingProductList[index].productCost}",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -340,7 +346,13 @@ class BillPreviewScreenState
                                                                       index]
                                                                   .productPreviousBalanceFlag
                                                               ? ""
-                                                              : "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
+                                                              : BaseSingleton
+                                                                      .shared
+                                                                      .billingProductList[
+                                                                          index]
+                                                                      .purchaseBoxFlag
+                                                                  ? "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Box"
+                                                                  : "${BaseSingleton.shared.billingProductList[index].totalKiloGrams} Kg",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
@@ -1089,7 +1101,12 @@ class BillPreviewScreenState
           'product_name':
               BaseSingleton.shared.billingProductList[i].productName,
           'product_cost':
-              BaseSingleton.shared.billingProductList[i].productCost,
+              BaseSingleton.shared.billingProductList[i].purchaseBoxFlag
+                  ? BaseSingleton.shared.billingProductList[i].boxCost
+                  : BaseSingleton.shared.billingProductList[i].productCost,
+          'purchase_box_flag': BaseSingleton
+              .shared.billingProductList[i].purchaseBoxFlag
+              .toString(),
           'product_date':
               BaseSingleton.shared.billingProductList[i].productDate,
           'product_stock_kg':

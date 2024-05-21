@@ -45,6 +45,9 @@ class PresenterAddProduct {
       } else if (_addProductListener.getProductPrice().isEmpty) {
         _addProductListener.errorValidationMgs(
             AppLocalizations.instance.text('key_enter_product_cost'));
+      } else if (_addProductListener.getBoxPrice().isEmpty) {
+        _addProductListener.errorValidationMgs(
+            AppLocalizations.instance.text('key_enter_box_cost'));
       } else if (_addProductListener.getProductCode().isEmpty) {
         _addProductListener.errorValidationMgs(
             AppLocalizations.instance.text('key_enter_product_code'));

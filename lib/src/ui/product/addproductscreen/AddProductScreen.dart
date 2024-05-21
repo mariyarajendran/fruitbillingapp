@@ -15,8 +15,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../utils/localizations.dart';
 import 'ModalAddProduct.dart';
-import 'package:IGO/src/ui/base/BaseAlertListener.dart';
-import 'package:IGO/src/ui/base/BaseSingleton.dart';
 import 'package:IGO/src/ui/base/BaseState.dart';
 
 void main() => runApp(AddProductScreen());
@@ -87,6 +85,9 @@ class AddProductScreenState
 
   void setEditDetails() {
     setState(() {
+      if (productDetailsNavigate.productPreviousBalanceFlag == null) {
+        productDetailsNavigate.productPreviousBalanceFlag = false;
+      }
       if (productDetailsNavigate.productPreviousBalanceFlag) {
         _modalAddProduct.switchEnabledPreviousBalance =
             productDetailsNavigate.productPreviousBalanceFlag;
@@ -103,6 +104,10 @@ class AddProductScreenState
         if (productDetailsNavigate.productCost != null) {
           _modalAddProduct.controllerProductCost.text =
               cutNull(productDetailsNavigate.productCost.toString());
+        }
+        if (productDetailsNavigate.boxCost != null) {
+          _modalAddProduct.controllerBoxCost.text =
+              cutNull(productDetailsNavigate.boxCost.toString());
         }
         _modalAddProduct.controllerProductCode.text =
             productDetailsNavigate.productCode;
@@ -219,6 +224,41 @@ class AddProductScreenState
               contentPadding: EdgeInsets.all(20.0)),
           onFieldSubmitted: (v) {
             fieldFocusChange(context, _modalAddProduct.focusProductCost,
+                _modalAddProduct.focusBoxCost);
+          },
+          textCapitalization: TextCapitalization.sentences,
+        ));
+
+    Container containerBoxCost = new Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.only(left: 30, right: 30, top: 15),
+        child: new TextFormField(
+          style: TextStyle(
+              color: ConstantColor.COLOR_DARK_GRAY,
+              fontSize: 16,
+              fontFamily: ConstantCommon.BASE_FONT_REGULAR),
+          enableInteractiveSelection: true,
+          textInputAction: TextInputAction.next,
+          controller: _modalAddProduct.controllerBoxCost,
+          keyboardType: TextInputType.number,
+          focusNode: _modalAddProduct.focusBoxCost,
+          decoration: InputDecoration(
+              labelText: AppLocalizations.instance.text('key_box_cost'),
+              labelStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              hintStyle: TextStyle(color: ConstantColor.COLOR_PRODUCTS),
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: ConstantColor.COLOR_LIGHT_GREY_ONE, width: 0.5),
+                  gapPadding: 10.0,
+                  borderRadius: BorderRadius.circular(1.0)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(1.0),
+                  borderSide: BorderSide(
+                      color: ConstantColor.COLOR_PRODUCTS, width: 1.3),
+                  gapPadding: 10.0),
+              contentPadding: EdgeInsets.all(20.0)),
+          onFieldSubmitted: (v) {
+            fieldFocusChange(context, _modalAddProduct.focusBoxCost,
                 _modalAddProduct.focusProductCode);
           },
           textCapitalization: TextCapitalization.sentences,
@@ -471,6 +511,7 @@ class AddProductScreenState
                               children: [
                                 containerProductName,
                                 containerProductCost,
+                                containerBoxCost,
                                 containerProductCode,
                                 containerProductKg,
                                 containerSwitchToPreviousBalanceEntry,
@@ -654,6 +695,7 @@ class AddProductScreenState
     return {
       "product_name": getProductName().trim(),
       "product_cost": getProductPrice().trim(),
+      "box_cost": getBoxPrice().trim(),
       "product_stock_kg": getProductKg().trim(),
       "product_code": getProductCode().trim(),
       "product_previous_balance_flag": getProductPreviousBalanceFlag(),
@@ -665,6 +707,7 @@ class AddProductScreenState
     setState(() {
       _modalAddProduct.controllerProductName.text = "";
       _modalAddProduct.controllerProductCode.text = "";
+      _modalAddProduct.controllerBoxCost.text = "";
       _modalAddProduct.controllerProductCost.text = "";
       _modalAddProduct.controllerProductKg.text = "";
       _modalAddProduct.controllerPreviousBalance.text = "";
@@ -730,6 +773,7 @@ class AddProductScreenState
       "product_id": getProductIdUpdate(),
       "product_name": getProductNameUpdate(),
       "product_cost": getProductCostUpdate(),
+      "box_cost": getBoxCostUpdate(),
       "product_stock_kg": getProductStockKgUpdate(),
       "product_code": getProductCodeUpdate(),
       "product_status": getProductStatusUpdate(),
@@ -747,5 +791,15 @@ class AddProductScreenState
   @override
   String getProductPreviousBalanceFlag() {
     return _modalAddProduct.switchEnabledPreviousBalance ? "true" : "false";
+  }
+
+  @override
+  String getBoxPrice() {
+    return _modalAddProduct.controllerBoxCost.text.toString();
+  }
+
+  @override
+  String getBoxCostUpdate() {
+    return _modalAddProduct.controllerBoxCost.text.toString();
   }
 }

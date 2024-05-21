@@ -482,7 +482,11 @@ class UpdatePendingBalanceState
                                                       flex: 1,
                                                       child: new Container(
                                                         child: new Text(
-                                                          "${overAllDetailReports[index].productStockKg} Kg",
+                                                          overAllDetailReports[
+                                                                      index]
+                                                                  .purchaseBoxFlag
+                                                              ? "${overAllDetailReports[index].productStockKg} Box"
+                                                              : "${overAllDetailReports[index].productStockKg} Kg",
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(

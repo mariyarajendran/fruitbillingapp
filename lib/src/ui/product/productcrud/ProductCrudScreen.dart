@@ -313,7 +313,7 @@ class ProductCrudScreenState
                                                   child: new Text(
                                                     AppLocalizations.instance
                                                         .text(
-                                                            'key_product_stock'),
+                                                            'key_box_price'),
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(
                                                         color: ConstantColor
@@ -370,7 +370,7 @@ class ProductCrudScreenState
                                               child: new Align(
                                                 child: new Container(
                                                   child: new Text(
-                                                    "${item.productStockKg} kg",
+                                                    "₹ ${item.boxCost}",
                                                     textAlign: TextAlign.left,
                                                     style: TextStyle(
                                                         color: ConstantColor
@@ -1082,6 +1082,11 @@ class ProductCrudScreenState
 
   @override
   String getProductPreviousBalanceFlag() {
+    return "";
+  }
+
+  @override
+  String getBoxCostUpdate() {
     return "";
   }
 }
