@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/material.dart';
-
 import 'package:data_connection_checker/data_connection_checker.dart';
 
 abstract class ViewContractConnectivityListener {
